@@ -221,167 +221,436 @@ feat: crear modelos de dominio con validaciones
 
 ---
 
-## Commit 3: Configuración de Entity Framework Core
+## Commit 3: DbContext y Configuración de Relaciones con Fluent API
 
 ### Objetivo
-Crear y configurar el DbContext con todas las relaciones entre entidades usando Fluent API, preparando la infraestructura de acceso a datos.
+Crear el ApplicationDbContext y configurar todas las relaciones entre entidades usando **Fluent API**, estableciendo la base de la infraestructura de acceso a datos.
+
+### ¿Qué es Fluent API?
+**Fluent API** es una forma de configurar Entity Framework usando código C# en lugar de atributos (Data Annotations). Es más poderosa y flexible porque permite configuraciones que no son posibles con atributos.
+
+**¿Por qué usarla?**
+- ✅ Control total sobre **comportamientos de eliminación** (Restrict, SetNull, Cascade)
+- ✅ Permite configurar **índices únicos compuestos** (imposible con Data Annotations)
+- ✅ Configuración de **valores por defecto** a nivel de base de datos
+- ✅ Documentación clara de todas las relaciones en un solo lugar
+- ✅ Separación de responsabilidades (validación vs configuración de BD)
+
+---
 
 ### Paso a Paso
 
 #### 1. Creación de la Carpeta Data
 - Crear la carpeta `Data/` en la raíz del proyecto (al mismo nivel que `Models/`)
+- Esta carpeta contendrá toda la lógica de acceso a datos
 
 #### 2. Creación del ApplicationDbContext
 - Crear el archivo `Data/ApplicationDbContext.cs`
-- Hacer que la clase herede de `DbContext`
-- Agregar el constructor que recibe `DbContextOptions<ApplicationDbContext>`:
-  ```csharp
-  public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-      : base(options)
-  {
-  }
-  ```
-- Agregar los namespaces necesarios:
-  ```csharp
-  using Microsoft.EntityFrameworkCore;
-  using SCA_MVC.Models;
-  ```
+- Este será el "puente" entre tu aplicación y la base de datos
 
-#### 3. Declaración de DbSets
-- Declarar las propiedades `DbSet` para cada entidad:
-  ```csharp
-  public DbSet<Empresa> Empresas { get; set; }
-  public DbSet<Empleado> Empleados { get; set; }
-  public DbSet<Lugar> Lugares { get; set; }
-  public DbSet<Servicio> Servicios { get; set; }
-  public DbSet<Registro> Registros { get; set; }
-  ```
+**Estructura básica**:
+```csharp
+using Microsoft.EntityFrameworkCore;
+using SCA_MVC.Models;
 
-#### 4. Configuración del Método OnModelCreating
-- Crear el método `OnModelCreating` que recibe `ModelBuilder`:
-  ```csharp
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
-      base.OnModelCreating(modelBuilder);
-      
-      // Configuraciones aquí
-  }
-  ```
+namespace SCA_MVC.Data
+{
+    public class ApplicationDbContext : DbContext
+    {
+        // Constructor: recibe opciones de configuración
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
-#### 5. Configuración de Relaciones con Fluent API
+        // DbSets: representan las tablas en la BD
+        public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
+        public DbSet<Lugar> Lugares { get; set; }
+        public DbSet<Servicio> Servicios { get; set; }
+        public DbSet<Registro> Registros { get; set; }
 
-**Relación Empresa → Empleados (1:N)**
-- Configurar que una Empresa tiene muchos Empleados
-- Un Empleado pertenece a una Empresa
-- Clave foránea: `IdEmpresa`
-- Comportamiento de eliminación: `Restrict` (no permitir eliminar empresa con empleados)
+        // OnModelCreating: aquí va toda la configuración Fluent API
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            
+            // Aquí irán las configuraciones de relaciones
+        }
+    }
+}
+```
 
-**Relación Empresa → Registros (1:N)**
-- Configurar que una Empresa tiene muchos Registros
-- Un Registro pertenece a una Empresa
-- Clave foránea: `IdEmpresa`
-- Comportamiento de eliminación: `Restrict`
+**Explicación**:
+- `DbContext`: Clase base de EF Core que maneja la conexión a la BD
+- `DbSet<T>`: Representa una tabla en la BD (permite hacer consultas LINQ)
+- `OnModelCreating`: Método donde configuramos las relaciones, índices, etc.
 
-**Relación Empleado → Registros (1:N, opcional)**
-- Configurar que un Empleado puede tener muchos Registros
-- Un Registro puede pertenecer a un Empleado (nullable)
-- Clave foránea: `IdEmpleado` (nullable)
-- Comportamiento de eliminación: `SetNull` (si se elimina empleado, IdEmpleado queda null)
+#### 3. Configuración de Relaciones con Fluent API
 
-**Relación Lugar → Servicios (1:N)**
-- Configurar que un Lugar tiene muchos Servicios
-- Un Servicio pertenece a un Lugar
-- Clave foránea: `IdLugar`
-- Comportamiento de eliminación: `Restrict`
+**📚 Conceptos Básicos de Fluent API**:
 
-**Relación Lugar → Registros (1:N)**
-- Configurar que un Lugar tiene muchos Registros
-- Un Registro pertenece a un Lugar
-- Clave foránea: `IdLugar`
-- Comportamiento de eliminación: `Restrict`
+Fluent API usa un patrón de "construcción" donde encadenas métodos:
+```csharp
+modelBuilder.Entity<Entidad>()  // Selecciona la entidad
+    .HasOne(x => x.Propiedad)    // Define "tiene uno"
+    .WithMany(x => x.Coleccion)  // Define "con muchos"
+    .HasForeignKey(x => x.FK)    // Define la clave foránea
+    .OnDelete(DeleteBehavior.X); // Define qué pasa al eliminar
+```
 
-**Relación Servicio → Registros (1:N)**
-- Configurar que un Servicio tiene muchos Registros
-- Un Registro pertenece a un Servicio
-- Clave foránea: `IdServicio`
-- Comportamiento de eliminación: `Restrict`
+---
 
-#### 6. Configuración de Índices Únicos
+**A. Configuración: Empresa → Empleados (1:N)**
 
-**Índice único en Empleado.IdCredencial**
-- Configurar índice único para evitar credenciales duplicadas
-- Usar `HasIndex(e => e.IdCredencial).IsUnique()`
+**¿Qué significa?**: Una empresa tiene muchos empleados, un empleado pertenece a una empresa.
 
-**Constraint único compuesto en Registro**
-- Configurar índice único compuesto en `(IdEmpleado, IdServicio)`
-- Evitar que un empleado se registre dos veces en el mismo servicio
-- Usar `HasIndex(r => new { r.IdEmpleado, r.IdServicio }).IsUnique()`
+```csharp
+// Configurar relación Empresa → Empleados
+modelBuilder.Entity<Empresa>()
+    .HasMany(e => e.Empleados)           // Una Empresa tiene muchos Empleados
+    .WithOne(emp => emp.Empresa)         // Cada Empleado tiene una Empresa
+    .HasForeignKey(emp => emp.IdEmpresa) // La FK es IdEmpresa
+    .OnDelete(DeleteBehavior.Restrict)   // NO permitir eliminar Empresa si tiene Empleados
+    .HasConstraintName("FK_Empleados_Empresa"); // Nombre del constraint en BD
+```
 
-#### 7. Configuración de Valores por Defecto
-- Configurar valor por defecto para `Empresa.Estado = true`
-- Configurar valor por defecto para `Empleado.Estado = true`
-- Configurar valor por defecto para `Lugar.Estado = true`
-- Configurar valor por defecto para `Servicio.TotalComensales = 0`
-- Configurar valor por defecto para `Servicio.TotalInvitados = 0`
+**Explicación línea por línea**:
+1. `Entity<Empresa>()` - Estamos configurando la entidad Empresa
+2. `HasMany(e => e.Empleados)` - Empresa tiene una colección de Empleados
+3. `WithOne(emp => emp.Empresa)` - Cada Empleado tiene UNA Empresa
+4. `HasForeignKey(emp => emp.IdEmpresa)` - La columna FK es IdEmpresa
+5. `OnDelete(DeleteBehavior.Restrict)` - Si intentas eliminar una Empresa con empleados, dará error
+6. `HasConstraintName(...)` - Nombre personalizado del constraint en la BD
 
-#### 8. Configuración de Nombres de Tablas (Opcional)
-- Verificar que los nombres de las tablas coincidan con la base de datos existente
-- Si es necesario, configurar nombres explícitos con `ToTable("NombreTabla")`
-- Por convención, EF Core usa el nombre del DbSet como nombre de tabla
+---
 
-#### 9. Registro del DbContext en Program.cs
-- Abrir el archivo `Program.cs`
-- Agregar los namespaces necesarios:
-  ```csharp
-  using Microsoft.EntityFrameworkCore;
-  using SCA_MVC.Data;
-  ```
-- Registrar el DbContext antes de `builder.Build()`:
-  ```csharp
-  builder.Services.AddDbContext<ApplicationDbContext>(options =>
-      options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-  ```
-- Verificar que la cadena de conexión "DefaultConnection" existe en `appsettings.json`
+**B. Configuración: Empresa → Registros (1:N)**
 
-#### 10. Verificación y Compilación
-- Compilar el proyecto con `dotnet build`
-- Verificar que no hay errores de compilación
-- Verificar que el DbContext está correctamente registrado
-- Revisar que todas las relaciones estén configuradas
+```csharp
+// Configurar relación Empresa → Registros
+modelBuilder.Entity<Empresa>()
+    .HasMany(e => e.Registros)
+    .WithOne(r => r.Empresa)
+    .HasForeignKey(r => r.IdEmpresa)
+    .OnDelete(DeleteBehavior.Restrict)
+    .HasConstraintName("FK_Registros_Empresa");
+```
+
+**¿Por qué Restrict?**: No queremos que al eliminar una Empresa se borren todos sus registros históricos.
+
+---
+
+**C. Configuración: Empleado → Registros (1:N, NULLABLE)**
+
+**⚠️ IMPORTANTE**: Esta relación es especial porque `IdEmpleado` es nullable (permite invitados).
+
+```csharp
+// Configurar relación Empleado → Registros (NULLABLE)
+modelBuilder.Entity<Empleado>()
+    .HasMany(e => e.Registros)
+    .WithOne(r => r.Empleado)
+    .HasForeignKey(r => r.IdEmpleado)
+    .OnDelete(DeleteBehavior.SetNull)  // ⚠️ SetNull: si eliminas empleado, IdEmpleado = null
+    .IsRequired(false)                  // ⚠️ La relación es opcional
+    .HasConstraintName("FK_Registros_Empleado");
+```
+
+**Explicación especial**:
+- `OnDelete(DeleteBehavior.SetNull)` - Si eliminas un empleado, sus registros NO se borran, solo se pone `IdEmpleado = null`
+- `IsRequired(false)` - Indica que la FK puede ser null (permite invitados sin empleado)
+
+---
+
+**D. Configuración: Lugar → Servicios (1:N)**
+
+```csharp
+// Configurar relación Lugar → Servicios
+modelBuilder.Entity<Lugar>()
+    .HasMany(l => l.Servicios)
+    .WithOne(s => s.Lugar)
+    .HasForeignKey(s => s.IdLugar)
+    .OnDelete(DeleteBehavior.Restrict)
+    .HasConstraintName("FK_Servicios_Lugar");
+```
+
+---
+
+**E. Configuración: Lugar → Registros (1:N)**
+
+```csharp
+// Configurar relación Lugar → Registros
+modelBuilder.Entity<Lugar>()
+    .HasMany(l => l.Registros)
+    .WithOne(r => r.Lugar)
+    .HasForeignKey(r => r.IdLugar)
+    .OnDelete(DeleteBehavior.Restrict)
+    .HasConstraintName("FK_Registros_Lugar");
+```
+
+---
+
+**F. Configuración: Servicio → Registros (1:N)**
+
+```csharp
+// Configurar relación Servicio → Registros
+modelBuilder.Entity<Servicio>()
+    .HasMany(s => s.Registros)
+    .WithOne(r => r.Servicio)
+    .HasForeignKey(r => r.IdServicio)
+    .OnDelete(DeleteBehavior.Restrict)
+    .HasConstraintName("FK_Registros_Servicio");
+```
+
+---
+
+#### 4. Registro del DbContext en Program.cs
+
+**📚 ¿Qué es la inyección de dependencias?**
+Es un patrón que permite que ASP.NET Core "inyecte" automáticamente el DbContext donde lo necesites.
+
+**Pasos**:
+1. Abrir `Program.cs`
+2. Agregar los namespaces:
+```csharp
+using Microsoft.EntityFrameworkCore;
+using SCA_MVC.Data;
+```
+
+3. Registrar el DbContext ANTES de `var app = builder.Build();`:
+```csharp
+// Registrar DbContext con SQL Server
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+```
+
+**Explicación**:
+- `AddDbContext<ApplicationDbContext>` - Registra el DbContext en el contenedor de DI
+- `UseSqlServer(...)` - Indica que usaremos SQL Server
+- `GetConnectionString("DefaultConnection")` - Lee la cadena de conexión de appsettings.json
+
+---
+
+#### 5. Verificación y Compilación
+
+**Pasos finales**:
+1. Compilar el proyecto: `dotnet build`
+2. Verificar que no hay errores
+3. Revisar que todas las configuraciones estén en `OnModelCreating`
+
+**Checklist de verificación**:
+- ✅ ApplicationDbContext creado en `Data/`
+- ✅ 5 DbSets declarados
+- ✅ 6 relaciones configuradas con Fluent API
+- ✅ Nombres de constraints personalizados
+- ✅ Comportamientos de eliminación configurados
+- ✅ DbContext registrado en Program.cs
+- ✅ Proyecto compila sin errores
 
 ### Resultado Esperado
 Un proyecto con:
 - **ApplicationDbContext** creado en `Data/` con:
   - 5 DbSets declarados (Empresas, Empleados, Lugares, Servicios, Registros)
   - Constructor configurado correctamente
-  - Método `OnModelCreating` con configuración Fluent API
+  - Método `OnModelCreating` con 6 relaciones configuradas (~80 líneas)
 - **Relaciones configuradas** entre todas las entidades:
-  - 6 relaciones principales (Empresa-Empleados, Empresa-Registros, Empleado-Registros, Lugar-Servicios, Lugar-Registros, Servicio-Registros)
+  - 6 relaciones principales con nombres de constraints personalizados
   - Comportamientos de eliminación apropiados (Restrict, SetNull)
+  - Relación nullable configurada correctamente (Empleado → Registros)
+- **DbContext registrado** en `Program.cs` con inyección de dependencias
+- **Proyecto compilando sin errores**
+- **Base lista** para agregar índices y optimizaciones en el siguiente commit
+
+### Mensaje de Commit
+```
+feat: crear DbContext y configurar relaciones con Fluent API
+
+- Crear ApplicationDbContext en Data/ con 5 DbSets
+- Configurar 6 relaciones entre entidades usando Fluent API
+- Establecer nombres personalizados para constraints (FK_Empleados_Empresa, etc.)
+- Configurar comportamientos de eliminación (Restrict para preservar datos históricos)
+- Configurar relación nullable Empleado→Registros con SetNull (permite invitados)
+- Registrar DbContext en Program.cs con inyección de dependencias
+```
+
+---
+
+## Commit 4: Índices, Constraints y Optimizaciones de Base de Datos
+
+### Objetivo
+Agregar índices únicos, valores por defecto, check constraints e índices de performance al DbContext para optimizar y asegurar la integridad de la base de datos.
+
+### Paso a Paso
+
+#### 1. Configuración de Índices Únicos
+
+**📚 ¿Qué es un índice único?**
+Un índice único garantiza que no haya valores duplicados en una columna (o combinación de columnas).
+
+**A. Índice Único Simple: Empleado.IdCredencial**
+
+**¿Por qué?**: No puede haber dos empleados con la misma credencial RFID.
+
+Agregar en `OnModelCreating`:
+```csharp
+// Índice único en IdCredencial
+modelBuilder.Entity<Empleado>()
+    .HasIndex(e => e.IdCredencial)      // Crear índice en IdCredencial
+    .IsUnique()                          // Hacerlo único
+    .HasDatabaseName("IX_Empleado_IdCredencial"); // Nombre del índice en BD
+```
+
+**Explicación**:
+- `HasIndex(e => e.IdCredencial)` - Crea un índice en la columna IdCredencial
+- `IsUnique()` - Lo hace único (no permite duplicados)
+- `HasDatabaseName(...)` - Nombre personalizado del índice
+
+---
+
+**B. Índice Único Compuesto: Registro (IdEmpleado, IdServicio)**
+
+**¿Por qué?**: Un empleado no puede registrarse dos veces en el mismo servicio.
+
+```csharp
+// Índice único compuesto en (IdEmpleado, IdServicio)
+modelBuilder.Entity<Registro>()
+    .HasIndex(r => new { r.IdEmpleado, r.IdServicio }) // Índice en AMBAS columnas
+    .IsUnique()                                         // Hacerlo único
+    .HasFilter("[IdEmpleado] IS NOT NULL")             // ⚠️ Solo si IdEmpleado no es null
+    .HasDatabaseName("IX_Registro_Empleado_Servicio");
+```
+
+**Explicación especial**:
+- `new { r.IdEmpleado, r.IdServicio }` - Índice compuesto (dos columnas)
+- `HasFilter("[IdEmpleado] IS NOT NULL")` - **MUY IMPORTANTE**: Como IdEmpleado es nullable, solo aplicamos el constraint cuando NO es null (invitados pueden registrarse múltiples veces)
+
+---
+
+#### 2. Configuración de Valores por Defecto
+
+**📚 ¿Qué son valores por defecto?**
+Valores que la base de datos asigna automáticamente si no se especifican al insertar.
+
+```csharp
+// Valores por defecto para Estado = true
+modelBuilder.Entity<Empresa>()
+    .Property(e => e.Estado)
+    .HasDefaultValue(true);
+
+modelBuilder.Entity<Empleado>()
+    .Property(e => e.Estado)
+    .HasDefaultValue(true);
+
+modelBuilder.Entity<Lugar>()
+    .Property(l => l.Estado)
+    .HasDefaultValue(true);
+
+// Valores por defecto para totales = 0
+modelBuilder.Entity<Servicio>()
+    .Property(s => s.TotalComensales)
+    .HasDefaultValue(0);
+
+modelBuilder.Entity<Servicio>()
+    .Property(s => s.TotalInvitados)
+    .HasDefaultValue(0);
+```
+
+**Explicación**:
+- `Property(x => x.Propiedad)` - Selecciona una propiedad específica
+- `HasDefaultValue(valor)` - Define el valor por defecto en la BD
+
+---
+
+#### 3. Configuración de Check Constraints
+
+**📚 ¿Qué es un Check Constraint?**
+Una regla de validación que se aplica directamente en la base de datos.
+
+```csharp
+// Check constraint: Fecha no puede ser futura
+modelBuilder.Entity<Servicio>()
+    .ToTable(t => t.HasCheckConstraint(
+        "CK_Servicio_Fecha",           // Nombre del constraint
+        "[Fecha] <= CAST(GETDATE() AS DATE)")); // Condición SQL
+```
+
+**Explicación**:
+- `ToTable(t => ...)` - Configuración a nivel de tabla
+- `HasCheckConstraint(nombre, condición)` - Crea un constraint de validación
+- `[Fecha] <= GETDATE()` - La fecha no puede ser mayor a hoy
+
+---
+
+#### 4. Configuración de Índices para Performance
+
+**📚 ¿Por qué índices adicionales?**
+Mejoran el rendimiento de consultas frecuentes.
+
+```csharp
+// Índice compuesto para búsquedas por Fecha y Lugar
+modelBuilder.Entity<Servicio>()
+    .HasIndex(s => new { s.Fecha, s.IdLugar })
+    .HasDatabaseName("IX_Servicio_Fecha_Lugar");
+
+// Índice para búsquedas por Fecha en Registros
+modelBuilder.Entity<Registro>()
+    .HasIndex(r => r.Fecha)
+    .HasDatabaseName("IX_Registro_Fecha");
+```
+
+**Explicación**:
+Estos índices aceleran consultas como:
+- "Mostrar servicios de un lugar en una fecha específica"
+- "Mostrar registros de una fecha específica"
+
+---
+
+#### 5. Verificación y Compilación
+
+**Pasos finales**:
+1. Compilar el proyecto: `dotnet build`
+2. Verificar que no hay errores
+3. Revisar que todas las configuraciones estén en `OnModelCreating`
+
+**Checklist de verificación**:
+- ✅ 2 índices únicos configurados
+- ✅ 5 valores por defecto configurados
+- ✅ 1 check constraint configurado
+- ✅ 2 índices de performance configurados
+- ✅ Proyecto compila sin errores
+
+### Resultado Esperado
+Un proyecto con:
 - **Índices únicos** configurados:
-  - Índice único en `Empleado.IdCredencial`
-  - Constraint único compuesto en `Registro (IdEmpleado, IdServicio)`
-- **Valores por defecto** configurados para propiedades Estado y totales
-- **DbContext registrado** en `Program.cs` con conexión a SQL Server
+  - Índice único simple en `Empleado.IdCredencial`
+  - Índice único compuesto en `Registro (IdEmpleado, IdServicio)` con filtro para nulls
+- **Valores por defecto** configurados:
+  - Estado = true (Empresa, Empleado, Lugar)
+  - TotalComensales = 0, TotalInvitados = 0 (Servicio)
+- **Check Constraints** configurados:
+  - Validación de fecha no futura en Servicio
+- **Índices de performance** configurados:
+  - Índice compuesto (Fecha, IdLugar) en Servicio
+  - Índice simple (Fecha) en Registro
+- **ApplicationDbContext completo** (~150 líneas) con todas las configuraciones
 - **Proyecto compilando sin errores**
 - **Infraestructura lista** para crear migraciones
 
 ### Mensaje de Commit
 ```
-feat: configurar Entity Framework Core con DbContext
+feat: agregar índices, constraints y optimizaciones a DbContext
 
-- Crear ApplicationDbContext en Data/ con 5 DbSets
-- Configurar 6 relaciones entre entidades usando Fluent API
-- Establecer comportamientos de eliminación (Restrict, SetNull)
-- Configurar índice único en Empleado.IdCredencial
-- Configurar constraint único compuesto en Registro (IdEmpleado, IdServicio)
+- Configurar índice único en Empleado.IdCredencial (evitar credenciales duplicadas)
+- Configurar índice único compuesto en Registro (IdEmpleado, IdServicio) con filtro para nulls
 - Configurar valores por defecto (Estado=true, TotalComensales=0, TotalInvitados=0)
-- Registrar DbContext en Program.cs con conexión a SQL Server
+- Agregar check constraint para validar fecha no futura en Servicio
+- Agregar índices de performance para búsquedas por fecha (Servicio, Registro)
 ```
 
 ---
 
-## Commit 4: Creación de Base de Datos con Migraciones
+## Commit 5: Creación de Base de Datos con Migraciones
 
 ### Objetivo
 Crear la primera migración de Entity Framework Core y aplicarla a SQL Server, generando la base de datos BD_Control_Almuerzos con todas las tablas, relaciones y constraints.
@@ -517,7 +786,7 @@ feat: crear base de datos con migraciones de Entity Framework
 
 ---
 
-## Commit 5: Implementación de Layout Base y Comprensión del Patrón MVC
+## Commit 6: Implementación de Layout Base y Comprensión del Patrón MVC
 
 ### Objetivo
 Configurar el layout maestro de la aplicación, implementar la navegación básica y documentar la comprensión del patrón MVC aplicado al proyecto.
@@ -632,7 +901,7 @@ feat: implementar layout base y estructura de navegación MVC
 
 ---
 
-## Resumen de los 5 Commits
+## Resumen de los 6 Commits
 
 ### Commit 1: Configuración Inicial
 **Enfoque**: Infraestructura y configuración base del proyecto.
@@ -642,15 +911,19 @@ feat: implementar layout base y estructura de navegación MVC
 **Enfoque**: Creación de modelos con validaciones.
 **Entregable**: 5 modelos (Empresa, Empleado, Lugar, Servicio, Registro) con Data Annotations y propiedades de navegación declaradas.
 
-### Commit 3: Configuración de Entity Framework
-**Enfoque**: Infraestructura de acceso a datos.
-**Entregable**: ApplicationDbContext con DbSets, relaciones Fluent API, índices únicos y valores por defecto configurados.
+### Commit 3: DbContext y Relaciones
+**Enfoque**: Configuración de Entity Framework y relaciones.
+**Entregable**: ApplicationDbContext con DbSets y 6 relaciones configuradas usando Fluent API.
 
-### Commit 4: Migraciones y Base de Datos
+### Commit 4: Índices y Optimizaciones
+**Enfoque**: Integridad y performance de base de datos.
+**Entregable**: Índices únicos, valores por defecto, check constraints e índices de performance configurados.
+
+### Commit 5: Migraciones y Base de Datos
 **Enfoque**: Generación y aplicación de esquema de base de datos.
 **Entregable**: Migración InitialCreate aplicada, BD_Control_Almuerzos creada con 5 tablas, relaciones y constraints.
 
-### Commit 5: UI Base y Arquitectura
+### Commit 6: UI Base y Arquitectura
 **Enfoque**: Interfaz de usuario base y comprensión del patrón MVC.
 **Entregable**: Layout funcional, navegación implementada y estructura preparada para desarrollo futuro.
 
@@ -660,6 +933,6 @@ feat: implementar layout base y estructura de navegación MVC
 
 - Cada commit debe compilar sin errores
 - Cada commit debe ser funcional y ejecutable
-- Los commits siguen una progresión lógica: Configuración → Modelos → EF Core → BD → UI
+- Los commits siguen una progresión lógica: Configuración → Modelos → DbContext+Relaciones → Índices+Optimizaciones → BD → UI
 - Se sigue la convención de commits: `feat:` para nuevas funcionalidades
 - Los mensajes de commit son descriptivos y siguen el formato Conventional Commits
