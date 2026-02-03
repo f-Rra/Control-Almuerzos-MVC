@@ -80,6 +80,71 @@ namespace SCA_MVC.Data
                 .HasForeignKey(r => r.IdServicio)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_Registros_Servicio");
+
+            // ===== CONFIGURACIÓN DE ÍNDICES ÚNICOS =====
+
+            // Índice único en Empleado.IdCredencial
+            // Garantiza que no haya dos empleados con la misma credencial RFID
+            modelBuilder.Entity<Empleado>()
+                .HasIndex(e => e.IdCredencial)
+                .IsUnique()
+                .HasDatabaseName("IX_Empleado_IdCredencial");
+
+            // Índice único compuesto en Registro (IdEmpleado, IdServicio)
+            // Evita que un empleado se registre dos veces en el mismo servicio
+            // ⚠️ IMPORTANTE: HasFilter para excluir nulls (permite múltiples invitados)
+            modelBuilder.Entity<Registro>()
+                .HasIndex(r => new { r.IdEmpleado, r.IdServicio })
+                .IsUnique()
+                .HasFilter("[IdEmpleado] IS NOT NULL")  // Solo aplica cuando IdEmpleado no es null
+                .HasDatabaseName("IX_Registro_Empleado_Servicio");
+
+            // ===== CONFIGURACIÓN DE VALORES POR DEFECTO =====
+
+            // Valores por defecto para Estado = true
+            modelBuilder.Entity<Empresa>()
+                .Property(e => e.Estado)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<Empleado>()
+                .Property(e => e.Estado)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<Lugar>()
+                .Property(l => l.Estado)
+                .HasDefaultValue(true);
+
+            // Valores por defecto para totales = 0
+            modelBuilder.Entity<Servicio>()
+                .Property(s => s.TotalComensales)
+                .HasDefaultValue(0);
+
+            modelBuilder.Entity<Servicio>()
+                .Property(s => s.TotalInvitados)
+                .HasDefaultValue(0);
+
+            // ===== CONFIGURACIÓN DE CHECK CONSTRAINTS =====
+
+            // Check constraint: Fecha no puede ser futura
+            // Validación a nivel de base de datos
+            modelBuilder.Entity<Servicio>()
+                .ToTable(t => t.HasCheckConstraint(
+                    "CK_Servicio_Fecha",
+                    "[Fecha] <= CAST(GETDATE() AS DATE)"));
+
+            // ===== CONFIGURACIÓN DE ÍNDICES DE PERFORMANCE =====
+
+            // Índice compuesto para búsquedas por Fecha y Lugar
+            // Optimiza consultas como "servicios de un lugar en una fecha"
+            modelBuilder.Entity<Servicio>()
+                .HasIndex(s => new { s.Fecha, s.IdLugar })
+                .HasDatabaseName("IX_Servicio_Fecha_Lugar");
+
+            // Índice para búsquedas por Fecha en Registros
+            // Optimiza consultas como "registros de una fecha específica"
+            modelBuilder.Entity<Registro>()
+                .HasIndex(r => r.Fecha)
+                .HasDatabaseName("IX_Registro_Fecha");
         }
     }
 }
