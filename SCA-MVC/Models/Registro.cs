@@ -5,6 +5,7 @@ namespace SCA_MVC.Models
 {
     public class Registro
     {
+        [Key]
         public int IdRegistro { get; set; }
 
         [Display(Name = "Empleado")]

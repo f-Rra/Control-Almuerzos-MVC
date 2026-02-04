@@ -5,6 +5,7 @@ namespace SCA_MVC.Models
 {
     public class Servicio
     {
+        [Key]
         public int IdServicio { get; set; }
 
         [Display(Name = "Lugar")]

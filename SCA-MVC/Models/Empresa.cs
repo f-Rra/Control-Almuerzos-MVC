@@ -4,6 +4,7 @@ namespace SCA_MVC.Models
 {
     public class Empresa
     {
+        [Key]
         public int IdEmpresa { get; set; }
 
         [Required(ErrorMessage = "El nombre de la empresa es obligatorio")]

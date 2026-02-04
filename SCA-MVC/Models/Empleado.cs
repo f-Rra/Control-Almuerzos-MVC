@@ -5,6 +5,7 @@ namespace SCA_MVC.Models
 {
     public class Empleado
     {
+        [Key]
         public int IdEmpleado { get; set; }
 
         [Required(ErrorMessage = "El nombre es obligatorio")]

@@ -4,6 +4,7 @@ namespace SCA_MVC.Models
 {
     public class Lugar
     {
+        [Key]
         public int IdLugar { get; set; }
 
         [Required(ErrorMessage = "El nombre del lugar es obligatorio")]
