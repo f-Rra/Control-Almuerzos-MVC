@@ -786,68 +786,669 @@ feat: crear base de datos con migraciones de Entity Framework
 
 ---
 
-## Commit 6: Implementación de Layout Base y Comprensión del Patrón MVC
+## Commit 6A: Layout Maestro y Navegación Base
 
 ### Objetivo
-Configurar el layout maestro de la aplicación, implementar la navegación básica y documentar la comprensión del patrón MVC aplicado al proyecto.
+Crear la estructura HTML base de la aplicación con un layout maestro responsive y un menú de navegación funcional.
 
 ### Paso a Paso
 
-#### 1. Personalización del Layout Maestro
-- Abrir el archivo `Views/Shared/_Layout.cshtml`
-- Modificar el título de la aplicación a "Sistema de Control de Almuerzos"
-- Actualizar el logo o nombre de la aplicación en el header
-- Configurar el menú de navegación principal con enlaces a los módulos futuros
-- Agregar un footer con información de copyright y versión
-- Asegurar que el layout sea responsive y se vea bien en diferentes dispositivos
+#### 1. Modificar el Layout Maestro (_Layout.cshtml)
 
-#### 2. Configuración de Estilos Base
-- Revisar el archivo `wwwroot/css/site.css`
-- Definir variables CSS para colores corporativos del sistema
-- Establecer estilos base para tipografía (fuentes, tamaños, pesos)
-- Configurar estilos para el header y footer
-- Definir estilos para la navegación principal
-- Agregar estilos para mensajes de alerta y notificaciones
-- Establecer un esquema de colores consistente
+**Ubicación:** `Views/Shared/_Layout.cshtml`
 
-#### 3. Estructura del Menú de Navegación
-- Crear enlaces en el navbar para los módulos principales:
-  - Inicio (Home)
-  - Servicios (placeholder para futuro desarrollo)
-  - Empleados (placeholder para futuro desarrollo)
-  - Empresas (placeholder para futuro desarrollo)
-  - Reportes (placeholder para futuro desarrollo)
-  - Configuración (placeholder para futuro desarrollo)
-- Configurar los enlaces usando HTML Helpers para generar URLs correctas
-- Asegurar que el menú indique visualmente la página activa
+**Cambios a realizar:**
 
-#### 4. Configuración de Routing
-- Revisar la configuración de rutas en `Program.cs`
-- Verificar que la ruta por defecto apunte a `Home/Index`
-- Comprender el patrón de URL: `/{controller}/{action}/{id?}`
-- Documentar cómo las URLs se mapean a controladores y acciones
-- Preparar el routing para los futuros controladores
+**A. Actualizar el título de la aplicación**
+```html
+<title>@ViewData["Title"] - Sistema Control Almuerzos</title>
+```
 
-#### 5. Actualización de la Vista Home/Index
-- Modificar la vista `Views/Home/Index.cshtml`
-- Crear una página de bienvenida al sistema
-- Agregar una descripción breve del propósito del sistema
-- Incluir tarjetas o secciones que presenten los módulos principales
-- Agregar iconos o imágenes representativas (pueden ser placeholders)
-- Asegurar que la vista use el layout maestro correctamente
+**B. Crear Navbar Responsive con Bootstrap**
+```html
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                Sistema Control Almuerzos
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Empresas" asp-action="Index">Empresas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Lugares" asp-action="Index">Lugares</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Servicios" asp-action="Index">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Registros" asp-action="Index">Registros</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+```
 
-#### 6. Creación de Vista About
-- Crear una nueva acción `About()` en `HomeController.cs`
-- Crear la vista correspondiente `Views/Home/About.cshtml`
-- Agregar información sobre el sistema:
-  - Propósito del sistema
-  - Módulos principales
-  - Tecnologías utilizadas (ASP.NET MVC, Entity Framework, SQL Server)
-  - Comparación conceptual con la versión WinForms
-- Agregar un enlace a esta vista en el footer
+**Explicación:**
+- `navbar-expand-sm` - Navbar responsive (se colapsa en pantallas pequeñas)
+- `navbar-toggler` - Botón "hamburguesa" para móviles
+- `asp-controller` y `asp-action` - Tag Helpers que generan URLs automáticamente
+- `ms-auto` - Alinea el menú a la derecha
 
-#### 7. Documentación del Patrón MVC en el Proyecto
-- Crear un archivo de documentación `Docs/ArquitecturaMVC.md` (opcional)
+**⚠️ NOTA:** Los controllers (Empresas, Empleados, etc.) no existen todavía. Los crearemos en unidades futuras. Por ahora, los links darán error 404, pero está bien.
+
+**C. Mantener el área de contenido dinámico**
+```html
+<main role="main" class="pb-3">
+    <div class="container">
+        @RenderBody()
+    </div>
+</main>
+```
+
+**Explicación:**
+- `@RenderBody()` - Aquí se inyecta el contenido de cada vista (Index.cshtml, etc.)
+
+**D. Actualizar el Footer**
+```html
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2026 - Sistema Control Almuerzos
+    </div>
+</footer>
+```
+
+**E. Verificar Scripts de Bootstrap**
+```html
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+```
+
+---
+
+#### 2. Verificar _ViewStart.cshtml
+
+**Ubicación:** `Views/_ViewStart.cshtml`
+
+**Contenido esperado:**
+```cshtml
+@{
+    Layout = "_Layout";
+}
+```
+
+**Explicación:**
+- Este archivo hace que todas las vistas usen `_Layout.cshtml` automáticamente
+- No necesitas especificar el layout en cada vista individual
+
+---
+
+#### 3. Compilar y Verificar
+
+**Pasos:**
+1. Compilar: `dotnet build`
+2. Ejecutar: `dotnet run`
+3. Abrir navegador: `http://localhost:5000`
+
+**Verificar:**
+- ✅ Navbar aparece en la parte superior
+- ✅ Links del navbar son clicables (aunque den 404)
+- ✅ Footer aparece en la parte inferior
+- ✅ Navbar es responsive (prueba redimensionar la ventana)
+
+---
+
+### Resultado Esperado
+Un proyecto con:
+- **Layout maestro** funcional con navbar y footer
+- **Navegación responsive** que funciona en desktop y móvil
+- **Estructura base** lista para agregar contenido
+- **Proyecto compilando** sin errores
+
+### Mensaje de Commit
+```
+feat: implementar layout maestro y navegación base
+
+- Modificar _Layout.cshtml con navbar responsive de Bootstrap
+- Crear menú de navegación con links a Empresas, Empleados, Lugares, Servicios, Registros
+- Agregar footer básico con información de copyright
+- Configurar scripts de Bootstrap y jQuery para funcionalidad responsive
+- Verificar _ViewStart.cshtml para aplicar layout a todas las vistas
+```
+
+---
+
+## Commit 6B: Página de Inicio, Estilos y Documentación MVC
+
+### Objetivo
+Crear una página de inicio profesional, personalizar los estilos de la aplicación y documentar la comprensión del patrón MVC.
+
+### Paso a Paso
+
+#### 1. Actualizar la Página de Inicio (Index.cshtml)
+
+**Ubicación:** `Views/Home/Index.cshtml`
+
+**Reemplazar el contenido con:**
+```cshtml
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bienvenido al Sistema de Control de Almuerzos</h1>
+    <p class="lead">Gestión integral de servicios de comedor</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-building"></i> Empresas
+                </h5>
+                <p class="card-text">Gestiona las empresas registradas en el sistema.</p>
+                <a asp-controller="Empresas" asp-action="Index" class="btn btn-primary">Ver Empresas</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-people"></i> Empleados
+                </h5>
+                <p class="card-text">Administra los empleados y sus credenciales RFID.</p>
+                <a asp-controller="Empleados" asp-action="Index" class="btn btn-primary">Ver Empleados</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-geo-alt"></i> Lugares
+                </h5>
+                <p class="card-text">Configura los lugares donde se prestan servicios.</p>
+                <a asp-controller="Lugares" asp-action="Index" class="btn btn-primary">Ver Lugares</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-calendar-event"></i> Servicios
+                </h5>
+                <p class="card-text">Consulta y gestiona los servicios de comedor disponibles.</p>
+                <a asp-controller="Servicios" asp-action="Index" class="btn btn-primary">Ver Servicios</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-clipboard-check"></i> Registros
+                </h5>
+                <p class="card-text">Revisa los registros de asistencia a los servicios.</p>
+                <a asp-controller="Registros" asp-action="Index" class="btn btn-primary">Ver Registros</a>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+**Explicación:**
+- `@{ ViewData["Title"] = "Inicio"; }` - Define el título de la página
+- `display-4` - Clase de Bootstrap para título grande
+- `lead` - Clase de Bootstrap para texto destacado
+- `row` y `col-md-4` - Sistema de grillas de Bootstrap (3 columnas)
+- `card` - Componente de Bootstrap para tarjetas
+- `h-100` - Altura 100% (todas las cards tienen la misma altura)
+- `mb-4` - Margin bottom 4 (espacio inferior)
+
+---
+
+#### 2. Personalizar Estilos (site.css)
+
+**Ubicación:** `wwwroot/css/site.css`
+
+**Agregar al final del archivo:**
+```css
+/* ===== ESTILOS PERSONALIZADOS SISTEMA CONTROL ALMUERZOS ===== */
+
+/* Estilos generales */
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Navbar personalizado */
+.navbar-brand {
+  font-weight: bold;
+  color: #0066cc !important;
+  font-size: 1.2rem;
+}
+
+.nav-link {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #0066cc !important;
+}
+
+.nav-link.active {
+  color: #0066cc !important;
+  font-weight: 600;
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+  background-color: #f8f9fa;
+}
+
+/* Cards en la página de inicio */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #dee2e6;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card-title {
+  color: #0066cc;
+  font-weight: 600;
+}
+
+.card-title i {
+  margin-right: 8px;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: #0066cc;
+  border-color: #0066cc;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,102,204,0.3);
+}
+
+/* Títulos */
+.display-4 {
+  color: #333;
+  font-weight: 600;
+}
+
+.lead {
+  color: #666;
+}
+```
+
+**Explicación:**
+- **Navbar:** Color azul corporativo (#0066cc), efectos hover
+- **Cards:** Efecto de elevación al pasar el mouse, sombras suaves
+- **Botones:** Color personalizado, efecto hover con elevación
+- **Footer:** Fijo en la parte inferior, fondo gris claro
+
+---
+
+#### 3. Crear Documento de Comprensión del Patrón MVC
+
+**Ubicación:** `Guias/Comprension_MVC.md`
+
+**Contenido:**
+```markdown
+# Comprensión del Patrón MVC en Sistema Control Almuerzos
+
+## ¿Qué es MVC?
+
+MVC (Model-View-Controller) es un patrón de arquitectura de software que separa la aplicación en tres componentes principales:
+
+### 1. Model (Modelo)
+**Responsabilidad:** Representa los datos y la lógica de negocio de la aplicación.
+
+**En mi proyecto:**
+- `Models/Empresa.cs` - Representa una empresa
+- `Models/Empleado.cs` - Representa un empleado
+- `Models/Lugar.cs` - Representa un lugar de servicio
+- `Models/Servicio.cs` - Representa un servicio de comedor
+- `Models/Registro.cs` - Representa un registro de asistencia
+
+**Ejemplo:**
+```csharp
+public class Empleado
+{
+    [Key]
+    public int IdEmpleado { get; set; }
+    
+    [Required]
+    public string Nombre { get; set; }
+    
+    public int IdEmpresa { get; set; }
+    
+    // Propiedades de navegación
+    public Empresa? Empresa { get; set; }
+}
+```
+
+### 2. View (Vista)
+**Responsabilidad:** Presenta los datos al usuario (interfaz de usuario HTML).
+
+**En mi proyecto:**
+- `Views/Shared/_Layout.cshtml` - Layout maestro (navbar, footer)
+- `Views/Home/Index.cshtml` - Página de inicio
+- `Views/_ViewStart.cshtml` - Configuración global de layout
+
+**Ejemplo:**
+```cshtml
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>Bienvenido al sistema</p>
+```
+
+### 3. Controller (Controlador)
+**Responsabilidad:** Maneja las peticiones HTTP, interactúa con el modelo y selecciona la vista a mostrar.
+
+**En mi proyecto:**
+- `Controllers/HomeController.cs` - Controlador de la página de inicio
+
+**Ejemplo:**
+```csharp
+public class HomeController : Controller
+{
+    public IActionResult Index()
+    {
+        return View();  // Retorna Views/Home/Index.cshtml
+    }
+}
+```
+
+---
+
+## Flujo de una Petición HTTP en MVC
+
+### Ejemplo: Usuario visita la página de inicio
+
+1. **Usuario** hace clic en "Inicio" en el navbar
+2. **Navegador** envía petición GET a `http://localhost:5000/Home/Index`
+3. **Routing** (enrutamiento) analiza la URL:
+   - Controller: `Home`
+   - Action: `Index`
+4. **ASP.NET Core** instancia `HomeController`
+5. **Controller** ejecuta el método `Index()`
+6. **Controller** retorna `View()` (sin parámetros = busca `Views/Home/Index.cshtml`)
+7. **View Engine** (Razor):
+   - Lee `Views/_ViewStart.cshtml` → Layout = "_Layout"
+   - Lee `Views/Shared/_Layout.cshtml`
+   - Lee `Views/Home/Index.cshtml`
+   - Inyecta `Index.cshtml` en `@RenderBody()` de `_Layout.cshtml`
+8. **View Engine** genera HTML final
+9. **ASP.NET Core** envía el HTML al navegador
+10. **Usuario** ve la página renderizada
+
+---
+
+## Diagrama del Flujo
+
+```
+Usuario → Navegador → ASP.NET Core → Routing
+                            ↓
+                       HomeController.Index()
+                            ↓
+                       return View();
+                            ↓
+                       View Engine (Razor)
+                            ↓
+                    _Layout.cshtml + Index.cshtml
+                            ↓
+                        HTML Final
+                            ↓
+                       Navegador → Usuario
+```
+
+---
+
+## Ejemplo Concreto en Mi Proyecto
+
+### URL: `http://localhost:5000/Home/Index`
+
+#### 1. Routing (Program.cs)
+```csharp
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+```
+
+**Mapeo:**
+- `{controller=Home}` → `HomeController`
+- `{action=Index}` → Método `Index()`
+- `{id?}` → Parámetro opcional (no usado en este caso)
+
+#### 2. Controller (HomeController.cs)
+```csharp
+public class HomeController : Controller
+{
+    public IActionResult Index()
+    {
+        return View();
+    }
+}
+```
+
+#### 3. View (_ViewStart.cshtml)
+```cshtml
+@{
+    Layout = "_Layout";
+}
+```
+
+#### 4. Layout (_Layout.cshtml)
+```cshtml
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"] - Sistema Control Almuerzos</title>
+</head>
+<body>
+    <nav>...</nav>
+    
+    <main>
+        @RenderBody()  ← Aquí se inyecta Index.cshtml
+    </main>
+    
+    <footer>...</footer>
+</body>
+</html>
+```
+
+#### 5. Vista Específica (Index.cshtml)
+```cshtml
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<h1>Bienvenido al Sistema de Control de Almuerzos</h1>
+```
+
+#### 6. HTML Final Generado
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inicio - Sistema Control Almuerzos</title>
+</head>
+<body>
+    <nav>...</nav>
+    
+    <main>
+        <h1>Bienvenido al Sistema de Control de Almuerzos</h1>
+    </main>
+    
+    <footer>...</footer>
+</body>
+</html>
+```
+
+---
+
+## Ventajas del Patrón MVC
+
+### 1. Separación de Responsabilidades
+- **Modelo:** Solo maneja datos y lógica de negocio
+- **Vista:** Solo maneja presentación
+- **Controller:** Solo maneja flujo de control
+
+### 2. Mantenibilidad
+- Cambiar el diseño (Vista) no afecta la lógica (Controller/Model)
+- Cambiar la lógica no afecta la presentación
+- Código más organizado y fácil de mantener
+
+### 3. Reutilización
+- Un modelo puede usarse en múltiples vistas
+- Un layout se reutiliza en todas las páginas
+- Controllers pueden compartir lógica común
+
+### 4. Testabilidad
+- Puedes testear controllers sin la vista
+- Puedes testear modelos independientemente
+- Separación facilita unit testing
+
+---
+
+## Comparación con WinForms
+
+### WinForms (Proyecto Anterior)
+```
+┌─────────────────────────┐
+│ frmEmpleados.cs         │ ← Todo en un archivo
+│ - UI (controles)        │
+│ - Lógica de negocio     │
+│ - Acceso a datos        │
+└─────────────────────────┘
+```
+
+### MVC (Proyecto Actual)
+```
+┌─────────────────────────┐
+│ Empleado.cs (Model)     │ ← Solo datos
+└─────────────────────────┘
+           ↓
+┌─────────────────────────┐
+│ EmpleadosController.cs  │ ← Solo lógica de control
+└─────────────────────────┘
+           ↓
+┌─────────────────────────┐
+│ Index.cshtml (View)     │ ← Solo presentación
+└─────────────────────────┘
+```
+
+---
+
+## Conceptos Clave Aprendidos
+
+1. ✅ **Layout Maestro:** Plantilla reutilizable para todas las páginas
+2. ✅ **@RenderBody():** Inyecta contenido dinámico en el layout
+3. ✅ **Tag Helpers:** `asp-controller`, `asp-action` generan URLs
+4. ✅ **ViewData:** Pasa datos del controller a la vista
+5. ✅ **Routing:** Mapea URLs a controllers y acciones
+6. ✅ **Razor:** Motor de vistas que mezcla C# con HTML
+7. ✅ **Bootstrap:** Framework CSS para diseño responsive
+
+---
+
+## Próximos Pasos (Unidad 2)
+
+En la siguiente unidad aprenderemos a:
+- Crear controllers personalizados (EmpleadosController, EmpresasController)
+- Implementar CRUD completo (Create, Read, Update, Delete)
+- Pasar datos del controller a la vista usando ViewModels
+- Usar Entity Framework para consultar la base de datos
+- Crear formularios con validación
+```
+
+---
+
+#### 4. Compilar y Verificar
+
+**Pasos:**
+1. Compilar: `dotnet build`
+2. Ejecutar: `dotnet run`
+3. Abrir navegador: `http://localhost:5000`
+
+**Verificar:**
+- ✅ Página de inicio muestra tarjetas de módulos
+- ✅ Cards tienen efecto hover (elevación)
+- ✅ Colores personalizados aplicados
+- ✅ Navbar tiene color azul corporativo
+- ✅ Botones tienen efecto hover
+
+---
+
+### Resultado Esperado
+Un proyecto con:
+- **Página de inicio profesional** con tarjetas de presentación
+- **Estilos personalizados** aplicados (colores, efectos hover)
+- **Documentación completa** del patrón MVC
+- **Aplicación funcional** lista para desarrollo futuro
+
+### Mensaje de Commit
+```
+feat: crear página de inicio y personalizar estilos
+
+- Actualizar Index.cshtml con tarjetas de presentación de módulos principales
+- Personalizar site.css con estilos para navbar, cards, botones y footer
+- Agregar efectos hover y transiciones suaves
+- Configurar colores corporativos (#0066cc) en toda la aplicación
+- Crear documento Comprension_MVC.md explicando el patrón MVC aplicado
+- Documentar flujo completo de peticiones HTTP en el proyecto
+- Incluir comparación con arquitectura WinForms
+```
 - Documentar cómo se aplica el patrón MVC en este proyecto específico:
   - **Models**: Empleado, Empresa, Servicio, Comensal
   - **Views**: Vistas Razor en carpetas por controlador
@@ -901,31 +1502,42 @@ feat: implementar layout base y estructura de navegación MVC
 
 ---
 
-## Resumen de los 6 Commits
+## Resumen de los 7 Commits
 
 ### Commit 1: Configuración Inicial
 **Enfoque**: Infraestructura y configuración base del proyecto.
 **Entregable**: Proyecto MVC funcional con paquetes instalados y cadena de conexión configurada.
+**Tiempo estimado**: ~15 minutos
 
 ### Commit 2: Modelos de Dominio
 **Enfoque**: Creación de modelos con validaciones.
 **Entregable**: 5 modelos (Empresa, Empleado, Lugar, Servicio, Registro) con Data Annotations y propiedades de navegación declaradas.
+**Tiempo estimado**: ~20 minutos
 
 ### Commit 3: DbContext y Relaciones
 **Enfoque**: Configuración de Entity Framework y relaciones.
 **Entregable**: ApplicationDbContext con DbSets y 6 relaciones configuradas usando Fluent API.
+**Tiempo estimado**: ~30 minutos
 
 ### Commit 4: Índices y Optimizaciones
 **Enfoque**: Integridad y performance de base de datos.
 **Entregable**: Índices únicos, valores por defecto, check constraints e índices de performance configurados.
+**Tiempo estimado**: ~20 minutos
 
 ### Commit 5: Migraciones y Base de Datos
 **Enfoque**: Generación y aplicación de esquema de base de datos.
 **Entregable**: Migración InitialCreate aplicada, BD_Control_Almuerzos creada con 5 tablas, relaciones y constraints.
+**Tiempo estimado**: ~15 minutos
 
-### Commit 6: UI Base y Arquitectura
-**Enfoque**: Interfaz de usuario base y comprensión del patrón MVC.
-**Entregable**: Layout funcional, navegación implementada y estructura preparada para desarrollo futuro.
+### Commit 6A: Layout Maestro y Navegación
+**Enfoque**: Estructura HTML base y navegación responsive.
+**Entregable**: Layout funcional con navbar y footer, navegación implementada.
+**Tiempo estimado**: ~20 minutos
+
+### Commit 6B: Página de Inicio y Estilos
+**Enfoque**: Contenido visual y documentación del patrón MVC.
+**Entregable**: Página de inicio profesional, estilos personalizados, documento de comprensión MVC.
+**Tiempo estimado**: ~15 minutos
 
 ---
 
@@ -933,6 +1545,7 @@ feat: implementar layout base y estructura de navegación MVC
 
 - Cada commit debe compilar sin errores
 - Cada commit debe ser funcional y ejecutable
-- Los commits siguen una progresión lógica: Configuración → Modelos → DbContext+Relaciones → Índices+Optimizaciones → BD → UI
-- Se sigue la convención de commits: `feat:` para nuevas funcionalidades
+- Los commits siguen una progresión lógica: Configuración → Modelos → DbContext+Relaciones → Índices+Optimizaciones → BD → Layout → UI+Estilos
+- Se sigue la convención de commits: `feat:` para nuevas funcionalidades, `fix:` para correcciones
 - Los mensajes de commit son descriptivos y siguen el formato Conventional Commits
+- **Tiempo total estimado**: ~2 horas 15 minutos
