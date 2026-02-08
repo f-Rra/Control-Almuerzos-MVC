@@ -1,83 +1,79 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SCA Premium</title>
+    <title>@ViewData["Title"] - SCA</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.11.2/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body class="ux-master-crystal">
-    <div class="shader-layer">
-        <div class="orb o-1"></div>
-        <div class="orb o-2"></div>
-    </div>
+<body>
+    <div class="shader"><div class="orb o1"></div><div class="orb o2"></div></div>
 
-    <!-- NAVBAR: CRYSTAL LIGHT -->
-    <nav class="glass-nav-premium">
-        <div class="nav-brand-group">
-            <div class="logo-wrap-clean">
-                <img src="/images/logo.png" alt="SCA" />
+    <aside class="side">
+        <div class="side-line">
+            <div class="side-brand">
+                <img src="~/images/logo.png" alt="SCA" />
+                <h1>Control de Almuerzos</h1>
             </div>
-            <h1 class="nav-title-minimal">Control de Almuerzos</h1>
         </div>
-        
-        <div class="nav-user-info">
-            <div class="user-profile-group">
-                <span class="u-name-label">Usuario</span>
-            </div>
-            <a href="#" class="logout-minimal-btn" title="Cerrar Sesión">
-                <div class="logout-orb">
-                    <i class="bi bi-power"></i>
-                </div>
-            </a>
-        </div>
-    </nav>
-
-    <div class="app-main-layout">
-        <aside class="sidebar-crystal">
-            <nav class="side-nav-modern">
-                <a asp-controller="Home" asp-action="Index" class="menu-item-liquid active">
-                    <div class="active-pill-glow"></div>
-                    <div class="m-icon"><img src="/images/home.png" alt="H" /></div>
-                    <span class="m-text">INICIO</span>
+        <div class="side-nav">
+            <nav>
+                <a asp-controller="Home" asp-action="Index" class="mi active" data-tip="Inicio">
+                    <div class="bar"></div>
+                    <div class="ico"><img src="~/images/home.png" /></div>
+                    <span class="lbl">INICIO</span>
                 </a>
-                <a asp-controller="Registro" asp-action="Index" class="menu-item-liquid">
-                    <div class="active-pill-glow"></div>
-                    <div class="m-icon"><img src="/images/registro.png" alt="R" /></div>
-                    <span class="m-text">REGISTRO MANUAL</span>
+                <a asp-controller="Servicio" asp-action="Index" class="mi" data-tip="Servicios">
+                    <div class="bar"></div>
+                    <div class="ico"><img src="~/images/servicio.png" /></div>
+                    <span class="lbl">SERVICIOS</span>
                 </a>
-                <a asp-controller="Reportes" asp-action="Index" class="menu-item-liquid">
-                    <div class="active-pill-glow"></div>
-                    <div class="m-icon"><img src="/images/Reporte.png" alt="Re" /></div>
-                    <span class="m-text">REPORTES</span>
+                <a asp-controller="Registro" asp-action="Index" class="mi" data-tip="Registro Manual">
+                    <div class="bar"></div>
+                    <div class="ico"><img src="~/images/registro.png" /></div>
+                    <span class="lbl">REGISTRO MANUAL</span>
                 </a>
-                <a asp-controller="Admin" asp-action="Index" class="menu-item-liquid">
-                    <div class="active-pill-glow"></div>
-                    <div class="m-icon"><img src="/images/admin.png" alt="C" /></div>
-                    <span class="m-text">CONFIGURACIÓN</span>
+                <a asp-controller="Reporte" asp-action="Index" class="mi" data-tip="Reportes">
+                    <div class="bar"></div>
+                    <div class="ico"><img src="~/images/Reporte.png" /></div>
+                    <span class="lbl">REPORTES</span>
+                </a>
+                <a asp-controller="Configuracion" asp-action="Index" class="mi" data-tip="Configuración">
+                    <div class="bar"></div>
+                    <div class="ico"><img src="~/images/admin.png" /></div>
+                    <span class="lbl">CONFIGURACIÓN</span>
                 </a>
             </nav>
-        </aside>
+        </div>
+    </aside>
 
-        <main class="viewport-stage">
+    <div class="right-panel">
+        <nav class="topbar">
+            <div class="user-area">
+                <div class="pill">
+                    <div class="avatar">AD</div>
+                    <span class="uname">Administrador</span>
+                </div>
+                <a href="#" class="logout"><i class="bi bi-power"></i></a>
+            </div>
+        </nav>
+
+        <main class="content">
             @RenderBody()
         </main>
-    </div>
 
-    <footer class="footer-crystal-full">
-        <div class="footer-inner">
-            <p>&copy; 2026 - Sistema Control de Almuerzos</p>
-        </div>
-    </footer>
+        <footer class="foot">
+            <p>&lt;/&gt; SISTEMA CONTROL DE ALMUERZOS &mdash; 2026</p>
+        </footer>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
