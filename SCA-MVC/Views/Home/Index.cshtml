@@ -2,4 +2,92 @@
     ViewData["Title"] = "Inicio";
 }
 
-<h1>Panel de Control</h1>
+<div class="layout">
+    <div class="panel list-panel">
+        <div class="ph"><h2><i class="bi bi-clock-history"></i> Últimos Servicios</h2></div>
+        <div class="card-list">
+            <div class="svc-card selected">
+                <div class="svc-icon comedor"><i class="bi bi-building"></i></div>
+                <div class="svc-info">
+                    <div class="svc-top"><span class="svc-name">Comedor</span></div>
+                    <div class="svc-nums"><span class="svc-n">Comensales: <span>182</span></span><span class="svc-n">Invitados: <span>15</span></span></div>
+                </div>
+                <span class="svc-date">07/02/2026</span>
+                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">197</div></div>
+            </div>
+
+            <div class="svc-card">
+                <div class="svc-icon quincho"><i class="bi bi-tree"></i></div>
+                <div class="svc-info">
+                    <div class="svc-top"><span class="svc-name">Quincho</span></div>
+                    <div class="svc-nums"><span class="svc-n">Comensales: <span>45</span></span><span class="svc-n">Invitados: <span>8</span></span></div>
+                </div>
+                <span class="svc-date">07/02/2026</span>
+                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">53</div></div>
+            </div>
+
+            <div class="svc-card">
+                <div class="svc-icon comedor"><i class="bi bi-building"></i></div>
+                <div class="svc-info">
+                    <div class="svc-top"><span class="svc-name">Comedor</span></div>
+                    <div class="svc-nums"><span class="svc-n">Comensales: <span>195</span></span><span class="svc-n">Invitados: <span>12</span></span></div>
+                </div>
+                <span class="svc-date">06/02/2026</span>
+                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">207</div></div>
+            </div>
+
+            <div class="svc-card">
+                <div class="svc-icon quincho"><i class="bi bi-tree"></i></div>
+                <div class="svc-info">
+                    <div class="svc-top"><span class="svc-name">Quincho</span></div>
+                    <div class="svc-nums"><span class="svc-n">Comensales: <span>38</span></span><span class="svc-n">Invitados: <span>5</span></span></div>
+                </div>
+                <span class="svc-date">06/02/2026</span>
+                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">43</div></div>
+            </div>
+
+            <div class="svc-card">
+                <div class="svc-icon comedor"><i class="bi bi-building"></i></div>
+                <div class="svc-info">
+                    <div class="svc-top"><span class="svc-name">Comedor</span></div>
+                    <div class="svc-nums"><span class="svc-n">Comensales: <span>201</span></span><span class="svc-n">Invitados: <span>18</span></span></div>
+                </div>
+                <span class="svc-date">05/02/2026</span>
+                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">219</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-col">
+        <div class="panel">
+            <div class="ph"><h2><i class="bi bi-info-circle-fill"></i> Detalle del Servicio</h2></div>
+            <div class="det-body">
+                <div class="det-hero">
+                    <div class="svc-icon comedor" style="width:56px;height:56px;border-radius:16px;font-size:1.5rem"><i class="bi bi-building"></i></div>
+                    <div class="det-hero-info"><h3>Comedor</h3><p>07/02/2026</p></div>
+                </div>
+                <div class="det-grid">
+                    <div class="dg-item"><img src="~/images/proyeccion.png" /><div><div class="dg-l">Proyección</div><div class="dg-v gold">200</div></div></div>
+                    <div class="dg-item"><img src="~/images/duracion.png" /><div><div class="dg-l">Duración</div><div class="dg-v">85 min</div></div></div>
+                    <div class="dg-item"><img src="~/images/comensales.png" /><div><div class="dg-l">Comensales</div><div class="dg-v">182</div></div></div>
+                    <div class="dg-item"><img src="~/images/invitados.png" /><div><div class="dg-l">Invitados</div><div class="dg-v">15</div></div></div>
+                    <div class="det-total"><div><div class="dg-l">Total General</div><div class="dg-v">197</div></div><i class="bi bi-people-fill" style="font-size:2rem;opacity:0.25"></i></div>
+                    <div class="cov"><div class="cov-head"><span>Cobertura vs Proyección</span><span>91%</span></div><div class="cov-track"><div class="cov-fill" style="width:91%"></div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="comp-body">
+                <h3><i class="bi bi-bar-chart-line"></i> Comparativa Semanal</h3>
+                <div class="mini-bars">
+                    <div class="mb-item"><span class="mb-label">Lun</span><div class="mb-track"><div class="mb-fill gold" style="width:88%"></div></div><span class="mb-val">219</span></div>
+                    <div class="mb-item"><span class="mb-label">Mar</span><div class="mb-track"><div class="mb-fill gold" style="width:83%"></div></div><span class="mb-val">207</span></div>
+                    <div class="mb-item"><span class="mb-label">Mié</span><div class="mb-track"><div class="mb-fill gold" style="width:79%"></div></div><span class="mb-val">197</span></div>
+                    <div class="mb-item"><span class="mb-label">Jue</span><div class="mb-track"><div class="mb-fill gold" style="width:17%"></div></div><span class="mb-val">43</span></div>
+                    <div class="mb-item"><span class="mb-label">Vie</span><div class="mb-track"><div class="mb-fill gold" style="width:21%"></div></div><span class="mb-val">53</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
