@@ -1,0 +1,144 @@
+@{
+    ViewData["Title"] = "Registro Manual";
+}
+
+<div class="reg-wrap">
+
+<!-- ═══ 1. RESUMEN DE ESTADO ═══ -->
+<div class="summary-row">
+    <div class="sm-card registrados">
+        <div class="sm-ico registrados"><i class="bi bi-person-check-fill"></i></div>
+        <div class="sm-info">
+            <div class="sm-label">Registrados</div>
+            <div class="sm-value">156</div>
+        </div>
+    </div>
+    <div class="sm-card pendientes">
+        <div class="sm-ico pendientes"><i class="bi bi-person-dash-fill"></i></div>
+        <div class="sm-info">
+            <div class="sm-label">Pendientes</div>
+            <div class="sm-value">44</div>
+        </div>
+    </div>
+    <div class="sm-card total">
+        <div class="sm-ico total"><i class="bi bi-people-fill"></i></div>
+        <div class="sm-info">
+            <div class="sm-label">Total</div>
+            <div class="sm-value">200</div>
+        </div>
+    </div>
+    <div class="sm-card">
+        <div class="sm-ico progreso"><i class="bi bi-graph-up"></i></div>
+        <div class="sm-info">
+            <div class="sm-label">Progreso</div>
+            <div class="prog-mini">
+                <div class="prog-mini-track"><div class="prog-mini-fill" style="width:78%"></div></div>
+                <div class="prog-mini-pct">78%</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ 2. TABLA CON FILTROS INTEGRADOS ═══ -->
+<div class="rm-table-panel">
+    <div class="rm-panel-head">
+        <h3><i class="bi bi-pencil-square"></i> Registro Manual</h3>
+        <div class="rm-sep"></div>
+        <div class="rm-filter">
+            <label>Empresa</label>
+            <select>
+                <option>Todas</option>
+                <option>Administración</option>
+                <option>Gastronomía</option>
+                <option>Mantenimiento</option>
+                <option>Limpieza</option>
+                <option>Seguridad</option>
+                <option>Tecnología</option>
+            </select>
+        </div>
+        <div class="rm-search">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Buscar por nombre o apellido..."/>
+        </div>
+        <div class="rm-actions">
+            <div class="rm-sel-count"><span>2</span> seleccionados</div>
+            <button class="btn-agregar"><i class="bi bi-plus-circle"></i> Agregar</button>
+        </div>
+    </div>
+    <div class="rm-tbl-wrap">
+        <table class="reg-table rm-table">
+            <thead>
+                <tr>
+                    <th class="td-check"><input type="checkbox" title="Seleccionar todos"/></th>
+                    <th style="width:40px">#</th>
+                    <th>Empleado</th>
+                    <th>Empresa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="rm-selected">
+                    <td class="td-check"><input type="checkbox" checked/></td>
+                    <td class="td-num">1</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Juan Pérez</span></div></td>
+                    <td class="td-empresa">Administración</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">2</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">María García</span></div></td>
+                    <td class="td-empresa">Gastronomía</td>
+                </tr>
+                <tr class="rm-selected">
+                    <td class="td-check"><input type="checkbox" checked/></td>
+                    <td class="td-num">3</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Carlos López</span></div></td>
+                    <td class="td-empresa">Mantenimiento</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">4</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Ana Martínez</span></div></td>
+                    <td class="td-empresa">Limpieza</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">5</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Roberto Sánchez</span></div></td>
+                    <td class="td-empresa">Seguridad</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">6</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Laura Fernández</span></div></td>
+                    <td class="td-empresa">Tecnología</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">7</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Diego Morales</span></div></td>
+                    <td class="td-empresa">Logística</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">8</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Sofía Ramírez</span></div></td>
+                    <td class="td-empresa">Recursos Humanos</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">9</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Andrés Vega</span></div></td>
+                    <td class="td-empresa">Gerencia</td>
+                </tr>
+                <tr>
+                    <td class="td-check"><input type="checkbox"/></td>
+                    <td class="td-num">10</td>
+                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Camila Torres</span></div></td>
+                    <td class="td-empresa">Servicios</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div> <!-- /reg-wrap -->
