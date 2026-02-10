@@ -1,0 +1,127 @@
+@{
+    ViewData["Title"] = "Reportes";
+}
+
+<div class="rpt-wrap">
+
+<!-- ═══ 1. CONFIGURACIÓN DEL REPORTE ═══ -->
+<div class="panel">
+    <div class="config-row">
+        <div class="cfg-title"><i class="bi bi-bar-chart-line-fill"></i> Reportes</div>
+        <div class="cfg-sep"></div>
+        <div class="cfg-inputs">
+            <div class="cfg-item"><label>Desde</label><input type="date" value="2026-01-28"/></div>
+            <div class="cfg-item"><label>Hasta</label><input type="date" value="2026-02-03"/></div>
+            <div class="cfg-item"><label>Lugar</label><select><option>Todos</option><option>Comedor</option><option>Quincho</option></select></div>
+            <div class="cfg-item">
+                <label>Tipo de reporte</label>
+                <select class="rpt-tipo-select">
+                    <option>Lista de servicios</option>
+                    <option>Asistencias por empresas</option>
+                    <option>Cobertura vs proyección</option>
+                    <option>Distribución por día de semana</option>
+                </select>
+            </div>
+        </div>
+        <div class="cfg-sep"></div>
+        <div class="cfg-btn-wrap">
+            <button class="btn-srv btn-iniciar"><i class="bi bi-play-fill"></i> Generar Reporte</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ 2. TABLA DE RESULTADOS ═══ -->
+<div class="panel registro-section">
+    <div class="registro-inner">
+        <div class="rpt-ph">
+            <h2><i class="bi bi-table"></i> Lista de servicios</h2>
+            <div class="rpt-ph-right">
+                <span class="rpt-ph-count"><strong>7</strong> registros</span>
+                <button class="btn-exportar"><i class="bi bi-file-earmark-pdf"></i> Exportar PDF</button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="reg-table">
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Fecha</th>
+                        <th>Proyección</th>
+                        <th>Duración (min)</th>
+                        <th>Total Comensales</th>
+                        <th>Total Invitados</th>
+                        <th>Total General</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="td-num">1</td>
+                        <td class="td-fecha">03/02/2026</td>
+                        <td>200</td>
+                        <td class="td-muted">95</td>
+                        <td>156</td>
+                        <td>15</td>
+                        <td class="td-total">171</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">2</td>
+                        <td class="td-fecha">02/02/2026</td>
+                        <td>180</td>
+                        <td class="td-muted">88</td>
+                        <td>142</td>
+                        <td>12</td>
+                        <td class="td-total">154</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">3</td>
+                        <td class="td-fecha">01/02/2026</td>
+                        <td>190</td>
+                        <td class="td-muted">102</td>
+                        <td>165</td>
+                        <td>18</td>
+                        <td class="td-total">183</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">4</td>
+                        <td class="td-fecha">31/01/2026</td>
+                        <td>200</td>
+                        <td class="td-muted">91</td>
+                        <td>178</td>
+                        <td>10</td>
+                        <td class="td-total">188</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">5</td>
+                        <td class="td-fecha">30/01/2026</td>
+                        <td>210</td>
+                        <td class="td-muted">85</td>
+                        <td>189</td>
+                        <td>20</td>
+                        <td class="td-total">209</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">6</td>
+                        <td class="td-fecha">29/01/2026</td>
+                        <td>195</td>
+                        <td class="td-muted">97</td>
+                        <td>160</td>
+                        <td>14</td>
+                        <td class="td-total">174</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">7</td>
+                        <td class="td-fecha">28/01/2026</td>
+                        <td>200</td>
+                        <td class="td-muted">90</td>
+                        <td>170</td>
+                        <td>16</td>
+                        <td class="td-total">186</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="rpt-info"><i class="bi bi-info-circle"></i> 28/01/2026 – 03/02/2026 · Todos los lugares</div>
+    </div>
+</div>
+
+</div> <!-- /rpt-wrap -->

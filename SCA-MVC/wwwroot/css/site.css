@@ -542,3 +542,29 @@ body {
 
 .td-check { width: 40px; text-align: center; }
 .td-check input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+
+/* ══════════════════════════════════════════
+   REPORTES — Vista de Reportes
+   ══════════════════════════════════════════ */
+
+.rpt-wrap { width: 90%; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0; }
+
+.rpt-tipo-select { min-width: 200px; }
+
+.rpt-ph { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--glass-border); }
+.rpt-ph h2 { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.rpt-ph h2 i { color: var(--primary); }
+
+.rpt-ph-right { display: flex; align-items: center; gap: 12px; }
+.rpt-ph-count { font-size: 0.82rem; color: #999; font-weight: 600; }
+.rpt-ph-count strong { color: #B8860B; }
+
+.btn-exportar { padding: 10px 24px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--primary), #FFD54F); color: #1A1A1A; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.25s; white-space: nowrap; box-shadow: 0 4px 12px var(--primary-glow); }
+.btn-exportar:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+.td-fecha { font-weight: 600; }
+.td-muted { color: #777; }
+.td-total { font-weight: 700; color: #B8860B; }
+
+.rpt-info { padding: 12px 20px; font-size: 0.78rem; color: #999; font-weight: 500; display: flex; align-items: center; gap: 6px; border-top: 1px solid var(--glass-border); background: rgba(255, 193, 7, 0.03); }
+.rpt-info i { color: var(--primary); font-size: 0.78rem; line-height: 1; }
