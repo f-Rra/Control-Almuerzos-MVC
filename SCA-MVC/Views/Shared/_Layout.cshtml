@@ -22,28 +22,31 @@
             </div>
         </div>
         <div class="side-nav">
+            @{
+                var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+            }
             <nav>
-                <a asp-controller="Home" asp-action="Index" class="mi active" data-tip="Inicio">
+                <a asp-controller="Home" asp-action="Index" class="mi @(controller == "Home" ? "active" : "")" data-tip="Inicio">
                     <div class="bar"></div>
                     <div class="ico"><img src="~/images/home.png" /></div>
                     <span class="lbl">INICIO</span>
                 </a>
-                <a asp-controller="Servicio" asp-action="Index" class="mi" data-tip="Servicios">
+                <a asp-controller="Servicio" asp-action="Index" class="mi @(controller == "Servicio" ? "active" : "")" data-tip="Servicios">
                     <div class="bar"></div>
                     <div class="ico"><img src="~/images/servicio.png" /></div>
                     <span class="lbl">SERVICIOS</span>
                 </a>
-                <a asp-controller="Registro" asp-action="Index" class="mi" data-tip="Registro Manual">
+                <a asp-controller="Registro" asp-action="Index" class="mi @(controller == "Registro" ? "active" : "")" data-tip="Registro Manual">
                     <div class="bar"></div>
                     <div class="ico"><img src="~/images/registro.png" /></div>
                     <span class="lbl">REGISTRO MANUAL</span>
                 </a>
-                <a asp-controller="Reporte" asp-action="Index" class="mi" data-tip="Reportes">
+                <a asp-controller="Reporte" asp-action="Index" class="mi @(controller == "Reporte" ? "active" : "")" data-tip="Reportes">
                     <div class="bar"></div>
                     <div class="ico"><img src="~/images/Reporte.png" /></div>
                     <span class="lbl">REPORTES</span>
                 </a>
-                <a asp-controller="Configuracion" asp-action="Index" class="mi" data-tip="Configuración">
+                <a asp-controller="Configuracion" asp-action="Index" class="mi @(controller == "Configuracion" ? "active" : "")" data-tip="Configuración">
                     <div class="bar"></div>
                     <div class="ico"><img src="~/images/admin.png" /></div>
                     <span class="lbl">CONFIGURACIÓN</span>

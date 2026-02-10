@@ -1,0 +1,148 @@
+@{
+    ViewData["Title"] = "Servicio";
+}
+
+<div class="srv-wrap">
+
+<!-- ═══ 1. CONFIGURACIÓN DEL SERVICIO ═══ -->
+<div class="panel">
+    <div class="config-row">
+        <div class="cfg-title"><i class="bi bi-gear-fill"></i> Configuración del Servicio</div>
+        <div class="cfg-sep"></div>
+        <div class="cfg-inputs">
+            <div class="cfg-item"><label>Lugar</label><select><option>Comedor</option><option>Quincho</option></select></div>
+            <div class="cfg-item"><label>Fecha</label><input type="date" value="2026-02-09"/></div>
+            <div class="cfg-item"><label>Proyección</label><input type="number" value="200" min="0"/></div>
+            <div class="cfg-item"><label>Invitados</label><input type="number" value="15" min="0"/></div>
+        </div>
+        <div class="cfg-sep"></div>
+        <div class="cfg-btn-wrap">
+            <button class="btn-srv btn-iniciar"><i class="bi bi-play-fill"></i> Iniciar Servicio</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ 2. BARRA DE ESTADO ═══ -->
+<div class="status-bar">
+    <div class="st-card">
+        <i class="bi bi-power ico-lg" style="color:var(--green)"></i>
+        <div class="st-label">Estado</div>
+        <div class="st-value activo"><span class="st-dot on"></span> ACTIVO</div>
+    </div>
+    <div class="st-card">
+        <i class="bi bi-stopwatch ico-lg"></i>
+        <div class="st-label">Duración</div>
+        <div class="st-crono">01:23:45</div>
+    </div>
+    <div class="st-card">
+        <i class="bi bi-graph-up ico-lg" style="color:#42A5F5"></i>
+        <div class="st-label">Progreso</div>
+        <div class="prog-row"><div class="prog-track"><div class="prog-fill" style="width:78%"></div></div><div class="prog-pct">78%</div></div>
+    </div>
+    <div class="st-card">
+        <i class="bi bi-person-check ico-lg" style="color:var(--green)"></i>
+        <div class="st-label">Registrados</div>
+        <div class="st-big">156</div>
+    </div>
+    <div class="st-card">
+        <i class="bi bi-person-dash ico-lg" style="color:var(--red)"></i>
+        <div class="st-label">Faltan</div>
+        <div class="st-big">44</div>
+    </div>
+    <div class="st-card">
+        <i class="bi bi-people-fill ico-lg"></i>
+        <div class="st-label">Total</div>
+        <div class="st-big">171</div>
+    </div>
+</div>
+
+<!-- ═══ 3. REGISTRO DE COMENSALES ═══ -->
+<div class="panel registro-section">
+    <div class="registro-inner">
+        <div class="ph">
+            <h2><i class="bi bi-upc-scan"></i> Registro de Comensales</h2>
+        </div>
+        <div class="rfid-row">
+            <input class="rfid-input" placeholder="Escanear credencial..." autofocus/>
+            <button class="btn-registrar">
+                <i class="bi bi-arrow-return-left"></i> Ingresar Registro
+            </button>
+        </div>
+        <div class="table-wrap">
+            <table class="reg-table">
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Empleado</th>
+                        <th>Empresa</th>
+                        <th style="width:90px">Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="td-num">1</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Héctor Vega</span></div></td>
+                        <td class="td-empresa">Gastronomía</td>
+                        <td class="td-hora">12:06</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">2</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Carla Ibarra</span></div></td>
+                        <td class="td-empresa">Limpieza</td>
+                        <td class="td-hora">12:05</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">3</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Adriana Miranda</span></div></td>
+                        <td class="td-empresa">Gerencia</td>
+                        <td class="td-hora">12:05</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">4</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Óscar Molina</span></div></td>
+                        <td class="td-empresa">Administración</td>
+                        <td class="td-hora">12:04</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">5</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Beatriz Figueroa</span></div></td>
+                        <td class="td-empresa">Recursos Humanos</td>
+                        <td class="td-hora">12:03</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">6</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Juan Perez</span></div></td>
+                        <td class="td-empresa">Logística</td>
+                        <td class="td-hora">12:02</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">7</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Andrés Morales</span></div></td>
+                        <td class="td-empresa">Servicios</td>
+                        <td class="td-hora">12:02</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">8</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">María García</span></div></td>
+                        <td class="td-empresa">Mantenimiento</td>
+                        <td class="td-hora">12:01</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">9</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Roberto Sánchez</span></div></td>
+                        <td class="td-empresa">Seguridad</td>
+                        <td class="td-hora">12:00</td>
+                    </tr>
+                    <tr>
+                        <td class="td-num">10</td>
+                        <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Laura Fernández</span></div></td>
+                        <td class="td-empresa">Tecnología</td>
+                        <td class="td-hora">11:59</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div> <!-- /srv-wrap -->
