@@ -1,0 +1,170 @@
+@{
+    ViewData["Title"] = "Empresas";
+}
+
+<div class="emp-wrap">
+
+<!-- ═══ LAYOUT 2 COLUMNAS ═══ -->
+<div class="emp-grid">
+
+    <!-- ═══ COLUMNA IZQUIERDA — LISTA DE EMPRESAS ═══ -->
+    <div class="emp-list-col">
+        <div class="panel registro-section">
+            <div class="registro-inner">
+                <div class="emp-ph">
+                    <h2><i class="bi bi-building"></i> Lista de Empresas</h2>
+                    <div class="emp-ph-right">
+                        <span class="emp-ph-count"><strong>8</strong> empresas</span>
+                    </div>
+                </div>
+                <div class="emp-filter-row">
+                    <div class="rm-search">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Buscar por nombre..."/>
+                    </div>
+                    <button class="btn-nueva-emp"><i class="bi bi-plus-circle"></i> Nueva Empresa</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="reg-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40px">#</th>
+                                <th>Nombre</th>
+                                <th style="width:110px">Empleados</th>
+                                <th style="width:100px">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="emp-row-selected">
+                                <td class="td-num">1</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Administración</span></div></td>
+                                <td>24</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">2</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Gastronomía</span></div></td>
+                                <td>18</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">3</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Mantenimiento</span></div></td>
+                                <td>31</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">4</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Limpieza</span></div></td>
+                                <td>15</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">5</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Seguridad</span></div></td>
+                                <td>12</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">6</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Tecnología</span></div></td>
+                                <td>9</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">7</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Recursos Humanos</span></div></td>
+                                <td>7</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">8</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Logística</span></div></td>
+                                <td>5</td>
+                                <td><span class="emp-badge inactivo">Inactivo</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ COLUMNA DERECHA — FORMULARIO + ESTADÍSTICAS ═══ -->
+    <div class="emp-detail-col">
+
+        <!-- Formulario de Alta/Edición -->
+        <div class="panel">
+            <div class="config-row">
+                <div class="cfg-title"><i class="bi bi-pencil-square"></i> Detalles de la Empresa</div>
+            </div>
+            <div class="emp-form">
+                <div class="emp-field">
+                    <label>Nombre</label>
+                    <input type="text" value="Administración" placeholder="Nombre de la empresa"/>
+                </div>
+                <div class="emp-field">
+                    <label>Estado</label>
+                    <div class="emp-radios">
+                        <label class="emp-radio">
+                            <input type="radio" name="estado" value="1" checked/>
+                            <span class="emp-radio-mark activo"></span>
+                            Activo
+                        </label>
+                        <label class="emp-radio">
+                            <input type="radio" name="estado" value="0"/>
+                            <span class="emp-radio-mark inactivo"></span>
+                            Inactivo
+                        </label>
+                    </div>
+                </div>
+                <div class="emp-actions">
+                    <button class="btn-srv btn-iniciar"><i class="bi bi-check-lg"></i> Guardar</button>
+                    <button class="btn-emp-sec"><i class="bi bi-x-lg"></i> Cancelar</button>
+                    <button class="btn-emp-danger"><i class="bi bi-trash3"></i> Eliminar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas de la Empresa -->
+        <div class="panel">
+            <div class="config-row">
+                <div class="cfg-title"><i class="bi bi-graph-up"></i> Estadísticas de la Empresa</div>
+            </div>
+            <div class="emp-stats">
+                <div class="emp-stat-item">
+                    <div class="emp-stat-ico"><i class="bi bi-people-fill"></i></div>
+                    <div class="emp-stat-info">
+                        <div class="emp-stat-label">Total Empleados</div>
+                        <div class="emp-stat-value">24</div>
+                    </div>
+                </div>
+                <div class="emp-stat-item">
+                    <div class="emp-stat-ico inactivo"><i class="bi bi-person-dash-fill"></i></div>
+                    <div class="emp-stat-info">
+                        <div class="emp-stat-label">Inactivos</div>
+                        <div class="emp-stat-value inactivo">3</div>
+                    </div>
+                </div>
+                <div class="emp-stat-item">
+                    <div class="emp-stat-ico asistencias"><i class="bi bi-calendar-check-fill"></i></div>
+                    <div class="emp-stat-info">
+                        <div class="emp-stat-label">Asistencias (Mes Actual)</div>
+                        <div class="emp-stat-value">312</div>
+                    </div>
+                </div>
+                <div class="emp-stat-item">
+                    <div class="emp-stat-ico promedio"><i class="bi bi-bar-chart-fill"></i></div>
+                    <div class="emp-stat-info">
+                        <div class="emp-stat-label">Promedio Diario</div>
+                        <div class="emp-stat-value">15.6</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- /emp-grid -->
+
+</div> <!-- /emp-wrap -->
