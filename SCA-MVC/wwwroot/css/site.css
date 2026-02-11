@@ -717,3 +717,40 @@ body {
 /* Progress bar */
 .est-top-bar { width: 100%; height: 8px; border-radius: 6px; background: rgba(0, 0, 0, 0.05); overflow: hidden; }
 .est-top-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--primary), #FFD54F); transition: width 0.6s ease; }
+
+/* ══════════════════════════════════════════
+   ADMIN — Vista de Inicio del Administrador
+   ══════════════════════════════════════════ */
+
+.adm-wrap { width: 90%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; flex: 1; min-height: 0; justify-content: center; }
+
+.adm-header { text-align: center; }
+.adm-header h1 { font-size: 1.5rem; font-weight: 800; }
+.adm-header h1 i { color: var(--primary); }
+.adm-header p { color: #999; font-size: 0.88rem; margin-top: 6px; font-weight: 500; }
+
+.adm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+.adm-card { padding: 28px 24px; text-align: center; transition: 0.3s; cursor: pointer; }
+.adm-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06); }
+.adm-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+.adm-card p { font-size: 0.82rem; color: #999; margin-bottom: 14px; }
+
+.adm-circle { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; position: relative; }
+.adm-circle::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px dashed; opacity: 0.2; }
+.adm-circle.emp { background: rgba(156, 39, 176, 0.1); color: #9C27B0; }
+.adm-circle.emp::after { border-color: #9C27B0; }
+.adm-circle.empl { background: rgba(255, 193, 7, 0.12); color: #B8860B; }
+.adm-circle.empl::after { border-color: #B8860B; }
+.adm-circle.est { background: rgba(76, 175, 80, 0.1); color: #4CAF50; }
+.adm-circle.est::after { border-color: #4CAF50; }
+
+.adm-card-num { font-size: 1.6rem; font-weight: 900; color: #B8860B; margin-bottom: 14px; line-height: 1.3; }
+.adm-card-num small { font-size: 0.65rem; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+
+.adm-btn { padding: 9px 22px; border-radius: 12px; border: 1.5px solid var(--glass-border); background: rgba(255, 255, 255, 0.6); font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; color: #555; text-decoration: none; }
+.adm-btn:hover { border-color: var(--primary); background: rgba(255, 193, 7, 0.06); color: #B8860B; transform: translateY(-2px); }
+
+.adm-info { text-align: center; }
+.adm-info-inner { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-size: 0.82rem; color: #999; font-weight: 500; }
+.adm-info-inner i { color: var(--primary); }

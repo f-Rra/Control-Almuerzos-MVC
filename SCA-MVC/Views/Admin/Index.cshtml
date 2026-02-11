@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Administración";
+}
+
+<div class="adm-wrap">
+
+<!-- ═══ HEADER ═══ -->
+<div class="adm-header">
+    <h1><i class="bi bi-shield-check"></i> Panel de Administración</h1>
+    <p>Accesos directos a la gestión del sistema</p>
+</div>
+
+<!-- ═══ GRID DE CARDS ═══ -->
+<div class="adm-grid">
+
+    <!-- ── Empresas ── -->
+    <div class="panel adm-card">
+        <div class="adm-circle emp"><i class="bi bi-building"></i></div>
+        <h3>Empresas</h3>
+        <p>Gestionar empresas, estados y asignaciones</p>
+        <div class="adm-card-num">12<br><small>empresas</small></div>
+        <a asp-controller="Empresa" asp-action="Index" class="adm-btn"><i class="bi bi-arrow-right"></i> Acceder</a>
+    </div>
+
+    <!-- ── Empleados ── -->
+    <div class="panel adm-card">
+        <div class="adm-circle empl"><i class="bi bi-people-fill"></i></div>
+        <h3>Empleados</h3>
+        <p>Empleados, credenciales y estados</p>
+        <div class="adm-card-num">156<br><small>empleados</small></div>
+        <a asp-controller="Empleado" asp-action="Index" class="adm-btn"><i class="bi bi-arrow-right"></i> Acceder</a>
+    </div>
+
+    <!-- ── Estadísticas ── -->
+    <div class="panel adm-card">
+        <div class="adm-circle est"><i class="bi bi-graph-up"></i></div>
+        <h3>Estadísticas</h3>
+        <p>KPIs, tendencias y top empresas</p>
+        <div class="adm-card-num">3,284<br><small>asist/mes</small></div>
+        <a asp-controller="Estadistica" asp-action="Index" class="adm-btn"><i class="bi bi-arrow-right"></i> Acceder</a>
+    </div>
+
+</div>
+
+<!-- ═══ INFO BAR ═══ -->
+<div class="panel adm-info">
+    <div class="adm-info-inner"><i class="bi bi-info-circle"></i> Las estadísticas se actualizan automáticamente con cada servicio registrado</div>
+</div>
+
+</div>
