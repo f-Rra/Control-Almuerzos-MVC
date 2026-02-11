@@ -102,6 +102,7 @@ feat: diseño de vista de reportes
 
 **Descripción:** Crear la vista CRUD de empresas (`Views/Empresa/Index.cshtml`) que replica `ucEmpresas`. Incluye: layout dividido con tabla de empresas a la izquierda (con barra de búsqueda y conteo) y formulario de alta/edición a la derecha (nombre, estado activo/inactivo, botones guardar/cancelar/eliminar). Panel inferior con estadísticas de la empresa seleccionada (total empleados, inactivos, asistencias del mes, promedio diario). Datos estáticos.
 
+
 **Archivos:**
 - `Views/Empresa/Index.cshtml` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
@@ -158,28 +159,30 @@ feat: diseño de vista de estadísticas y KPIs
 
 ---
 
-### Commit 7 — Vista de Configuración
+### Commit 7 — Vista de Inicio del Administrador
 
-**Descripción:** Crear la vista de configuración (`Views/Configuracion/Index.cshtml`) que replica `ucConfiguracion`. Incluye: sección de conexión a base de datos (cadena de conexión con botón probar/guardar, indicador de estado), sección de respaldos (ruta de destino, frecuencia, botones crear/restaurar respaldo, info del último respaldo), sección de información de la aplicación (versión, framework, fecha compilación). Datos estáticos.
+**Descripción:** Crear la vista de inicio exclusiva para el rol Admin (`Views/Admin/Index.cshtml`) que será la página principal al iniciar sesión como administrador. Funciona como hub de acceso rápido a la gestión del sistema. Incluye: encabezado de bienvenida, grid de cards (Empresas, Empleados, Estadísticas) con ícono, título, descripción breve, indicador numérico (ej: "12 empresas") y botón "Ir a...". Cada card enlaza a su respectivo controlador. Datos estáticos.
 
 **Archivos:**
-- `Views/Configuracion/Index.cshtml` (crear)
+- `Views/Admin/Index.cshtml` (crear)
+- `Controllers/AdminController.cs` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
 
 **Mensaje:**
 ```
-feat: diseño de vista de configuración del sistema
+feat: diseño de vista de inicio del administrador
 
-- Panel de conexión a base de datos con indicador de estado
-- Sección de respaldos (crear, restaurar, historial)
-- Información de la aplicación (versión, framework)
+- Hub de acceso rápido a Empresas, Empleados y Estadísticas
+- Grid de cards con íconos, conteos e indicadores
+- Controlador AdminController con acción Index
+- Estilos adm-* integrados en site.css
 ```
 
 ---
 
 ### Commit 8 — Navegación activa en sidebar y limpieza
 
-**Descripción:** Implementar la lógica de resaltado del ítem activo en el sidebar usando `ViewContext.RouteData` para determinar qué controlador está activo y aplicar la clase `.active` dinámicamente. Crear los controladores vacíos necesarios (`ServicioController`, `RegistroController`, `ReporteController`, `EmpresaController`, `EmpleadoController`, `EstadisticaController`, `ConfiguracionController`) con solo la acción `Index()` retornando la vista. Eliminar `Privacy.cshtml` y su acción. Limpiar `_Layout.cshtml.css` (estilos scaffold no usados).
+**Descripción:** Implementar la lógica de resaltado del ítem activo en el sidebar usando `ViewContext.RouteData` para determinar qué controlador está activo y aplicar la clase `.active` dinámicamente. Crear los controladores vacíos necesarios (`ServicioController`, `RegistroController`, `ReporteController`, `EmpresaController`, `EmpleadoController`, `EstadisticaController`) con solo la acción `Index()` retornando la vista. Eliminar `Privacy.cshtml` y su acción. Limpiar `_Layout.cshtml.css` (estilos scaffold no usados).
 
 **Archivos:**
 - `Views/Shared/_Layout.cshtml` (modificar sidebar con lógica Razor de clase activa)
@@ -189,13 +192,12 @@ feat: diseño de vista de configuración del sistema
 - `Controllers/EmpresaController.cs` (crear)
 - `Controllers/EmpleadoController.cs` (crear)
 - `Controllers/EstadisticaController.cs` (crear)
-- `Controllers/ConfiguracionController.cs` (crear)
 - `Views/Home/Privacy.cshtml` (eliminar)
 - `Views/Shared/_Layout.cshtml.css` (limpiar)
 
 **Mensaje:**
 ```
-feat: navegación activa en sidebar y controladores base
+feat: agregar navegación activa en sidebar y controladores base
 
 - Lógica Razor para resaltado dinámico del ítem activo en sidebar
 - Controladores base con acción Index para cada módulo
@@ -227,7 +229,7 @@ feat: navegación activa en sidebar y controladores base
 
 **Mensaje:**
 ```
-feat: capa de acceso a datos ADO.NET
+feat: crear capa de acceso a datos con ADO.NET
 
 - Clase AccesoDatos con SqlConnection/SqlCommand/SqlDataReader
 - NegocioException con traducción de errores SQL a español
@@ -247,7 +249,7 @@ feat: capa de acceso a datos ADO.NET
 
 **Mensaje:**
 ```
-feat: stored procedures, vistas y triggers en SQL Server
+feat: crear stored procedures, vistas y triggers en SQL Server
 
 - 33 stored procedures para todas las operaciones CRUD y reportes
 - 2 vistas (EmpleadosSinAlmorzar, EmpresasConEmpleados)
@@ -271,7 +273,7 @@ feat: stored procedures, vistas y triggers en SQL Server
 
 **Mensaje:**
 ```
-feat: capa de servicios de negocio con ADO.NET
+feat: crear capa de servicios de negocio con ADO.NET
 
 - Servicios para Empresa, Empleado, Servicio, Registro y Lugar
 - Interfaces para inyección de dependencias
@@ -293,7 +295,7 @@ feat: capa de servicios de negocio con ADO.NET
 
 **Mensaje:**
 ```
-feat: CRUD funcional de empresas con ADO.NET
+feat: implementar CRUD funcional de empresas con ADO.NET
 
 - Controlador con acciones Index, Create, Edit, Delete
 - Vista conectada a datos reales con Razor
@@ -316,7 +318,7 @@ feat: CRUD funcional de empresas con ADO.NET
 
 **Mensaje:**
 ```
-feat: CRUD funcional de empleados con ADO.NET
+feat: implementar CRUD funcional de empleados con ADO.NET
 
 - Controlador con acciones CRUD completas
 - Filtros por empresa y búsqueda por nombre/credencial
@@ -338,7 +340,7 @@ feat: CRUD funcional de empleados con ADO.NET
 
 **Mensaje:**
 ```
-feat: servicio activo y registro por credencial RFID
+feat: implementar servicio activo y registro por credencial RFID
 
 - Iniciar/finalizar servicio con validaciones
 - Registro de comensales por credencial con AJAX
@@ -360,10 +362,7 @@ feat: servicio activo y registro por credencial RFID
 
 **Mensaje:**
 ```
-feat: registro manual de empleados
-
-- Filtros por empresa y búsqueda por nombre
-- Selección múltiple con checkboxes
+feat: implementar registro manual de empleados
 - Registro masivo vía AJAX
 - Actualización dinámica del listado y conteos
 ```
@@ -385,7 +384,7 @@ feat: registro manual de empleados
 
 **Mensaje:**
 ```
-feat: reportes con filtros y exportación PDF
+feat: implementar reportes con filtros y exportación PDF
 
 - 4 tipos de reporte (servicios, empresas, cobertura, distribución)
 - Filtros por fecha, lugar y tipo de reporte
@@ -412,7 +411,7 @@ feat: reportes con filtros y exportación PDF
 
 **Mensaje:**
 ```
-feat: estadísticas y dashboard con datos reales
+feat: conectar estadísticas y dashboard con datos reales
 
 - KPIs de empleados, empresas, servicios y asistencias
 - Top 5 empresas con barras de progreso
@@ -422,30 +421,7 @@ feat: estadísticas y dashboard con datos reales
 
 ---
 
-### Commit 18 — Configuración del sistema
-
-**Descripción:** Implementar `ConfiguracionController`: `Index` (vista de configuración), `ProbarConexion` (AJAX), `CrearRespaldo` (POST), `RestaurarRespaldo` (POST), `InfoSistema` (GET). Conectar la vista con datos reales. Implementar `ConfiguracionNegocio` para info de BD, respaldos y estado de conexión. La funcionalidad de cambiar cadena de conexión se adapta al contexto web (solo lectura, se muestra pero no se edita en runtime).
-
-**Archivos:**
-- `Controllers/ConfiguracionController.cs` (implementar)
-- `Views/Configuracion/Index.cshtml` (conectar con datos reales)
-- `Services/IConfiguracionNegocio.cs` + `Services/ConfiguracionNegocio.cs` (crear)
-- `Models/Configuracion.cs` (crear)
-- `wwwroot/js/site.js` (agregar JS para probar conexión AJAX)
-
-**Mensaje:**
-```
-feat: configuración del sistema
-
-- Información de base de datos (nombre, tamaño, fecha)
-- Crear y restaurar respaldos con confirmación
-- Probar conexión vía AJAX
-- Información de la aplicación (versión, framework)
-```
-
----
-
-### Commit 19 — Seed de datos iniciales
+### Commit 18 — Seed de datos iniciales
 
 **Descripción:** Ejecutar datos iniciales en la base de datos: 2 lugares, 12 empresas, 60 empleados con credenciales RF001-RF060, 10 servicios finalizados y ~490 registros de asistencia. Incluir el script SQL en la carpeta del proyecto. Esto permite probar toda la funcionalidad CRUD y reportes con datos realistas.
 
@@ -454,7 +430,7 @@ feat: configuración del sistema
 
 **Mensaje:**
 ```
-feat: seed de datos iniciales en SQL Server
+feat: agregar seed de datos iniciales en SQL Server
 
 - 2 lugares (Comedor, Quincho)
 - 12 empresas del complejo industrial
@@ -464,7 +440,7 @@ feat: seed de datos iniciales en SQL Server
 
 ---
 
-### Commit 20 — Validaciones completas y mensajes de usuario
+### Commit 19 — Validaciones completas y mensajes de usuario
 
 **Descripción:** Implementar validaciones client-side con jQuery Validation + Unobtrusive en todos los formularios. Crear clase `MensajesConstantes` con todas las constantes de mensajes en español (validación, confirmación, éxito, error). Crear helper `MensajesUI` para manejo centralizado de TempData (éxito/error/advertencia). Agregar `_ValidationScriptsPartial` en todas las vistas con formularios. Implementar notificaciones toast globales en el layout que leen TempData.
 
@@ -479,7 +455,7 @@ feat: seed de datos iniciales en SQL Server
 
 **Mensaje:**
 ```
-feat: validaciones completas y sistema de mensajes
+feat: agregar validaciones completas y sistema de mensajes
 
 - Validaciones client-side con jQuery Validation
 - Constantes de mensajes en español
@@ -495,7 +471,7 @@ feat: validaciones completas y sistema de mensajes
 
 ---
 
-### Commit 21 — Refactorización: de ADO.NET a Entity Framework
+### Commit 20 — Refactorización: de ADO.NET a Entity Framework
 
 **Descripción:** Reemplazar todas las llamadas a stored procedures en los servicios de negocio por consultas LINQ a través de `ApplicationDbContext`. Eliminar `AccesoDatos.cs` y los Mappers (EF los hace automáticamente). Actualizar cada servicio: `EmpresaNegocio` usa `_context.Empresas.Where/Include/...`, `EmpleadoNegocio` usa `_context.Empleados.Include(e => e.Empresa)...`, etc. Los servicios ahora reciben `ApplicationDbContext` via DI en lugar de `AccesoDatos`. Mantener las mismas interfaces para que los controladores no cambien.
 
@@ -507,14 +483,13 @@ feat: validaciones completas y sistema de mensajes
 - `Services/LugarNegocio.cs` (reescribir con EF)
 - `Services/ReporteNegocio.cs` (reescribir con EF)
 - `Services/EstadisticasNegocio.cs` (reescribir con EF)
-- `Services/ConfiguracionNegocio.cs` (reescribir con EF donde aplique)
 - `Data/AccesoDatos.cs` (eliminar)
 - `Data/Mappers/` (eliminar carpeta completa)
 - `Program.cs` (actualizar registros de DI)
 
 **Mensaje:**
 ```
-refactor: migración de ADO.NET a Entity Framework Core
+refactor: migrar de ADO.NET a Entity Framework Core
 
 - Reemplazo de stored procedures por consultas LINQ
 - Eliminación de AccesoDatos y Mappers (EF los reemplaza)
@@ -524,7 +499,7 @@ refactor: migración de ADO.NET a Entity Framework Core
 
 ---
 
-### Commit 22 — Revisión del modelado de clases y Fluent API
+### Commit 21 — Revisión del modelado de clases y Fluent API
 
 **Descripción:** Revisar y documentar el modelado existente en `OnModelCreating`. Verificar que todas las relaciones, índices, restricciones y defaults coincidan con el schema original. Agregar comentarios explicativos en el `ApplicationDbContext` sobre cada configuración de Fluent API: `HasOne/WithMany`, `HasForeignKey`, `OnDelete`, `HasIndex`, `HasCheckConstraint`, `HasDefaultValue`. Esto es la explicación didáctica del modelado para la unidad.
 
@@ -533,7 +508,7 @@ refactor: migración de ADO.NET a Entity Framework Core
 
 **Mensaje:**
 ```
-docs: documentación de Fluent API en ApplicationDbContext
+docs: documentar Fluent API en ApplicationDbContext
 
 - Comentarios explicativos en cada configuración
 - Detalle de relaciones, índices y restricciones
@@ -542,7 +517,7 @@ docs: documentación de Fluent API en ApplicationDbContext
 
 ---
 
-### Commit 23 — Nueva migración con ajustes de modelado
+### Commit 22 — Nueva migración con ajustes de modelado
 
 **Descripción:** Realizar ajustes finos al modelo si se detectaron diferencias con el esquema original (por ejemplo, tipos de datos `Date` vs `DateTime`, longitudes de campos). Generar una nueva migración que aplique estos cambios. Documentar el proceso de crear y aplicar migraciones (`Add-Migration`, `Update-Database`).
 
@@ -553,7 +528,7 @@ docs: documentación de Fluent API en ApplicationDbContext
 
 **Mensaje:**
 ```
-feat: ajustes de modelado y nueva migración
+feat: aplicar ajustes de modelado y nueva migración
 
 - Revisión de tipos de datos contra esquema original
 - Migración con correcciones de modelado
@@ -566,7 +541,7 @@ feat: ajustes de modelado y nueva migración
 
 ---
 
-### Commit 24 — Seeding con Entity Framework
+### Commit 23 — Seeding con Entity Framework
 
 **Descripción:** Implementar seeding de datos iniciales usando `HasData()` en `OnModelCreating`. Incluir: 2 Lugares (Comedor, Quincho), 12 Empresas, 60 Empleados con credenciales RF001-RF060. Generar migración que incluya los datos semilla. Los servicios y registros NO se seedean (se crean en runtime). Esto reemplaza el script SQL de datos iniciales.
 
@@ -576,7 +551,7 @@ feat: ajustes de modelado y nueva migración
 
 **Mensaje:**
 ```
-feat: seeding de datos iniciales con EF Core HasData
+feat: agregar seeding de datos iniciales con EF Core HasData
 
 - 2 lugares (Comedor, Quincho)
 - 12 empresas del complejo industrial
@@ -586,7 +561,7 @@ feat: seeding de datos iniciales con EF Core HasData
 
 ---
 
-### Commit 25 — Configuraciones Fluent API separadas
+### Commit 24 — Configuraciones Fluent API separadas
 
 **Descripción:** Refactorizar el `OnModelCreating` moviendo cada configuración de entidad a su propia clase usando `IEntityTypeConfiguration<T>`. Crear: `EmpresaConfiguration`, `EmpleadoConfiguration`, `LugarConfiguration`, `ServicioConfiguration`, `RegistroConfiguration`. En `OnModelCreating` usar `modelBuilder.ApplyConfigurationsFromAssembly()`. Esto mejora la organización y es una práctica avanzada de Fluent API.
 
@@ -600,7 +575,7 @@ feat: seeding de datos iniciales con EF Core HasData
 
 **Mensaje:**
 ```
-refactor: configuraciones Fluent API separadas por entidad
+refactor: separar configuraciones Fluent API por entidad
 
 - IEntityTypeConfiguration<T> para cada modelo
 - ApplyConfigurationsFromAssembly en OnModelCreating
@@ -609,7 +584,7 @@ refactor: configuraciones Fluent API separadas por entidad
 
 ---
 
-### Commit 26 — Vistas parciales
+### Commit 25 — Vistas parciales
 
 **Descripción:** Extraer componentes reutilizables a vistas parciales: `_ServicioCard.cshtml` (card de servicio usada en Index y Reportes), `_EmpleadoRow.cshtml` (fila de empleado usada en Empleados y Registro Manual), `_KpiCard.cshtml` (card de KPI usada en Estadísticas e Index), `_FiltroFechas.cshtml` (filtro de rango de fechas usado en Reportes), `_Paginacion.cshtml` (controles de paginación). Actualizar las vistas principales para usar `@await Html.PartialAsync()` o `<partial>` tag helper.
 
@@ -626,7 +601,7 @@ refactor: configuraciones Fluent API separadas por entidad
 
 **Mensaje:**
 ```
-feat: vistas parciales reutilizables
+feat: crear vistas parciales reutilizables
 
 - _ServicioCard para cards de servicio
 - _EmpleadoRow para filas de empleado
@@ -641,7 +616,7 @@ feat: vistas parciales reutilizables
 
 ---
 
-### Commit 27 — Instalación y configuración de Identity
+### Commit 26 — Instalación y configuración de Identity
 
 **Descripción:** Instalar `Microsoft.AspNetCore.Identity.EntityFrameworkCore`. Crear modelo `ApplicationUser` que extiende `IdentityUser` con propiedades adicionales (`Nombre`, `Apellido`). Cambiar `ApplicationDbContext` para heredar de `IdentityDbContext<ApplicationUser>`. Configurar Identity en `Program.cs` con opciones de contraseña, lockout y cookie. Generar migración para las tablas de Identity.
 
@@ -654,7 +629,7 @@ feat: vistas parciales reutilizables
 
 **Mensaje:**
 ```
-feat: instalación y configuración de ASP.NET Identity
+feat: instalar y configurar ASP.NET Identity
 
 - Modelo ApplicationUser con propiedades extendidas
 - DbContext hereda de IdentityDbContext
@@ -664,7 +639,7 @@ feat: instalación y configuración de ASP.NET Identity
 
 ---
 
-### Commit 28 — Vistas de Login, Logout y Registro
+### Commit 27 — Vistas de Login, Logout y Registro
 
 **Descripción:** Crear `AccountController` con acciones: `Login` (GET/POST), `Logout` (POST), `Register` (GET/POST), `AccessDenied` (GET). Diseñar las vistas de login y registro manteniendo el estilo glassmorphism (centradas, con logo, campos dorados). Actualizar el layout: reemplazar el pill "Administrador" hardcodeado por el nombre real del usuario autenticado con `@User.Identity.Name`. Agregar botón de logout funcional.
 
@@ -678,7 +653,7 @@ feat: instalación y configuración de ASP.NET Identity
 
 **Mensaje:**
 ```
-feat: autenticación con Login, Logout y Registro
+feat: crear vistas de autenticación (Login, Logout, Registro)
 
 - AccountController con autenticación completa
 - Vistas de Login y Registro con estilo glassmorphism
@@ -688,7 +663,7 @@ feat: autenticación con Login, Logout y Registro
 
 ---
 
-### Commit 29 — Roles y autorización por rol
+### Commit 28 — Roles y autorización por rol
 
 **Descripción:** Crear roles del sistema: `Admin` y `Usuario`. Implementar seeding de roles y usuario admin inicial en `Program.cs` (al arrancar la app, crea roles si no existen y crea usuario admin por defecto). Agregar `[Authorize]` a todos los controladores. Agregar `[Authorize(Roles = "Admin")]` a los controladores de: Empresa, Empleado, Configuración. El rol `Usuario` solo puede acceder a: Home, Servicio, Registro, Reporte, Estadística. Actualizar sidebar para ocultar ítems según rol.
 
@@ -699,7 +674,7 @@ feat: autenticación con Login, Logout y Registro
 
 **Mensaje:**
 ```
-feat: roles y autorización por rol
+feat: configurar roles y autorización por rol
 
 - Roles Admin y Usuario con seeding automático
 - Usuario admin creado al primer arranque
@@ -710,7 +685,7 @@ feat: roles y autorización por rol
 
 ---
 
-### Commit 30 — Gestión de usuarios
+### Commit 29 — Gestión de usuarios
 
 **Descripción:** Crear `UsuarioController` (solo Admin) para gestión de usuarios del sistema: listar usuarios con sus roles, crear nuevo usuario asignando rol, editar usuario (cambiar rol, resetear contraseña), desactivar usuario. Crear vista `Views/Usuario/Index.cshtml` con tabla de usuarios y formulario de edición. Agregar enlace en el sidebar (solo visible para Admin). Agregar entrada de navegación en el layout con icono.
 
@@ -723,7 +698,7 @@ feat: roles y autorización por rol
 
 **Mensaje:**
 ```
-feat: gestión de usuarios del sistema
+feat: crear gestión de usuarios del sistema
 
 - CRUD de usuarios (crear, editar rol, resetear contraseña, desactivar)
 - Vista con tabla de usuarios y formulario
@@ -737,7 +712,7 @@ feat: gestión de usuarios del sistema
 
 ---
 
-### Commit 31 — Manejo de archivos (foto de empleado)
+### Commit 30 — Manejo de archivos (foto de empleado)
 
 **Descripción:** Agregar campo `FotoUrl` al modelo `Empleado`. Implementar subida de foto en el formulario de empleados (input file con preview, validación de tipo y tamaño). Guardar fotos en `wwwroot/uploads/empleados/`. Mostrar foto en la tabla de empleados, en el detalle del servicio y en las notificaciones de registro. Implementar servicio `IFileService` para subida, eliminación y validación de archivos. Generar migración para el nuevo campo.
 
@@ -751,7 +726,7 @@ feat: gestión de usuarios del sistema
 
 **Mensaje:**
 ```
-feat: manejo de archivos — foto de empleado
+feat: agregar manejo de archivos — foto de empleado
 
 - Campo FotoUrl en modelo Empleado
 - Servicio de archivos (subida, validación, eliminación)
@@ -761,7 +736,7 @@ feat: manejo de archivos — foto de empleado
 
 ---
 
-### Commit 32 — Envío de email (reportes por correo)
+### Commit 31 — Envío de email (reportes por correo)
 
 **Descripción:** Implementar servicio de email usando `MailKit`/`MimeKit`. Configurar SMTP en `appsettings.json` (servidor, puerto, credenciales). Crear `IEmailService` con método `EnviarReporteAsync(destinatario, asunto, cuerpoHtml, archivoPdfAdjunto)`. Agregar botón "Enviar por Email" en la vista de reportes junto al botón de exportar PDF. El reporte se genera como PDF, se adjunta al email y se envía. Implementar modal para ingresar dirección de email destino.
 
@@ -775,7 +750,7 @@ feat: manejo de archivos — foto de empleado
 
 **Mensaje:**
 ```
-feat: envío de reportes por email
+feat: implementar envío de reportes por email
 
 - Servicio de email con MailKit/MimeKit
 - Configuración SMTP en appsettings.json
@@ -786,7 +761,7 @@ feat: envío de reportes por email
 
 ---
 
-### Commit 33 — Integración de LLM/IA (análisis inteligente)
+### Commit 32 — Integración de LLM/IA (análisis inteligente)
 
 **Descripción:** Integrar un servicio de IA (OpenAI API o similar) para análisis inteligente de datos. Crear `IIAService` con método `AnalizarDatosAsync(contexto)` que envía estadísticas del sistema a un LLM y recibe un análisis en texto. Agregar sección "Análisis IA" en la vista de Estadísticas con un botón "Generar Análisis" que solicita al LLM interpretar las tendencias, sugerir mejoras y predecir demanda. Configurar API key en `appsettings.json` (o user secrets). Mostrar respuesta en un panel con formato Markdown.
 
@@ -801,7 +776,7 @@ feat: envío de reportes por email
 
 **Mensaje:**
 ```
-feat: integración de IA para análisis de datos
+feat: integrar IA para análisis de datos
 
 - Servicio de IA con conexión a LLM (OpenAI API)
 - Análisis automático de tendencias y estadísticas
@@ -812,7 +787,7 @@ feat: integración de IA para análisis de datos
 
 ---
 
-### Commit 34 — Refinamientos finales y documentación
+### Commit 33 — Refinamientos finales y documentación
 
 **Descripción:** Realizar pruebas integrales de toda la funcionalidad. Corregir bugs encontrados. Agregar manejo global de excepciones con middleware personalizado. Agregar página de error personalizada (404, 500). Actualizar `README.md` del proyecto con: descripción, tecnologías, instrucciones de instalación, configuración, estructura del proyecto y capturas de pantalla. Limpiar código no utilizado.
 
@@ -826,7 +801,7 @@ feat: integración de IA para análisis de datos
 
 **Mensaje:**
 ```
-feat: refinamientos finales y documentación
+feat: aplicar refinamientos finales y documentación
 
 - Middleware global de manejo de excepciones
 - Páginas de error personalizadas (404/500)
@@ -841,11 +816,11 @@ feat: refinamientos finales y documentación
 | Unidad | Commits | Tema Principal |
 |--------|---------|---------------|
 | **Fase 0** | 1–8 | Diseños de vistas cshtml (estáticas) |
-| **Unidad 2** | 9–20 | CRUD con ADO.NET, Stored Procedures, Validaciones |
-| **Unidad 3** | 21–23 | Migración a Entity Framework, Modelado, Migraciones |
-| **Unidad 4** | 24–26 | Seeding, Fluent API avanzado, Vistas parciales |
-| **Unidad 5** | 27–30 | Identity, Login, Roles, Gestión de usuarios |
-| **Unidad 6** | 31–34 | Archivos, Email, IA, Documentación final |
+| **Unidad 2** | 9–19 | CRUD con ADO.NET, Stored Procedures, Validaciones |
+| **Unidad 3** | 20–22 | Migración a Entity Framework, Modelado, Migraciones |
+| **Unidad 4** | 23–25 | Seeding, Fluent API avanzado, Vistas parciales |
+| **Unidad 5** | 26–29 | Identity, Login, Roles, Gestión de usuarios |
+| **Unidad 6** | 30–33 | Archivos, Email, IA, Documentación final |
 
 ---
 
@@ -854,25 +829,25 @@ feat: refinamientos finales y documentación
 | Concepto del Plan de Estudio | Commits |
 |------------------------------|---------|
 | Introducción a MVC | Todo el proyecto |
-| Introducción a Razor | 1–8, 12–18 |
-| HTML, CSS y JS en MVC | 1–8, 12–18 |
+| Introducción a Razor | 1–8, 12–17 |
+| HTML, CSS y JS en MVC | 1–8, 12–17 |
 | Primer proyecto MVC | 1–8 |
-| CRUD con MVC, ADO y SQL | 9–19 |
-| Controladores y Vistas Razor | 8, 12–18 |
-| Validaciones | 13, 14, 20 |
-| Entity Framework | 21–23 |
-| Modelado de clases | 22 |
-| Configuración de contexto | 21, 22 |
-| Migraciones | 23, 24 |
-| Desarrollo con EF | 21–26 |
-| Fluent API | 22, 25 |
-| Seeding | 24 |
-| Vistas parciales | 26 |
-| Identity | 27 |
-| Configuración de usuarios | 28 |
-| Roles y permisos | 29 |
-| Gestión de usuarios | 30 |
-| Desarrollo con EF e Identity | 27–30 |
-| Manejo de archivos | 31 |
-| Envíos de email | 32 |
-| Integración de LLM IA | 33 |
+| CRUD con MVC, ADO y SQL | 9–18 |
+| Controladores y Vistas Razor | 8, 12–17 |
+| Validaciones | 13, 14, 19 |
+| Entity Framework | 20–22 |
+| Modelado de clases | 21 |
+| Configuración de contexto | 20, 21 |
+| Migraciones | 22, 23 |
+| Desarrollo con EF | 20–25 |
+| Fluent API | 21, 24 |
+| Seeding | 23 |
+| Vistas parciales | 25 |
+| Identity | 26 |
+| Configuración de usuarios | 27 |
+| Roles y permisos | 28 |
+| Gestión de usuarios | 29 |
+| Desarrollo con EF e Identity | 26–29 |
+| Manejo de archivos | 30 |
+| Envíos de email | 31 |
+| Integración de LLM IA | 32 |

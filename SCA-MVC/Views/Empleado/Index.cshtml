@@ -1,0 +1,205 @@
+@{
+    ViewData["Title"] = "Empleados";
+}
+
+<div class="emp-wrap">
+
+<!-- ═══ LAYOUT 2 COLUMNAS ═══ -->
+<div class="emp-grid">
+
+    <!-- ═══ COLUMNA IZQUIERDA — LISTA DE EMPLEADOS ═══ -->
+    <div class="emp-list-col">
+        <div class="panel registro-section">
+            <div class="registro-inner">
+                <div class="emp-ph">
+                    <h2><i class="bi bi-people-fill"></i> Lista de Empleados</h2>
+                    <div class="emp-ph-right">
+                        <span class="emp-ph-count"><strong>60</strong> empleados</span>
+                    </div>
+                </div>
+                <div class="emp-filter-row">
+                    <div class="rm-search">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Buscar por nombre o credencial..."/>
+                    </div>
+                    <div class="rm-filter">
+                        <label>Empresa</label>
+                        <select>
+                            <option>Todas</option>
+                            <option>Administración</option>
+                            <option>Gastronomía</option>
+                            <option>Mantenimiento</option>
+                            <option>Limpieza</option>
+                            <option>Seguridad</option>
+                            <option>Tecnología</option>
+                            <option>Recursos Humanos</option>
+                            <option>Logística</option>
+                        </select>
+                    </div>
+                    <button class="btn-nueva-emp"><i class="bi bi-plus-circle"></i> Nuevo Empleado</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="reg-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40px">#</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Empresa</th>
+                                <th style="width:110px">Credencial</th>
+                                <th style="width:100px">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="emp-row-selected">
+                                <td class="td-num">1</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Juan</span></div></td>
+                                <td>Pérez</td>
+                                <td class="td-empresa">Administración</td>
+                                <td class="td-cred">RF001</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">2</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">María</span></div></td>
+                                <td>García</td>
+                                <td class="td-empresa">Gastronomía</td>
+                                <td class="td-cred">RF002</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">3</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Carlos</span></div></td>
+                                <td>López</td>
+                                <td class="td-empresa">Mantenimiento</td>
+                                <td class="td-cred">RF003</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">4</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Ana</span></div></td>
+                                <td>Martínez</td>
+                                <td class="td-empresa">Limpieza</td>
+                                <td class="td-cred">RF004</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">5</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Roberto</span></div></td>
+                                <td>Sánchez</td>
+                                <td class="td-empresa">Seguridad</td>
+                                <td class="td-cred">RF005</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">6</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Laura</span></div></td>
+                                <td>Fernández</td>
+                                <td class="td-empresa">Tecnología</td>
+                                <td class="td-cred">RF006</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">7</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Diego</span></div></td>
+                                <td>Morales</td>
+                                <td class="td-empresa">Recursos Humanos</td>
+                                <td class="td-cred">RF007</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">8</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Sofía</span></div></td>
+                                <td>Ramírez</td>
+                                <td class="td-empresa">Logística</td>
+                                <td class="td-cred">RF008</td>
+                                <td><span class="emp-badge inactivo">Inactivo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">9</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Andrés</span></div></td>
+                                <td>Vega</td>
+                                <td class="td-empresa">Administración</td>
+                                <td class="td-cred">RF009</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td class="td-num">10</td>
+                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Camila</span></div></td>
+                                <td>Torres</td>
+                                <td class="td-empresa">Gastronomía</td>
+                                <td class="td-cred">RF010</td>
+                                <td><span class="emp-badge activo">Activo</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ COLUMNA DERECHA — FORMULARIO ═══ -->
+    <div class="emp-detail-col">
+
+        <!-- Formulario de Alta/Edición -->
+        <div class="panel">
+            <div class="config-row">
+                <div class="cfg-title"><i class="bi bi-person-vcard"></i> Detalles del Empleado</div>
+            </div>
+            <div class="emp-form">
+                <div class="emp-field">
+                    <label>Credencial RFID</label>
+                    <div class="empl-cred-row">
+                        <input type="text" value="RF001" placeholder="Ej: RF001"/>
+                        <button class="btn-verificar"><i class="bi bi-check-circle"></i> Verificar</button>
+                    </div>
+                </div>
+                <div class="emp-field">
+                    <label>Nombre</label>
+                    <input type="text" value="Juan" placeholder="Nombre del empleado"/>
+                </div>
+                <div class="emp-field">
+                    <label>Apellido</label>
+                    <input type="text" value="Pérez" placeholder="Apellido del empleado"/>
+                </div>
+                <div class="emp-field">
+                    <label>Empresa</label>
+                    <select class="emp-select-full">
+                        <option selected>Administración</option>
+                        <option>Gastronomía</option>
+                        <option>Mantenimiento</option>
+                        <option>Limpieza</option>
+                        <option>Seguridad</option>
+                        <option>Tecnología</option>
+                        <option>Recursos Humanos</option>
+                        <option>Logística</option>
+                    </select>
+                </div>
+                <div class="emp-field">
+                    <label>Estado</label>
+                    <div class="emp-radios">
+                        <label class="emp-radio">
+                            <input type="radio" name="estado" value="1" checked/>
+                            <span class="emp-radio-mark activo"></span>
+                            Activo
+                        </label>
+                        <label class="emp-radio">
+                            <input type="radio" name="estado" value="0"/>
+                            <span class="emp-radio-mark inactivo"></span>
+                            Inactivo
+                        </label>
+                    </div>
+                </div>
+                <div class="emp-actions">
+                    <button class="btn-srv btn-iniciar"><i class="bi bi-check-lg"></i> Guardar</button>
+                    <button class="btn-emp-sec"><i class="bi bi-x-lg"></i> Cancelar</button>
+                    <button class="btn-emp-danger"><i class="bi bi-trash3"></i> Eliminar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- /emp-grid -->
+
+</div> <!-- /emp-wrap -->
