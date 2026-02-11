@@ -1,0 +1,239 @@
+@{
+    ViewData["Title"] = "Estadísticas";
+}
+
+<div class="est-wrap">
+
+<!-- ═══ FILA SUPERIOR — KPIs (3 columnas) ═══ -->
+<div class="est-grid-top">
+
+    <!-- ── Empleados ── -->
+    <div class="panel est-card">
+        <div class="est-card-head">
+            <div class="est-card-ico empl"><i class="bi bi-people-fill"></i></div>
+            <span class="est-card-title">Empleados</span>
+        </div>
+        <div class="est-card-body">
+            <div class="est-kpi">
+                <div class="est-kpi-ico"><i class="bi bi-people"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Total Registrados</span>
+                    <span class="est-kpi-value">156</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico activo"><i class="bi bi-person-check"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Activos</span>
+                    <span class="est-kpi-value activo">142</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico inactivo"><i class="bi bi-person-x"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Inactivos</span>
+                    <span class="est-kpi-value inactivo">14</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Empresas ── -->
+    <div class="panel est-card">
+        <div class="est-card-head">
+            <div class="est-card-ico empresa"><i class="bi bi-building"></i></div>
+            <span class="est-card-title">Empresas</span>
+        </div>
+        <div class="est-card-body">
+            <div class="est-kpi">
+                <div class="est-kpi-ico empresa"><i class="bi bi-building-check"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Total Activas</span>
+                    <span class="est-kpi-value">8</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico"><i class="bi bi-diagram-3"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Con Empleados</span>
+                    <span class="est-kpi-value">7</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico promedio"><i class="bi bi-calculator"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Promedio (Empleados)</span>
+                    <span class="est-kpi-value promedio">19</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Servicios ── -->
+    <div class="panel est-card">
+        <div class="est-card-head">
+            <div class="est-card-ico servicio"><i class="bi bi-calendar-check"></i></div>
+            <span class="est-card-title">Servicios</span>
+        </div>
+        <div class="est-card-body">
+            <div class="est-kpi">
+                <div class="est-kpi-ico servicio"><i class="bi bi-calendar-event"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Este Mes</span>
+                    <span class="est-kpi-value">23</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico"><i class="bi bi-calendar-range"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Total del Año</span>
+                    <span class="est-kpi-value">187</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico promedio"><i class="bi bi-graph-up"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Promedio / Día</span>
+                    <span class="est-kpi-value promedio">1.2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══ FILA INFERIOR (2 columnas) ═══ -->
+<div class="est-grid-bottom">
+
+    <!-- ── Asistencias y Tendencias ── -->
+    <div class="panel est-card est-card-wide">
+        <div class="est-card-head">
+            <div class="est-card-ico asist"><i class="bi bi-clipboard-data"></i></div>
+            <span class="est-card-title">Asistencias y Tendencias</span>
+            <span class="est-card-badge">Mes Actual</span>
+        </div>
+        <div class="est-card-body est-body-grid">
+            <div class="est-kpi">
+                <div class="est-kpi-ico asist"><i class="bi bi-clipboard-check"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Asistencias Totales</span>
+                    <span class="est-kpi-value">3,284</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico empl"><i class="bi bi-person-badge"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Asist. Empleados</span>
+                    <span class="est-kpi-value">2,910</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico invitado"><i class="bi bi-person-plus"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Asist. Invitados</span>
+                    <span class="est-kpi-value invitado">374</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico promedio"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Promedio Diario</span>
+                    <span class="est-kpi-value promedio">142</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico cobertura"><i class="bi bi-pie-chart"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Cobertura Proyección vs Promedio</span>
+                    <span class="est-kpi-value cobertura">87.50%</span>
+                </div>
+            </div>
+            <div class="est-kpi">
+                <div class="est-kpi-ico duracion"><i class="bi bi-clock-history"></i></div>
+                <div class="est-kpi-info">
+                    <span class="est-kpi-label">Duración Promedio de Servicio</span>
+                    <span class="est-kpi-value duracion">1h 45m</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Top 5 Empresas ── -->
+    <div class="panel est-card">
+        <div class="est-card-head">
+            <div class="est-card-ico top"><i class="bi bi-trophy"></i></div>
+            <span class="est-card-title">Top Empresas</span>
+            <span class="est-card-badge">Mes Actual</span>
+        </div>
+        <div class="est-card-body est-top-list">
+            <!-- 1 -->
+            <div class="est-top-item">
+                <span class="est-top-rank">1</span>
+                <div class="est-top-info">
+                    <div class="est-top-head-row">
+                        <span class="est-top-name">Administración</span>
+                        <span class="est-top-pct">32.4%</span>
+                    </div>
+                    <div class="est-top-bar">
+                        <div class="est-top-fill" style="width:100%"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 2 -->
+            <div class="est-top-item">
+                <span class="est-top-rank">2</span>
+                <div class="est-top-info">
+                    <div class="est-top-head-row">
+                        <span class="est-top-name">Gastronomía</span>
+                        <span class="est-top-pct">24.1%</span>
+                    </div>
+                    <div class="est-top-bar">
+                        <div class="est-top-fill" style="width:74%"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 3 -->
+            <div class="est-top-item">
+                <span class="est-top-rank">3</span>
+                <div class="est-top-info">
+                    <div class="est-top-head-row">
+                        <span class="est-top-name">Logística</span>
+                        <span class="est-top-pct">18.7%</span>
+                    </div>
+                    <div class="est-top-bar">
+                        <div class="est-top-fill" style="width:58%"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 4 -->
+            <div class="est-top-item">
+                <span class="est-top-rank">4</span>
+                <div class="est-top-info">
+                    <div class="est-top-head-row">
+                        <span class="est-top-name">Mantenimiento</span>
+                        <span class="est-top-pct">14.2%</span>
+                    </div>
+                    <div class="est-top-bar">
+                        <div class="est-top-fill" style="width:44%"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 5 -->
+            <div class="est-top-item">
+                <span class="est-top-rank">5</span>
+                <div class="est-top-info">
+                    <div class="est-top-head-row">
+                        <span class="est-top-name">Producción</span>
+                        <span class="est-top-pct">10.6%</span>
+                    </div>
+                    <div class="est-top-bar">
+                        <div class="est-top-fill" style="width:33%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</div>
