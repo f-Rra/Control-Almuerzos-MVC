@@ -182,27 +182,20 @@ feat: diseño de vista de inicio del administrador
 
 ### Commit 8 — Navegación activa en sidebar y limpieza
 
-**Descripción:** Implementar la lógica de resaltado del ítem activo en el sidebar usando `ViewContext.RouteData` para determinar qué controlador está activo y aplicar la clase `.active` dinámicamente. Crear los controladores vacíos necesarios (`ServicioController`, `RegistroController`, `ReporteController`, `EmpresaController`, `EmpleadoController`, `EstadisticaController`) con solo la acción `Index()` retornando la vista. Eliminar `Privacy.cshtml` y su acción. Limpiar `_Layout.cshtml.css` (estilos scaffold no usados).
+**Descripción:** Completar la limpieza de navegación base ya iniciada en commits previos: mantener la lógica de resaltado activo en sidebar con `ViewContext.RouteData` y dejar el menú alineado al dominio actual (`Estadísticas` en lugar de `Configuración`). Eliminar `Privacy.cshtml` y su acción en `HomeController` (contenido scaffold no usado). Limpiar `_Layout.cshtml.css` para remover estilos scaffold sin uso.
 
 **Archivos:**
-- `Views/Shared/_Layout.cshtml` (modificar sidebar con lógica Razor de clase activa)
-- `Controllers/ServicioController.cs` (crear)
-- `Controllers/RegistroController.cs` (crear)
-- `Controllers/ReporteController.cs` (crear)
-- `Controllers/EmpresaController.cs` (crear)
-- `Controllers/EmpleadoController.cs` (crear)
-- `Controllers/EstadisticaController.cs` (crear)
+- `Controllers/HomeController.cs` (eliminar acción `Privacy`)
 - `Views/Home/Privacy.cshtml` (eliminar)
 - `Views/Shared/_Layout.cshtml.css` (limpiar)
 
 **Mensaje:**
 ```
-feat: agregar navegación activa en sidebar y controladores base
+feat: completar limpieza de navegación base y vistas scaffold
 
-- Lógica Razor para resaltado dinámico del ítem activo en sidebar
-- Controladores base con acción Index para cada módulo
-- Eliminada vista Privacy (no aplica al dominio)
-- Limpieza de estilos scaffold no utilizados
+- Sidebar con navegación activa alineada al dominio (Estadísticas)
+- Eliminada acción y vista Privacy del Home scaffold
+- Limpieza de estilos scaffold no utilizados en _Layout.cshtml.css
 ```
 
 ---
