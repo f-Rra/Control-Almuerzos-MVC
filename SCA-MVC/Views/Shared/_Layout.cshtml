@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=1920, initial-scale=1.0, shrink-to-fit=yes" />
     <title>@ViewData["Title"] - SCA</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.11.2/font/bootstrap-icons.min.css">
@@ -46,10 +46,10 @@
                     <div class="ico"><img src="~/images/Reporte.png" /></div>
                     <span class="lbl">REPORTES</span>
                 </a>
-                <a asp-controller="Configuracion" asp-action="Index" class="mi @(controller == "Configuracion" ? "active" : "")" data-tip="Configuración">
+                <a asp-controller="Estadistica" asp-action="Index" class="mi @(controller == "Estadistica" ? "active" : "")" data-tip="Estadísticas">
                     <div class="bar"></div>
-                    <div class="ico"><img src="~/images/admin.png" /></div>
-                    <span class="lbl">CONFIGURACIÓN</span>
+                    <div class="ico"><img src="~/images/estadisticas.png" /></div>
+                    <span class="lbl">ESTADÍSTICAS</span>
                 </a>
             </nav>
         </div>
