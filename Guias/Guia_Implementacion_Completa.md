@@ -238,7 +238,7 @@ feat: crear capa de acceso a datos con ADO.NET
 
 **Archivos:**
 - `SQL/Procedimientos_Vistas_Triggers.sql` (crear — copiar/adaptar del proyecto original)
-- `SQL/README.md` (crear — instrucciones de ejecución)
+
 
 **Mensaje:**
 ```
@@ -247,7 +247,6 @@ feat: crear stored procedures, vistas y triggers en SQL Server
 - 33 stored procedures para todas las operaciones CRUD y reportes
 - 2 vistas (EmpleadosSinAlmorzar, EmpresasConEmpleados)
 - Trigger de validación de registro único
-- Script SQL documentado con instrucciones de ejecución
 ```
 
 ---
