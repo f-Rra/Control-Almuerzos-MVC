@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
+using SCA_MVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<AccesoDatos>();
+builder.Services.AddScoped<IEmpresaNegocio, EmpresaNegocio>();
+builder.Services.AddScoped<IEmpleadoNegocio, EmpleadoNegocio>();
+builder.Services.AddScoped<IServicioNegocio, ServicioNegocio>();
+builder.Services.AddScoped<IRegistroNegocio, RegistroNegocio>();
+builder.Services.AddScoped<ILugarNegocio, LugarNegocio>();
 
 var app = builder.Build();
 
