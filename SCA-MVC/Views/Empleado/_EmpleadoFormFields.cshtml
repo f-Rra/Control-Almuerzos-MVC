@@ -1,0 +1,74 @@
+@model SCA_MVC.ViewModels.EmpleadoViewModel
+
+@* Vista parcial con los campos del formulario de Empleado (compartida por Create y Edit) *@
+
+<div class="emp-field">
+    <label asp-for="EmpleadoActual.IdCredencial">Credencial RFID</label>
+    <div class="empl-cred-row">
+        <input asp-for="EmpleadoActual.IdCredencial"
+               id="input-credencial"
+               type="text"
+               placeholder="Ej: RF001"
+               autocomplete="off"
+               style="text-transform:uppercase" />
+        <button type="button"
+                class="btn-verificar"
+                id="btn-verificar"
+                onclick="verificarCredencial()">
+            <i class="bi bi-check-circle"></i> Verificar
+        </button>
+    </div>
+    <span asp-validation-for="EmpleadoActual.IdCredencial" class="field-validation-error"></span>
+    <small id="credencial-status" style="min-height:1.1em; font-size:.8rem; margin-top:2px; display:block;"></small>
+</div>
+
+<div class="emp-field">
+    <label asp-for="EmpleadoActual.Nombre">Nombre</label>
+    <input asp-for="EmpleadoActual.Nombre"
+           type="text"
+           placeholder="Nombre del empleado" />
+    <span asp-validation-for="EmpleadoActual.Nombre" class="field-validation-error"></span>
+</div>
+
+<div class="emp-field">
+    <label asp-for="EmpleadoActual.Apellido">Apellido</label>
+    <input asp-for="EmpleadoActual.Apellido"
+           type="text"
+           placeholder="Apellido del empleado" />
+    <span asp-validation-for="EmpleadoActual.Apellido" class="field-validation-error"></span>
+</div>
+
+<div class="emp-field">
+    <label asp-for="EmpleadoActual.IdEmpresa">Empresa</label>
+    <select asp-for="EmpleadoActual.IdEmpresa"
+            class="emp-select-full"
+            asp-items="@(new SelectList(Model.Empresas, "IdEmpresa", "Nombre", Model.EmpleadoActual.IdEmpresa))">
+        <option value="0">-- Seleccionar empresa --</option>
+    </select>
+    <span asp-validation-for="EmpleadoActual.IdEmpresa" class="field-validation-error"></span>
+</div>
+
+<div class="emp-field">
+    <label>Estado</label>
+    <div class="emp-radios">
+        <label class="emp-radio">
+            <input type="radio"
+                   asp-for="EmpleadoActual.Estado"
+                   value="True"
+                   id="empleado-estado-activo" />
+            <span class="emp-radio-mark activo"></span>
+            Activo
+        </label>
+        <label class="emp-radio">
+            <input type="radio"
+                   asp-for="EmpleadoActual.Estado"
+                   value="False"
+                   id="empleado-estado-inactivo" />
+            <span class="emp-radio-mark inactivo"></span>
+            Inactivo
+        </label>
+    </div>
+</div>
+
+@* ID del empleado actual — usado por el JS de verificación para excluirlo del check de credencial *@
+<input type="hidden" id="hidden-id-empleado-actual" value="@Model.EmpleadoActual.IdEmpleado" />

@@ -204,6 +204,21 @@ feat: completar limpieza de navegación base y vistas scaffold
 
 > Se implementa la funcionalidad CRUD completa usando ADO.NET con stored procedures, tal como funciona el proyecto original WinForms.
 
+### 📐 Convenciones de código (basadas en los proyectos de ejemplo del curso)
+
+Todos los controladores CRUD de esta unidad (y las siguientes) deben respetar las siguientes convenciones, extraídas de los ejemplos `maxi-movie-mvc` y `galeria-arte-mvc`:
+
+| Convención | Descripción |
+|---|---|
+| **`[HttpGet]` implícito** | No se anota `[HttpGet]` explícitamente en acciones de lectura — es el valor por defecto en ASP.NET MVC |
+| **Comentarios `// GET:` / `// POST:`** | Cada acción lleva un comentario de una línea al estilo scaffold: `// GET: Empresa`, `// POST: Empresa/Create` |
+| **`DeleteConfirmed` + `[ActionName]`** | El método POST de eliminación se llama `DeleteConfirmed` y se decora con `[HttpPost, ActionName("Delete")]` para mantener la ruta `/Delete` y evitar conflictos con el futuro GET de confirmación |
+| **`XExiste(int id)`** | Todo controlador tiene un método privado `EntidadExiste(int id)` que verifica la existencia del registro. En la fase ADO.NET llama al servicio; en la fase EF usa `_context.Entidades.Any(...)` |
+| **Regiones** | Dividir el controlador en 3 regiones: `Dependencias`, `Acciones Públicas`, `Métodos Privados de Soporte` |
+| **Sin `[Bind]` en ViewModel** | Al usar ViewModels dedicados no es necesario `[Bind]`, ya que el ViewModel actúa como filtro de overposting |
+| **`try/catch` en escritura** | Envolver siempre los bloques de escritura (Create, Edit, Delete) en `try/catch` con notificación toast via `TempData` |
+
+
 ---
 
 ### Commit 9 — Capa de acceso a datos con ADO.NET
@@ -277,7 +292,9 @@ feat: crear capa de servicios de negocio con ADO.NET
 
 ### Commit 12 — CRUD de Empresas funcional
 
-**Descripción:** Implementar el controlador `EmpresaController` con todas las acciones CRUD: `Index` (lista con búsqueda), `Create` (GET/POST), `Edit` (GET/POST), `Delete` (POST, soft-delete), `Detalle` (AJAX para panel lateral). Conectar la vista `Views/Empresa/Index.cshtml` con datos reales del servidor reemplazando los datos estáticos por Razor (`@foreach`, `@model`, `asp-for`, `asp-action`). Agregar validaciones server-side (nombre requerido, duplicados, no desactivar con empleados activos). Crear ViewModels necesarios.
+**Descripción:** Implementar el controlador `EmpresaController` con todas las acciones CRUD siguiendo las convenciones del patrón de ejemplo: `Index` (GET implícito, lista con búsqueda y panel lateral), `Create` (POST), `Edit` (POST), `DeleteConfirmed` (`[HttpPost, ActionName("Delete")]`, soft-delete), `Detalle` (GET implícito, endpoint AJAX para panel lateral), `EmpresaExiste()` (método privado de verificación). Conectar la vista `Views/Empresa/Index.cshtml` con datos reales usando Razor (`@foreach`, `@model`, `asp-for`, `asp-action`). Agregar validaciones server-side. Crear ViewModels necesarios.
+
+> ⚠️ **Nota de diseño:** la vista unifica Create y Edit en un panel lateral dentro de `Index` (sin vistas separadas), por eso no existen acciones `Edit(int id)` GET ni `Create()` GET — el formulario ya está en la vista. Esto es una variación válida respecto al CRUD clásico de los ejemplos, que sí tienen vistas separadas.
 
 **Archivos:**
 - `Controllers/EmpresaController.cs` (implementar CRUD completo)
@@ -287,13 +304,7 @@ feat: crear capa de servicios de negocio con ADO.NET
 
 **Mensaje:**
 ```
-feat: implementar CRUD funcional de empresas con ADO.NET
-
-- Controlador con acciones Index, Create, Edit, Delete
-- Vista conectada a datos reales con Razor
-- Búsqueda en tiempo real y panel de estadísticas
-- Validaciones server-side (duplicados, dependencias)
-- ViewModels para la vista
+feat: implementar CRUD funcional de empresas - Controlador con acciones Index, Create, Edit, DeleteConfirmed, Detalle - Convenciones de patrón: [ActionName], EmpresaExiste(), // GET: comments - Vista conectada a datos reales con Razor - Búsqueda en tiempo real y panel de estadísticas - Validaciones server-side - ViewModels para la vista
 ```
 
 ---
@@ -310,12 +321,7 @@ feat: implementar CRUD funcional de empresas con ADO.NET
 
 **Mensaje:**
 ```
-feat: implementar CRUD funcional de empleados con ADO.NET
-
-- Controlador con acciones CRUD completas
-- Filtros por empresa y búsqueda por nombre/credencial
-- Verificación de credencial RFID vía AJAX
-- Validaciones regex y server-side
+feat: implementar CRUD funcional de empleados - Controlador con acciones Index, Create, Edit, DeleteConfirmed, VerificarCredencial - Vista conectada a datos reales con Razor - Búsqueda en tiempo real y filtro por empresa - Validación de credencial RFID única - ViewModels y vista parcial de formulario
 ```
 
 ---
@@ -465,28 +471,34 @@ feat: agregar validaciones completas y sistema de mensajes
 
 ### Commit 20 — Refactorización: de ADO.NET a Entity Framework
 
-**Descripción:** Reemplazar todas las llamadas a stored procedures en los servicios de negocio por consultas LINQ a través de `ApplicationDbContext`. Eliminar `AccesoDatos.cs` y los Mappers (EF los hace automáticamente). Actualizar cada servicio: `EmpresaNegocio` usa `_context.Empresas.Where/Include/...`, `EmpleadoNegocio` usa `_context.Empleados.Include(e => e.Empresa)...`, etc. Los servicios ahora reciben `ApplicationDbContext` via DI en lugar de `AccesoDatos`. Mantener las mismas interfaces para que los controladores no cambien.
+**Descripción:** Reemplazar todas las llamadas a stored procedures en los servicios de negocio por consultas LINQ a través de `ApplicationDbContext`. Eliminar `AccesoDatos.cs` y los Mappers (EF los hace automáticamente — mapea los resultados directamente a los modelos). Actualizar cada servicio: `EmpresaNegocio` usa `_context.Empresas.Where/Include/...`, `EmpleadoNegocio` usa `_context.Empleados.Include(e => e.Empresa)...`, etc. Los servicios ahora reciben `ApplicationDbContext` via DI en lugar de `AccesoDatos`. Mantener las mismas interfaces para que los controladores **no cambien**.
+
+> 🎯 **Punto de convergencia con los ejemplos del curso:** al finalizar este commit, el patrón interno de los servicios será idéntico al de `PeliculaController`/`GeneroController` de `maxi-movie-mvc` — LINQ con `.Include()`, `.FirstOrDefaultAsync()`, `.ToListAsync()`, y `catch (DbUpdateConcurrencyException)` en las ediciones. Los controladores permanecen intactos porque las interfaces actúan como contrato estable.
+
+> 🗑️ **Archivos a eliminar completamente:** `Data/AccesoDatos.cs`, `Data/NegocioException.cs`, `Data/Mappers/` (toda la carpeta). Estos son el equivalente al `DbContext` wrapper de ADO, que EF reemplaza de forma nativa.
 
 **Archivos:**
-- `Services/EmpresaNegocio.cs` (reescribir con EF)
+- `Services/EmpresaNegocio.cs` (reescribir con EF — LINQ en lugar de stored procedures)
 - `Services/EmpleadoNegocio.cs` (reescribir con EF)
 - `Services/ServicioNegocio.cs` (reescribir con EF)
 - `Services/RegistroNegocio.cs` (reescribir con EF)
 - `Services/LugarNegocio.cs` (reescribir con EF)
 - `Services/ReporteNegocio.cs` (reescribir con EF)
 - `Services/EstadisticasNegocio.cs` (reescribir con EF)
-- `Data/AccesoDatos.cs` (eliminar)
-- `Data/Mappers/` (eliminar carpeta completa)
-- `Program.cs` (actualizar registros de DI)
+- `Data/AccesoDatos.cs` (**eliminar**)
+- `Data/NegocioException.cs` (**eliminar**)
+- `Data/Mappers/` (**eliminar carpeta completa**)
+- `Program.cs` (reemplazar registro de `AccesoDatos` por `ApplicationDbContext`)
 
 **Mensaje:**
 ```
 refactor: migrar de ADO.NET a Entity Framework Core
 
-- Reemplazo de stored procedures por consultas LINQ
-- Eliminación de AccesoDatos y Mappers (EF los reemplaza)
+- Reemplazo de stored procedures por consultas LINQ con Include/Where
+- Eliminación de AccesoDatos, NegocioException y Mappers
 - Servicios refactorizados con ApplicationDbContext
-- Mismas interfaces, mismos controladores, nueva implementación
+- Mismas interfaces y controladores, nueva implementación interna
+- Patrón convergente con ejemplos maxi-movie / galeria-arte
 ```
 
 ---
