@@ -1,3 +1,5 @@
+@model SCA_MVC.ViewModels.EmpresaViewModel
+
 @{
     ViewData["Title"] = "Empresas";
 }
@@ -14,15 +16,18 @@
                 <div class="emp-ph">
                     <h2><i class="bi bi-building"></i> Lista de Empresas</h2>
                     <div class="emp-ph-right">
-                        <span class="emp-ph-count"><strong>8</strong> empresas</span>
+                        <span class="emp-ph-count"><strong>@Model.Empresas.Count</strong> empresas</span>
                     </div>
                 </div>
                 <div class="emp-filter-row">
-                    <div class="rm-search">
-                        <i class="bi bi-search"></i>
-                        <input type="text" placeholder="Buscar por nombre..."/>
-                    </div>
-                    <button class="btn-nueva-emp"><i class="bi bi-plus-circle"></i> Nueva Empresa</button>
+                    <form method="get" asp-action="Index" class="d-flex align-items-center gap-2 w-100">
+                        <div class="rm-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="filtro" value="@Model.Filtro" placeholder="Buscar por nombre..."/>
+                        </div>
+                        <button type="submit" class="btn-nueva-emp"><i class="bi bi-search"></i> Buscar</button>
+                    </form>
+                    <a asp-action="Index" asp-route-nueva="true" class="btn-nueva-emp text-decoration-none"><i class="bi bi-plus-circle"></i> Nueva Empresa</a>
                 </div>
                 <div class="table-wrap">
                     <table class="reg-table">
@@ -35,54 +40,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="emp-row-selected">
-                                <td class="td-num">1</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Administración</span></div></td>
-                                <td>24</td>
-                                <td><span class="emp-badge activo">Activo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="td-num">2</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Gastronomía</span></div></td>
-                                <td>18</td>
-                                <td><span class="emp-badge activo">Activo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="td-num">3</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Mantenimiento</span></div></td>
-                                <td>31</td>
-                                <td><span class="emp-badge activo">Activo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="td-num">4</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Limpieza</span></div></td>
-                                <td>15</td>
-                                <td><span class="emp-badge activo">Activo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="td-num">5</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Seguridad</span></div></td>
-                                <td>12</td>
-                                <td><span class="emp-badge activo">Activo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="td-num">6</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Tecnología</span></div></td>
-                                <td>9</td>
-                                <td><span class="emp-badge activo">Activo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="td-num">7</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Recursos Humanos</span></div></td>
-                                <td>7</td>
-                                <td><span class="emp-badge activo">Activo</span></td>
-                            </tr>
-                            <tr>
-                                <td class="td-num">8</td>
-                                <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">Logística</span></div></td>
-                                <td>5</td>
-                                <td><span class="emp-badge inactivo">Inactivo</span></td>
-                            </tr>
+                            @if (Model.Empresas.Any())
+                            {
+                                var i = 1;
+                                foreach (var empresa in Model.Empresas)
+                                {
+                                    var selectedClass = empresa.IdEmpresa == Model.EmpresaSeleccionadaId ? "emp-row-selected" : "";
+                                    <tr class="@selectedClass emp-row">
+                                        <td class="td-num">
+                                            <a asp-action="Index" asp-route-idEmpresa="@empresa.IdEmpresa" asp-route-filtro="@Model.Filtro" class="text-decoration-none text-reset d-block">@i</a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index" asp-route-idEmpresa="@empresa.IdEmpresa" asp-route-filtro="@Model.Filtro" class="text-decoration-none text-reset d-block">
+                                                <div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-building"></i></div><span class="td-empleado">@empresa.Nombre</span></div>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a asp-action="Index" asp-route-idEmpresa="@empresa.IdEmpresa" asp-route-filtro="@Model.Filtro" class="text-decoration-none text-reset d-block">@empresa.CantidadEmpleados</a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index" asp-route-idEmpresa="@empresa.IdEmpresa" asp-route-filtro="@Model.Filtro" class="text-decoration-none text-reset d-block">
+                                                <span class="emp-badge @(empresa.Estado ? "activo" : "inactivo")">@(empresa.Estado ? "Activo" : "Inactivo")</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">No hay empresas para mostrar.</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -98,32 +88,44 @@
             <div class="config-row">
                 <div class="cfg-title"><i class="bi bi-pencil-square"></i> Detalles de la Empresa</div>
             </div>
-            <div class="emp-form">
+            <form asp-action="@(Model.EmpresaActual.IdEmpresa > 0 ? "Edit" : "Create")" method="post" class="emp-form" id="empresa-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="EmpresaActual.IdEmpresa" id="empresa-id" />
+                <input type="hidden" asp-for="Filtro" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                 <div class="emp-field">
-                    <label>Nombre</label>
-                    <input type="text" value="Administración" placeholder="Nombre de la empresa"/>
+                    <label asp-for="EmpresaActual.Nombre">Nombre</label>
+                    <input asp-for="EmpresaActual.Nombre" id="empresa-nombre" placeholder="Nombre de la empresa"/>
+                    <span asp-validation-for="EmpresaActual.Nombre" class="text-danger"></span>
                 </div>
                 <div class="emp-field">
                     <label>Estado</label>
                     <div class="emp-radios">
                         <label class="emp-radio">
-                            <input type="radio" name="estado" value="1" checked/>
+                            <input asp-for="EmpresaActual.Estado" type="radio" value="true" id="empresa-estado-activo" />
                             <span class="emp-radio-mark activo"></span>
                             Activo
                         </label>
                         <label class="emp-radio">
-                            <input type="radio" name="estado" value="0"/>
+                            <input asp-for="EmpresaActual.Estado" type="radio" value="false" id="empresa-estado-inactivo" />
                             <span class="emp-radio-mark inactivo"></span>
                             Inactivo
                         </label>
                     </div>
                 </div>
                 <div class="emp-actions">
-                    <button class="btn-srv btn-iniciar"><i class="bi bi-check-lg"></i> Guardar</button>
-                    <button class="btn-emp-sec"><i class="bi bi-x-lg"></i> Cancelar</button>
-                    <button class="btn-emp-danger"><i class="bi bi-trash3"></i> Eliminar</button>
+                    <button type="submit" class="btn-srv btn-iniciar"><i class="bi bi-check-lg"></i> Guardar</button>
+                    <a asp-action="Index" class="btn-emp-sec text-decoration-none d-inline-flex align-items-center"><i class="bi bi-x-lg"></i> Cancelar</a>
+                    <button type="button" class="btn-emp-danger" id="btn-eliminar" @(Model.EmpresaActual.IdEmpresa <= 0 ? "disabled" : null)><i class="bi bi-trash3"></i> Eliminar</button>
                 </div>
-            </div>
+            </form>
+
+            <form asp-action="Delete" method="post" id="delete-form" style="display:none;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="idEmpresa" value="@Model.EmpresaActual.IdEmpresa" id="empresa-id-delete" />
+            </form>
         </div>
 
         <!-- Estadísticas de la Empresa -->
@@ -136,28 +138,28 @@
                     <div class="emp-stat-ico"><i class="bi bi-people-fill"></i></div>
                     <div class="emp-stat-info">
                         <div class="emp-stat-label">Total Empleados</div>
-                        <div class="emp-stat-value">24</div>
+                        <div class="emp-stat-value" id="stat-total-empleados">@Model.TotalEmpleados</div>
                     </div>
                 </div>
                 <div class="emp-stat-item">
                     <div class="emp-stat-ico inactivo"><i class="bi bi-person-dash-fill"></i></div>
                     <div class="emp-stat-info">
                         <div class="emp-stat-label">Inactivos</div>
-                        <div class="emp-stat-value inactivo">3</div>
+                        <div class="emp-stat-value inactivo" id="stat-inactivos">@Model.Inactivos</div>
                     </div>
                 </div>
                 <div class="emp-stat-item">
                     <div class="emp-stat-ico asistencias"><i class="bi bi-calendar-check-fill"></i></div>
                     <div class="emp-stat-info">
                         <div class="emp-stat-label">Asistencias (Mes Actual)</div>
-                        <div class="emp-stat-value">312</div>
+                        <div class="emp-stat-value" id="stat-asistencias">@Model.AsistenciasMesActual</div>
                     </div>
                 </div>
                 <div class="emp-stat-item">
                     <div class="emp-stat-ico promedio"><i class="bi bi-bar-chart-fill"></i></div>
                     <div class="emp-stat-info">
                         <div class="emp-stat-label">Promedio Diario</div>
-                        <div class="emp-stat-value">15.6</div>
+                        <div class="emp-stat-value" id="stat-promedio">@Model.PromedioDiario</div>
                     </div>
                 </div>
             </div>
@@ -168,3 +170,7 @@
 </div> <!-- /emp-grid -->
 
 </div> <!-- /emp-wrap -->
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
