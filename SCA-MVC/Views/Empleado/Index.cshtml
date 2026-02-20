@@ -5,7 +5,7 @@
 
 <div class="emp-wrap">
 
-<!-- ═══ FILTROS SUPERIORES (formulario GET para búsqueda) ═══ -->
+<!-- ═══ FILTROS SUPERIORES ═══ -->
 <form method="get" asp-action="Index" id="filtro-form">
     <input type="hidden" name="idEmpleado" value="@Model.EmpleadoSeleccionadoId" />
 </form>
@@ -49,7 +49,7 @@
                             }
                         </select>
                     </div>
-                    <a asp-action="Index" asp-route-nuevo="true" class="btn-nueva-emp">
+                    <a asp-action="Index" asp-route-nuevo="true" class="btn-nueva-emp text-decoration-none">
                         <i class="bi bi-plus-circle"></i> Nuevo Empleado
                     </a>
                 </div>
@@ -81,23 +81,58 @@
                                 foreach (var emp in Model.Empleados)
                                 {
                                     var isSelected = emp.IdEmpleado == Model.EmpleadoSeleccionadoId;
-                                    <tr class="@(isSelected ? "emp-row-selected" : "")"
-                                        style="cursor:pointer"
-                                        onclick="seleccionarEmpleado(@emp.IdEmpleado)">
-                                        <td class="td-num">@num</td>
-                                        <td>
-                                            <div class="td-emp-cell">
-                                                <div class="td-emp-ico"><i class="bi bi-person-fill"></i></div>
-                                                <span class="td-empleado">@emp.Nombre</span>
-                                            </div>
+                                    @* Cada fila es un link al mismo Index con el idEmpleado — igual que Empresa *@
+                                    <tr class="@(isSelected ? "emp-row-selected" : "")">
+                                        <td class="td-num">
+                                            <a asp-action="Index"
+                                               asp-route-idEmpleado="@emp.IdEmpleado"
+                                               asp-route-filtro="@Model.Filtro"
+                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+                                               class="text-decoration-none text-reset d-block">@num</a>
                                         </td>
-                                        <td>@emp.Apellido</td>
-                                        <td class="td-empresa">@(emp.Empresa?.Nombre ?? "-")</td>
-                                        <td class="td-cred">@emp.IdCredencial</td>
                                         <td>
-                                            <span class="emp-badge @(emp.Estado ? "activo" : "inactivo")">
-                                                @(emp.Estado ? "Activo" : "Inactivo")
-                                            </span>
+                                            <a asp-action="Index"
+                                               asp-route-idEmpleado="@emp.IdEmpleado"
+                                               asp-route-filtro="@Model.Filtro"
+                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+                                               class="text-decoration-none text-reset d-block">
+                                                <div class="td-emp-cell">
+                                                    <div class="td-emp-ico"><i class="bi bi-person-fill"></i></div>
+                                                    <span class="td-empleado">@emp.Nombre</span>
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index"
+                                               asp-route-idEmpleado="@emp.IdEmpleado"
+                                               asp-route-filtro="@Model.Filtro"
+                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+                                               class="text-decoration-none text-reset d-block">@emp.Apellido</a>
+                                        </td>
+                                        <td class="td-empresa">
+                                            <a asp-action="Index"
+                                               asp-route-idEmpleado="@emp.IdEmpleado"
+                                               asp-route-filtro="@Model.Filtro"
+                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+                                               class="text-decoration-none text-reset d-block">@(emp.Empresa?.Nombre ?? "-")</a>
+                                        </td>
+                                        <td class="td-cred">
+                                            <a asp-action="Index"
+                                               asp-route-idEmpleado="@emp.IdEmpleado"
+                                               asp-route-filtro="@Model.Filtro"
+                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+                                               class="text-decoration-none text-reset d-block">@emp.IdCredencial</a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index"
+                                               asp-route-idEmpleado="@emp.IdEmpleado"
+                                               asp-route-filtro="@Model.Filtro"
+                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+                                               class="text-decoration-none text-reset d-block">
+                                                <span class="emp-badge @(emp.Estado ? "activo" : "inactivo")">
+                                                    @(emp.Estado ? "Activo" : "Inactivo")
+                                                </span>
+                                            </a>
                                         </td>
                                     </tr>
                                     num++;
@@ -120,7 +155,7 @@
                 </div>
             </div>
 
-            @* Mostrar errores de validación si los hay *@
+            @* Errores de validación *@
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="alert alert-danger" style="margin: 0.75rem 1rem 0; border-radius: 8px;">
@@ -130,52 +165,40 @@
 
             <div class="emp-form">
 
-                @* Formulario de ALTA *@
-                @if (Model.EmpleadoActual.IdEmpleado <= 0)
-                {
-                    <form asp-action="Create" method="post">
-                        @Html.AntiForgeryToken()
-                        @await Html.PartialAsync("_EmpleadoFormFields", Model)
-                        <div class="emp-actions">
-                            <button type="submit" class="btn-srv btn-iniciar">
-                                <i class="bi bi-check-lg"></i> Guardar
-                            </button>
-                            <a asp-action="Index" class="btn-emp-sec">
-                                <i class="bi bi-x-lg"></i> Cancelar
-                            </a>
-                        </div>
-                    </form>
-                }
-                else
-                {
-                    @* Form oculto de eliminación — el botón Desactivar lo submittea vía JS *@
-                    <form asp-action="Delete" method="post" id="delete-empleado-form">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="idEmpleado" value="@Model.EmpleadoActual.IdEmpleado" />
-                    </form>
+                @* Form oculto de eliminación *@
+                <form asp-action="Delete" method="post" id="delete-empleado-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idEmpleado" value="@Model.EmpleadoActual.IdEmpleado" id="empresa-id-delete" />
+                </form>
 
-                    @* Formulario de EDICIÓN con los 3 botones en la misma fila *@
-                    <form asp-action="Edit" method="post">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" asp-for="EmpleadoActual.IdEmpleado" />
-                        @await Html.PartialAsync("_EmpleadoFormFields", Model)
-                        <div class="emp-actions">
-                            <button type="submit" class="btn-srv btn-iniciar">
-                                <i class="bi bi-check-lg"></i> Guardar
-                            </button>
-                            <a asp-action="Index" class="btn-emp-sec">
-                                <i class="bi bi-x-lg"></i> Cancelar
-                            </a>
-                            <button type="button"
-                                    id="btn-eliminar-empleado"
-                                    class="btn-emp-danger"
-                                    data-estado="@Model.EmpleadoActual.Estado.ToString().ToLower()">
-                                <i class="bi bi-trash3"></i> Desactivar
-                            </button>
-                        </div>
-                    </form>
+                @* Formulario unificado Alta / Edición *@
+                <form asp-action="@(Model.EmpleadoActual.IdEmpleado > 0 ? "Edit" : "Create")"
+                      method="post"
+                      id="empleado-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="EmpleadoActual.IdEmpleado" />
 
-                }
+                    @await Html.PartialAsync("_EmpleadoFormFields", Model)
+
+                    <div class="emp-actions">
+                        <button type="submit" class="btn-srv btn-iniciar">
+                            <i class="bi bi-check-lg"></i> Guardar
+                        </button>
+                        <a asp-action="Index"
+                           asp-route-filtro="@Model.Filtro"
+                           asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+                           class="btn-emp-sec">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </a>
+                        <button type="button"
+                                id="btn-eliminar-empleado"
+                                class="btn-emp-danger"
+                                @(Model.EmpleadoActual.IdEmpleado <= 0 ? "disabled" : null)
+                                data-estado="@Model.EmpleadoActual.Estado.ToString().ToLower()">
+                            <i class="bi bi-trash3"></i> Desactivar
+                        </button>
+                    </div>
+                </form>
 
             </div>
         </div>
@@ -184,3 +207,82 @@
 </div> <!-- /emp-grid -->
 
 </div> <!-- /emp-wrap -->
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // ── Búsqueda con debounce ──────────────────────────────────
+        (function () {
+            const inputFiltro = document.getElementById("input-filtro");
+            if (!inputFiltro) return;
+            let timer;
+            inputFiltro.addEventListener("input", () => {
+                clearTimeout(timer);
+                timer = setTimeout(() => document.getElementById("filtro-form").submit(), 400);
+            });
+            inputFiltro.addEventListener("keydown", e => { if (e.key === "Enter") e.preventDefault(); });
+        })();
+
+        // ── Enter en credencial → verificar, no submitear ──────────
+        (function () {
+            const input = document.getElementById("input-credencial");
+            if (!input) return;
+            input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); verificarCredencial(); } });
+        })();
+
+        // ── Verificación RFID (AJAX → /Empleado/VerificarCredencial) ─
+        async function verificarCredencial() {
+            const inputCred = document.getElementById("input-credencial");
+            const statusEl  = document.getElementById("credencial-status");
+            if (!inputCred || !statusEl) return;
+
+            const cred = inputCred.value.trim().toUpperCase();
+            if (!cred) {
+                statusEl.textContent = "Ingresá una credencial para verificar.";
+                statusEl.style.color = "#f59e0b";
+                inputCred.style.borderColor = "";
+                return;
+            }
+
+            const idActual = document.getElementById("hidden-id-empleado-actual")?.value ?? "0";
+            try {
+                const r = await fetch(`/Empleado/VerificarCredencial?credencial=${encodeURIComponent(cred)}&idEmpleadoActual=${idActual}`);
+                const d = await r.json();
+                if (d.estado === "disponible") {
+                    statusEl.textContent = `✓ La credencial '${cred}' está disponible.`;
+                    statusEl.style.color = "#22c55e";
+                    inputCred.style.borderColor = "#22c55e";
+                } else if (d.estado === "propia") {
+                    statusEl.textContent = `ℹ '${cred}' es la credencial actual de este empleado.`;
+                    statusEl.style.color = "#2196F3";
+                    inputCred.style.borderColor = "#2196F3";
+                } else {
+                    statusEl.textContent = `⚠ La credencial '${cred}' ya está asignada a otro empleado.`;
+                    statusEl.style.color = "#ef4444";
+                    inputCred.style.borderColor = "#ef4444";
+                }
+            } catch {
+                statusEl.textContent = "Error al verificar. Intentá de nuevo.";
+                statusEl.style.color = "#ef4444";
+            }
+        }
+
+        // ── Confirmación de desactivación (usa showConfirm de site.js) ─
+        (function () {
+            const btn  = document.getElementById("btn-eliminar-empleado");
+            const form = document.getElementById("delete-empleado-form");
+            if (!btn || !form) return;
+            btn.addEventListener("click", () => {
+                if (btn.dataset.estado === "false") {
+                    showMessage("warning", "Ya desactivado", "El empleado ya se encuentra desactivado.");
+                    return;
+                }
+                showConfirm(
+                    "¿Estás seguro que deseas desactivar al empleado seleccionado?",
+                    "Confirmar desactivación",
+                    () => form.submit()
+                );
+            });
+        })();
+    </script>
+}

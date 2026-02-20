@@ -255,6 +255,30 @@ namespace SCA_MVC.Controllers
 
         // ---------------------------------------------------------------------
 
+        // GET: Empleado/Detalle?idEmpleado={id}
+        // Endpoint AJAX: devuelve JSON con los datos del empleado indicado.
+        // Se consume desde empleado.js para actualizar el panel lateral
+        // sin recargar la página (mismo patrón que EmpresaController.Detalle).
+        public async Task<IActionResult> Detalle(int idEmpleado)
+        {
+            if (!EmpleadoExiste(idEmpleado))
+                return NotFound();
+
+            var empleado = await _empleadoNegocio.BuscarPorIdAsync(idEmpleado);
+
+            return Json(new
+            {
+                idEmpleado = empleado!.IdEmpleado,
+                nombre = empleado.Nombre,
+                apellido = empleado.Apellido,
+                idCredencial = empleado.IdCredencial,
+                idEmpresa = empleado.IdEmpresa,
+                estado = empleado.Estado
+            });
+        }
+
+        // ---------------------------------------------------------------------
+
         // GET: Empleado/VerificarCredencial?credencial=RF001
         // Endpoint AJAX: verifica si una credencial RFID ya está en uso.
         // Devuelve JSON con { estado: 'disponible' | 'propia' | 'ocupada' } para
