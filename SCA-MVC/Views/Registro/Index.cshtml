@@ -1,144 +1,209 @@
+@model List<SCA_MVC.Models.Empleado>
 @{
     ViewData["Title"] = "Registro Manual";
+    var idServicio = ViewBag.IdServicio as int?;
+    var idLugar = ViewBag.IdLugar as int?;
+    var empresas = ViewBag.Empresas as List<SCA_MVC.Models.Empresa> ?? new List<SCA_MVC.Models.Empresa>();
+    bool noServicio = ViewBag.NoServicio ?? false;
 }
 
 <div class="reg-wrap">
 
-<!-- ═══ 1. RESUMEN DE ESTADO ═══ -->
-<div class="summary-row">
-    <div class="sm-card registrados">
-        <div class="sm-ico registrados"><i class="bi bi-person-check-fill"></i></div>
-        <div class="sm-info">
-            <div class="sm-label">Registrados</div>
-            <div class="sm-value">156</div>
+    @if (noServicio)
+    {
+        <div class="alert alert-warning text-center mt-4">
+            <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+            <h4 class="mt-2">No hay un servicio activo para hoy</h4>
+            <p>Debe iniciar un servicio en la sección de "Servicios" antes de realizar registros manuales.</p>
+            <a href="@Url.Action("Index", "Servicio")" class="btn btn-warning mt-2">Ir a Servicios</a>
         </div>
-    </div>
-    <div class="sm-card pendientes">
-        <div class="sm-ico pendientes"><i class="bi bi-person-dash-fill"></i></div>
-        <div class="sm-info">
-            <div class="sm-label">Pendientes</div>
-            <div class="sm-value">44</div>
-        </div>
-    </div>
-    <div class="sm-card total">
-        <div class="sm-ico total"><i class="bi bi-people-fill"></i></div>
-        <div class="sm-info">
-            <div class="sm-label">Total</div>
-            <div class="sm-value">200</div>
-        </div>
-    </div>
-    <div class="sm-card">
-        <div class="sm-ico progreso"><i class="bi bi-graph-up"></i></div>
-        <div class="sm-info">
-            <div class="sm-label">Progreso</div>
-            <div class="prog-mini">
-                <div class="prog-mini-track"><div class="prog-mini-fill" style="width:78%"></div></div>
-                <div class="prog-mini-pct">78%</div>
+    }
+    else
+    {
+        <!-- ═══ 1. RESUMEN DE ESTADO (Cargado en Runtime por JS) ═══ -->
+        <div class="summary-row">
+            <div class="sm-card total">
+                <div class="sm-ico total"><i class="bi bi-people-fill"></i></div>
+                <div class="sm-info">
+                    <div class="sm-label">Sin Almorzar</div>
+                    <div class="sm-value" id="count-total">@Model.Count</div>
+                </div>
+            </div>
+            <div class="sm-card info">
+                <div class="sm-ico"><i class="bi bi-info-circle"></i></div>
+                <div class="sm-info">
+                    <div class="sm-label">Instrucciones</div>
+                    <p class="mb-0 opacity-75 small">Seleccione los empleados y presione "Agregar" para registrarlos masivamente.</p>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- ═══ 2. TABLA CON FILTROS INTEGRADOS ═══ -->
-<div class="rm-table-panel">
-    <div class="rm-panel-head">
-        <h3><i class="bi bi-pencil-square"></i> Registro Manual</h3>
-        <div class="rm-sep"></div>
-        <div class="rm-filter">
-            <label>Empresa</label>
-            <select>
-                <option>Todas</option>
-                <option>Administración</option>
-                <option>Gastronomía</option>
-                <option>Mantenimiento</option>
-                <option>Limpieza</option>
-                <option>Seguridad</option>
-                <option>Tecnología</option>
-            </select>
+        <!-- ═══ 2. TABLA CON FILTROS INTEGRADOS ═══ -->
+        <div class="rm-table-panel">
+            <div class="rm-panel-head">
+                <h3><i class="bi bi-pencil-square"></i> Registro Manual</h3>
+                <div class="rm-sep"></div>
+                <div class="rm-filter">
+                    <label>Empresa</label>
+                    <select id="filtro-empresa">
+                        <option value="">Todas</option>
+                        @foreach (var emp in empresas)
+                        {
+                            <option value="@emp.IdEmpresa">@emp.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="rm-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="filtro-nombre" placeholder="Buscar por nombre o apellido..." />
+                </div>
+                <div class="rm-actions">
+                    <div class="rm-sel-count"><span id="span-sel-count">0</span> seleccionados</div>
+                    <button class="btn-agregar" id="btn-registrar-masivo" disabled>
+                        <i class="bi bi-plus-circle"></i> Agregar
+                    </button>
+                </div>
+            </div>
+            <div class="rm-tbl-wrap">
+                <table class="reg-table rm-table" id="tabla-empleados">
+                    <thead>
+                        <tr>
+                            <th class="td-check"><input type="checkbox" id="check-all" /></th>
+                            <th style="width:40px">#</th>
+                            <th>Empleado</th>
+                            <th>Empresa</th>
+                            <th style="width:120px">Credencial</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var emp = Model[i];
+                            <tr>
+                                <td class="td-check"><input type="checkbox" class="emp-check" value="@emp.IdEmpleado" /></td>
+                                <td class="td-num">@(i + 1)</td>
+                                <td>
+                                    <div class="td-emp-cell">
+                                        <div class="td-emp-ico"><i class="bi bi-person-fill"></i></div>
+                                        <span class="td-empleado">@emp.Nombre @emp.Apellido</span>
+                                    </div>
+                                </td>
+                                <td class="td-empresa">@(emp.Empresa?.Nombre ?? "-")</td>
+                                <td class="td-cred">@emp.IdCredencial</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="rm-search">
-            <i class="bi bi-search"></i>
-            <input type="text" placeholder="Buscar por nombre o apellido..."/>
-        </div>
-        <div class="rm-actions">
-            <div class="rm-sel-count"><span>2</span> seleccionados</div>
-            <button class="btn-agregar"><i class="bi bi-plus-circle"></i> Agregar</button>
-        </div>
-    </div>
-    <div class="rm-tbl-wrap">
-        <table class="reg-table rm-table">
-            <thead>
-                <tr>
-                    <th class="td-check"><input type="checkbox" title="Seleccionar todos"/></th>
-                    <th style="width:40px">#</th>
-                    <th>Empleado</th>
-                    <th>Empresa</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="rm-selected">
-                    <td class="td-check"><input type="checkbox" checked/></td>
-                    <td class="td-num">1</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Juan Pérez</span></div></td>
-                    <td class="td-empresa">Administración</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">2</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">María García</span></div></td>
-                    <td class="td-empresa">Gastronomía</td>
-                </tr>
-                <tr class="rm-selected">
-                    <td class="td-check"><input type="checkbox" checked/></td>
-                    <td class="td-num">3</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Carlos López</span></div></td>
-                    <td class="td-empresa">Mantenimiento</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">4</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Ana Martínez</span></div></td>
-                    <td class="td-empresa">Limpieza</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">5</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Roberto Sánchez</span></div></td>
-                    <td class="td-empresa">Seguridad</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">6</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Laura Fernández</span></div></td>
-                    <td class="td-empresa">Tecnología</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">7</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Diego Morales</span></div></td>
-                    <td class="td-empresa">Logística</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">8</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Sofía Ramírez</span></div></td>
-                    <td class="td-empresa">Recursos Humanos</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">9</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Andrés Vega</span></div></td>
-                    <td class="td-empresa">Gerencia</td>
-                </tr>
-                <tr>
-                    <td class="td-check"><input type="checkbox"/></td>
-                    <td class="td-num">10</td>
-                    <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">Camila Torres</span></div></td>
-                    <td class="td-empresa">Servicios</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+    }
 
 </div> <!-- /reg-wrap -->
+
+@section Scripts {
+    <script>
+        const idServicio = @(idServicio ?? 0);
+        const idLugar = @(idLugar ?? 0);
+
+        // Actualizar contador de seleccionados
+        function updateSelectionCount() {
+            const count = document.querySelectorAll('.emp-check:checked').length;
+            document.getElementById('span-sel-count').textContent = count;
+            document.getElementById('btn-registrar-masivo').disabled = count === 0;
+            
+            // Pintar filas seleccionadas
+            document.querySelectorAll('.emp-check').forEach(chk => {
+                chk.closest('tr').classList.toggle('rm-selected', chk.checked);
+            });
+        }
+
+        // Delegación de eventos para checkboxes
+        document.addEventListener('change', e => {
+            if (e.target.classList.contains('emp-check')) {
+                updateSelectionCount();
+            }
+            if (e.target.id === 'check-all') {
+                document.querySelectorAll('.emp-check').forEach(chk => {
+                    chk.checked = e.target.checked;
+                });
+                updateSelectionCount();
+            }
+        });
+
+        // Filtrado dinámico (AJAX)
+        async function aplicarFiltros() {
+            const idEmpresa = document.getElementById('filtro-empresa').value;
+            const nombre = document.getElementById('filtro-nombre').value;
+
+            const response = await fetch(`/Registro/Filtrar?idEmpresa=${idEmpresa}&nombre=${encodeURIComponent(nombre)}`);
+            const data = await response.json();
+
+            if (data.success === false) {
+                alert(data.message);
+                return;
+            }
+
+            const tbody = document.querySelector('#tabla-empleados tbody');
+            tbody.innerHTML = '';
+            
+            data.forEach((emp, i) => {
+                const tr = `
+                    <tr>
+                        <td class="td-check"><input type="checkbox" class="emp-check" value="${emp.idEmpleado}" /></td>
+                        <td class="td-num">${i + 1}</td>
+                        <td>
+                            <div class="td-emp-cell">
+                                <div class="td-emp-ico"><i class="bi bi-person-fill"></i></div>
+                                <span class="td-empleado">${emp.nombre} ${emp.apellido}</span>
+                            </div>
+                        </td>
+                        <td class="td-empresa">${emp.empresaNombre}</td>
+                        <td class="td-cred">${emp.credencial}</td>
+                    </tr>`;
+                tbody.insertAdjacentHTML('beforeend', tr);
+            });
+
+            document.getElementById('count-total').textContent = data.length;
+            document.getElementById('check-all').checked = false;
+            updateSelectionCount();
+        }
+
+        document.getElementById('filtro-empresa')?.addEventListener('change', aplicarFiltros);
+        
+        let typingTimer;
+        document.getElementById('filtro-nombre')?.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(aplicarFiltros, 400);
+        });
+
+        // Registro masivo
+        document.getElementById('btn-registrar-masivo')?.addEventListener('click', async () => {
+            const selectedIds = Array.from(document.querySelectorAll('.emp-check:checked')).map(chk => parseInt(chk.value));
+            
+            if (selectedIds.length === 0) return;
+
+            if (confirm(`¿Registrar almuerzo para los ${selectedIds.length} empleados seleccionados?`)) {
+                const response = await fetch('/Registro/RegistrarMultiples', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idServicio: idServicio,
+                        idLugar: idLugar,
+                        idsEmpleados: selectedIds
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    if (window.showToast) showToast('success', 'Registro exitoso', `Se registraron ${data.count} empleados.`);
+                    else alert(`Se registraron ${data.count} empleados.`);
+                    
+                    // Recargar lista filtrada para que desaparezcan los ya registrados
+                    aplicarFiltros();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            }
+        });
+    </script>
+}

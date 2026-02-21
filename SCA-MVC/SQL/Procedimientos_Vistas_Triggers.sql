@@ -88,11 +88,34 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE sp_IniciarServicio
-    @IdLugar INT,
-    @Proyeccion INT = NULL
+CREATE OR ALTER PROCEDURE sp_ObtenerServicioActivoSinLugar
 AS
 BEGIN
+    SELECT TOP 1
+        s.IdServicio, 
+        s.IdLugar, 
+        l.Nombre as NombreLugar,
+        s.Fecha,
+        s.Proyeccion,
+        s.DuracionMinutos,
+        s.TotalComensales, 
+        s.TotalInvitados
+    FROM Servicios s
+    INNER JOIN Lugares l ON s.IdLugar = l.IdLugar
+    WHERE s.DuracionMinutos IS NULL
+    ORDER BY s.Fecha DESC, s.IdServicio DESC;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_IniciarServicio
+    @IdLugar INT,
+    @Proyeccion INT = NULL,
+    @Fecha DATE = NULL,
+    @Invitados INT = 0
+AS
+BEGIN
+    DECLARE @FechaServicio DATE = ISNULL(@Fecha, GETDATE());
+
     -- Verificar si ya existe un servicio activo
     IF EXISTS (SELECT 1 FROM Servicios 
                WHERE IdLugar = @IdLugar AND DuracionMinutos IS NULL)
@@ -101,8 +124,8 @@ BEGIN
     END
     
     -- Insertar el nuevo servicio
-    INSERT INTO Servicios (IdLugar, Fecha, Proyeccion)
-    VALUES (@IdLugar, GETDATE(), @Proyeccion);
+    INSERT INTO Servicios (IdLugar, Fecha, Proyeccion, TotalInvitados)
+    VALUES (@IdLugar, @FechaServicio, @Proyeccion, @Invitados);
     
     SELECT SCOPE_IDENTITY() AS IdServicio;
 END

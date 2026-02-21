@@ -30,17 +30,24 @@ namespace SCA_MVC.Services
             return _accesoDatos.ObtenerPrimeroAsync("sp_ObtenerServicioActivo", CommandType.StoredProcedure, ServicioMapper.Map, parametros);
         }
 
+        public Task<Servicio?> ObtenerActivoGlobalAsync()
+        {
+            return _accesoDatos.ObtenerPrimeroAsync("sp_ObtenerServicioActivoSinLugar", CommandType.StoredProcedure, ServicioMapper.Map);
+        }
+
         public Task<Servicio?> ObtenerUltimoAsync()
         {
             return _accesoDatos.ObtenerPrimeroAsync("sp_ObtenerUltimoServicio", CommandType.StoredProcedure, ServicioMapper.Map);
         }
 
-        public async Task<int> CrearServicioAsync(int idLugar, int? proyeccion)
+        public async Task<int> CrearServicioAsync(int idLugar, int? proyeccion, int invitados = 0)
         {
             var parametros = new[]
             {
                 new SqlParameter("@IdLugar", idLugar),
-                new SqlParameter("@Proyeccion", (object?)proyeccion ?? DBNull.Value)
+                new SqlParameter("@Proyeccion", (object?)proyeccion ?? DBNull.Value),
+                new SqlParameter("@Invitados", invitados),
+                new SqlParameter("@Fecha", DateTime.Today)
             };
 
             var id = await _accesoDatos.EscalarAsync("sp_IniciarServicio", CommandType.StoredProcedure, parametros);
