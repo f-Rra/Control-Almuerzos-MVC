@@ -93,27 +93,23 @@ namespace SCA_MVC.Controllers
             }
 
             await _servicioNegocio.CrearServicioAsync(idLugar, proyeccion, invitados);
-            
-            TempData["ToastType"] = "success";
-            TempData["ToastMessage"] = "Servicio iniciado correctamente.";
-            
+
+            TempData["ToastType"]    = "success";
+            TempData["ToastTitle"]   = "Servicio iniciado correctamente";
             return RedirectToAction(nameof(Index));
         }
 
         // POST: Servicio/Finalizar
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Finalizar(int idServicio, int invitados)
+        public async Task<IActionResult> Finalizar(int idServicio, int invitados, int duracionMinutos = 1)
         {
-            var registros = await _registroNegocio.ContarAsync(idServicio);
-            
-            // Calcular duración (esto es simulado o se puede traer del DateTime.Now - Ininicio)
-            // En este ejemplo simplificado, lo dejamos al SP o pasamos un valor
-            await _servicioNegocio.FinalizarServicioAsync(idServicio, registros, invitados, null);
-            
-            TempData["ToastType"] = "info";
-            TempData["ToastMessage"] = "Servicio finalizado.";
-            
+            var totalComensales = await _registroNegocio.ContarAsync(idServicio);
+
+            await _servicioNegocio.FinalizarServicioAsync(idServicio, totalComensales, invitados, Math.Max(1, duracionMinutos));
+
+            TempData["ToastType"]    = "success";
+            TempData["ToastTitle"]   = "Servicio finalizado correctamente";
             return RedirectToAction(nameof(Index));
         }
 
@@ -137,11 +133,10 @@ namespace SCA_MVC.Controllers
 
             await _registroNegocio.RegistrarAsync(empleado.IdEmpleado, empleado.IdEmpresa, idServicio, idLugar);
 
-            // Obtener el registro para devolver datos a la UI
             return Json(new { 
                 success = true, 
                 nombre = $"{empleado.Nombre} {empleado.Apellido}",
-                empresa = "Cargando...", // Esto se podría mejorar trayendo el nombre de la empresa
+                empresa = empleado.Empresa?.Nombre ?? "-",
                 hora = DateTime.Now.ToString("HH:mm")
             });
         }

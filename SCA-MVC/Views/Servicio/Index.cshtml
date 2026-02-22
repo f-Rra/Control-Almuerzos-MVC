@@ -65,9 +65,10 @@
             <i class="bi bi-stopwatch ico-lg"></i>
             <div class="st-label">Duración</div>
             <div class="st-crono" id="cronometro">00:00:00</div>
+            @* Cronómetro arranca desde 0:00:00 al cargar — no depende de la hora guardada *@
             @if (hayServicio)
             {
-                <input type="hidden" id="hora-inicio" value="@Model.ServicioActivo.Fecha.ToString("o")" />
+                <span id="crono-activo"></span>
             }
         </div>
         <div class="st-card">
@@ -130,10 +131,10 @@
                                     <td>
                                         <div class="td-emp-cell">
                                             <div class="td-emp-ico"><i class="bi bi-person-fill"></i></div>
-                                            <span class="td-empleado">@(reg.Empleado?.Nombre ?? "Empleado") @(reg.Empleado?.Apellido ?? "")</span>
+                                            <span class="td-empleado">@(string.IsNullOrEmpty(reg.NombreEmpleado) ? "—" : reg.NombreEmpleado)</span>
                                         </div>
                                     </td>
-                                    <td class="td-empresa">@(reg.Empleado?.Empresa?.Nombre ?? "-")</td>
+                                    <td class="td-empresa">@(string.IsNullOrEmpty(reg.NombreEmpresa) ? "-" : reg.NombreEmpresa)</td>
                                     <td class="td-hora">@reg.Hora.ToString(@"hh\:mm")</td>
                                 </tr>
                             }
@@ -146,6 +147,7 @@
         <form asp-action="Finalizar" method="post" id="form-finalizar" style="display:none">
             <input type="hidden" name="idServicio" value="@Model.ServicioActivo.IdServicio" />
             <input type="hidden" name="invitados" id="input-invitados" value="0" />
+            <input type="hidden" name="duracionMinutos" id="input-duracion" value="0" />
         </form>
     }
     else
@@ -162,15 +164,14 @@
 
 @section Scripts {
     <script>
-        // Lógica del Cronómetro
-        if (document.getElementById('hora-inicio')) {
-            const inicio = new Date(document.getElementById('hora-inicio').value);
+        // ─── Cronómetro: cuenta desde 0 al cargar la página ───
+        if (document.getElementById('crono-activo')) {
+            const inicioEpoch = Date.now(); // momento exacto de carga de página
             setInterval(() => {
-                const ahora = new Date();
-                const diff = new Date(ahora - inicio);
-                const h = String(diff.getUTCHours()).padStart(2, '0');
-                const m = String(diff.getUTCMinutes()).padStart(2, '0');
-                const s = String(diff.getUTCSeconds()).padStart(2, '0');
+                const secsTotal = Math.floor((Date.now() - inicioEpoch) / 1000);
+                const h = String(Math.floor(secsTotal / 3600)).padStart(2, '0');
+                const m = String(Math.floor((secsTotal % 3600) / 60)).padStart(2, '0');
+                const s = String(secsTotal % 60).padStart(2, '0');
                 document.getElementById('cronometro').textContent = `${h}:${m}:${s}`;
             }, 1000);
         }
@@ -189,8 +190,8 @@
 
             const data = await response.json();
             if (data.success) {
-                // Notificación Toast (requiere site.js)
-                if (window.showToast) showToast('Éxito', `${data.nombre} registrado`, 'success');
+                // Notificación modal centrada — mismo estilo que el resto de la app
+                showRegistro(data.nombre, data.empresa, data.hora);
 
                 // Actualizar tabla (prepend)
                 const tbody = document.querySelector('#tabla-registros tbody');
@@ -216,7 +217,7 @@
                 input.value = '';
                 input.focus();
             } else {
-                if (window.showToast) showToast('Error', data.message, 'error');
+                showMessage('error', 'No se pudo registrar', data.message);
                 input.select();
             }
         }
@@ -227,11 +228,15 @@
         });
 
         function confirmarFinServicio() {
-            // Sincronizar invitados antes de enviar
             const invitados = document.getElementById('input-invitados-ui').value;
             document.getElementById('input-invitados').value = invitados;
 
-            // Usar el modal de confirmación de site.js si existe
+            // Leer duración del cronómetro y convertirla a minutos enteros
+            const cronoText = document.getElementById('cronometro').textContent; // HH:MM:SS
+            const [hh, mm, ss] = cronoText.split(':').map(Number);
+            const minutos = hh * 60 + mm + (ss >= 30 ? 1 : 0); // redondear al minuto más cercano
+            document.getElementById('input-duracion').value = Math.max(1, minutos);
+
             if (window.showConfirm) {
                 showConfirm(`¿Desea finalizar el servicio actual con ${invitados} invitados?`, "Finalizar Servicio", () => {
                    document.getElementById('form-finalizar').submit();

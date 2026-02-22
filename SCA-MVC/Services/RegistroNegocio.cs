@@ -77,9 +77,12 @@ namespace SCA_MVC.Services
         {
             return new Registro
             {
-                IdRegistro = DbMapper.GetInt32(reader, nameof(Registro.IdRegistro)),
-                Fecha = DbMapper.GetDateTime(reader, nameof(Registro.Fecha)),
-                Hora = DbMapper.GetTimeSpan(reader, nameof(Registro.Hora))
+                IdRegistro    = DbMapper.GetInt32(reader, nameof(Registro.IdRegistro)),
+                Fecha         = DbMapper.GetDateTime(reader, nameof(Registro.Fecha)),
+                Hora          = DbMapper.GetTimeSpan(reader, nameof(Registro.Hora)),
+                // El SP devuelve strings ya combinados, los mapeamos directamente
+                NombreEmpleado = DbMapper.GetString(reader, "Empleado"),
+                NombreEmpresa  = DbMapper.GetString(reader, "Empresa")
             };
         }
     }

@@ -128,12 +128,18 @@ namespace SCA_MVC.Services
         {
             return new Empleado
             {
-                IdEmpleado = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpleado)),
-                Nombre = DbMapper.GetString(reader, nameof(Empleado.Nombre)),
-                Apellido = DbMapper.GetString(reader, nameof(Empleado.Apellido)),
+                IdEmpleado  = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpleado)),
+                Nombre      = DbMapper.GetString(reader, nameof(Empleado.Nombre)),
+                Apellido    = DbMapper.GetString(reader, nameof(Empleado.Apellido)),
                 IdCredencial = DbMapper.GetString(reader, nameof(Empleado.IdCredencial)),
-                IdEmpresa = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
-                Estado = true
+                IdEmpresa   = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
+                Estado      = true,
+                // El SP devuelve emp.Nombre as Empresa — lo cargamos en la navegación
+                Empresa = new Empresa
+                {
+                    IdEmpresa = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
+                    Nombre    = DbMapper.GetString(reader, "Empresa")
+                }
             };
         }
 

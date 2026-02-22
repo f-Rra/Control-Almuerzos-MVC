@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Diseños — Notificación Registro</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --primary: #FFC107;
+    --primary-dark: #e6a800;
+    --primary-glow: rgba(255,193,7,0.35);
+    --bg-base: #FDF6E3;
+    --green: #4CAF50;
+    --green-light: rgba(76,175,80,0.12);
+    --text: #1A1A1A;
+    --text-muted: #666;
+    --white: #fff;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg-base);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  h1 { text-align: center; font-size: 1.4rem; color: var(--text); margin-bottom: 8px; font-weight: 700; }
+  p.sub { text-align: center; color: var(--text-muted); font-size: .9rem; margin-bottom: 40px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .card-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .label {
+    font-weight: 700;
+    font-size: .8rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ─── Fondo simulado ─── */
+  .mock-bg {
+    width: 100%;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #f5e9c8 0%, #fdf4d0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    position: relative;
+    overflow: hidden;
+    min-height: 200px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.06);
+  }
+  .mock-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(253,246,227,0.55);
+  }
+
+  /* ══════════ DISEÑO 1 — Clásico limpio ══════════ */
+  .d1 {
+    position: relative; z-index: 1;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px 24px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,.10);
+  }
+  .d1 .ico { width: 60px; height: 60px; border-radius: 16px; background: var(--green-light); display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--green); margin-bottom: 16px; }
+  .d1 .title { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+  .d1 .name { font-weight: 600; font-size: 1rem; color: var(--text); margin-top: 12px; }
+  .d1 .empresa { color: var(--text-muted); font-size: .88rem; margin-top: 2px; }
+
+  /* ══════════ DISEÑO 2 — Banner lateral verde ══════════ */
+  .d2 {
+    position: relative; z-index: 1;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 24px 24px 24px 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.10);
+    border-left: 5px solid var(--green);
+  }
+  .d2 .ico { width: 52px; height: 52px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--green); flex-shrink: 0; }
+  .d2 .body .title { font-size: 1rem; font-weight: 700; color: var(--text); }
+  .d2 .body .name { font-weight: 600; font-size: .95rem; color: var(--text); margin-top: 2px; }
+  .d2 .body .empresa { color: var(--text-muted); font-size: .85rem; }
+
+  /* ══════════ DISEÑO 3 — Fondo amarillo primario ══════════ */
+  .d3 {
+    position: relative; z-index: 1;
+    background: var(--primary);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 8px 32px var(--primary-glow);
+  }
+  .d3 .ico { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.3); display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fff; margin-bottom: 12px; }
+  .d3 .title { font-size: 1.1rem; font-weight: 700; color: #fff; }
+  .d3 .name { font-weight: 600; font-size: 1rem; color: #fff; margin-top: 10px; }
+  .d3 .empresa { color: rgba(255,255,255,0.75); font-size: .87rem; margin-top: 2px; }
+
+  /* ══════════ DISEÑO 4 — Pill con check grande ══════════ */
+  .d4 {
+    position: relative; z-index: 1;
+    background: var(--white);
+    border-radius: 999px;
+    padding: 16px 28px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.10);
+  }
+  .d4 .ico { width: 48px; height: 48px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; flex-shrink: 0; }
+  .d4 .body .name { font-weight: 700; font-size: 1rem; color: var(--text); }
+  .d4 .body .empresa { color: var(--text-muted); font-size: .85rem; }
+
+  /* ══════════ DISEÑO 5 — Card oscura (invertida) ══════════ */
+  .d5 {
+    position: relative; z-index: 1;
+    background: #1A1A1A;
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  }
+  .d5 .ico { width: 56px; height: 56px; border-radius: 14px; background: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #1A1A1A; margin-bottom: 14px; }
+  .d5 .title { font-size: 1rem; font-weight: 700; color: var(--primary); letter-spacing: .02em; }
+  .d5 .name { font-weight: 600; font-size: 1.05rem; color: #fff; margin-top: 10px; }
+  .d5 .empresa { color: rgba(255,255,255,0.5); font-size: .87rem; margin-top: 2px; }
+
+  /* ══════════ DISEÑO 6 — Minimalista solo texto ══════════ */
+  .d6 {
+    position: relative; z-index: 1;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .d6 .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); margin-top: 5px; flex-shrink: 0; }
+  .d6 .title { font-size: .78rem; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
+  .d6 .name { font-weight: 700; font-size: 1.05rem; color: var(--text); }
+  .d6 .empresa { color: var(--text-muted); font-size: .87rem; margin-top: 1px; }
+
+  /* ══════════ DISEÑO 7 — Glassmorphism crema ══════════ */
+  .d7 {
+    position: relative; z-index: 1;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(255,193,7,0.4);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(255,193,7,0.15);
+  }
+  .d7 .ico { width: 58px; height: 58px; border-radius: 50%; border: 2.5px solid var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--primary); margin-bottom: 14px; }
+  .d7 .title { font-size: .8rem; font-weight: 700; color: var(--primary-dark); text-transform: uppercase; letter-spacing: .08em; }
+  .d7 .name { font-weight: 700; font-size: 1.1rem; color: var(--text); margin-top: 10px; }
+  .d7 .empresa { color: var(--text-muted); font-size: .88rem; margin-top: 2px; }
+
+  /* ══════════ DISEÑO 8 — Ticket / recibo ══════════ */
+  .d8 {
+    position: relative; z-index: 1;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 0;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,.10);
+  }
+  .d8 .header { background: var(--green); padding: 18px 20px; display: flex; align-items: center; gap: 10px; }
+  .d8 .header i { font-size: 1.3rem; color: #fff; }
+  .d8 .header span { font-weight: 700; font-size: 1rem; color: #fff; }
+  .d8 .body { padding: 16px 20px; }
+  .d8 .body .name { font-weight: 700; font-size: 1.05rem; color: var(--text); }
+  .d8 .body .empresa { color: var(--text-muted); font-size: .87rem; margin-top: 2px; }
+  .d8 .body .hora { margin-top: 8px; font-size: .8rem; color: var(--primary-dark); font-weight: 600; }
+
+  /* ══════════ DISEÑO 9 — Floating card con avatar inicial ══════════ */
+  .d9 {
+    position: relative; z-index: 1;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    width: 100%;
+    box-shadow: 0 12px 40px rgba(0,0,0,.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+  .d9 .avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: #1A1A1A; }
+  .d9 .check { position: absolute; top: 16px; right: 16px; width: 26px; height: 26px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .85rem; }
+  .d9 .name { font-weight: 700; font-size: 1.1rem; color: var(--text); }
+  .d9 .empresa { color: var(--text-muted); font-size: .87rem; }
+  .d9 .tag { background: var(--green-light); color: var(--green); font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ══════════ DISEÑO 10 — Progress flash ══════════ */
+  .d10 {
+    position: relative; z-index: 1;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 24px 24px 0;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,.10);
+    overflow: hidden;
+    text-align: center;
+  }
+  .d10 .ico { width: 52px; height: 52px; border-radius: 14px; background: var(--green-light); display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--green); margin-bottom: 10px; }
+  .d10 .title { font-size: .78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+  .d10 .name { font-weight: 700; font-size: 1.1rem; color: var(--text); margin-top: 8px; }
+  .d10 .empresa { color: var(--text-muted); font-size: .87rem; margin-top: 2px; margin-bottom: 16px; }
+  .d10 .progress-bar {
+    height: 4px;
+    background: var(--primary);
+    animation: shrink 2.5s linear forwards;
+    transform-origin: left;
+  }
+  @keyframes shrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+</style>
+</head>
+<body>
+
+<h1>Diseños — Notificación de Registro de Comensal</h1>
+<p class="sub">Todos centrados, fondo desenfocado, colores del proyecto · Hacé clic en el que prefieras y avisame el número</p>
+
+<div class="grid">
+
+  <!-- 1 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 1 — Clásico limpio</span>
+    <div class="mock-bg">
+      <div class="d1">
+        <div class="ico"><i class="bi bi-check-lg"></i></div>
+        <div class="title">Registro exitoso</div>
+        <div class="name">Isabella Reyes</div>
+        <div class="empresa">Servicios S.A.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 2 — Banner lateral verde</span>
+    <div class="mock-bg">
+      <div class="d2">
+        <div class="ico"><i class="bi bi-person-check-fill"></i></div>
+        <div class="body">
+          <div class="title">Registro exitoso</div>
+          <div class="name">Isabella Reyes</div>
+          <div class="empresa">Servicios S.A.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 3 — Fondo amarillo</span>
+    <div class="mock-bg">
+      <div class="d3">
+        <div class="ico"><i class="bi bi-check-lg"></i></div>
+        <div class="title">Registro exitoso</div>
+        <div class="name">Isabella Reyes</div>
+        <div class="empresa">Servicios S.A.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 4 — Pill compacto</span>
+    <div class="mock-bg">
+      <div class="d4">
+        <div class="ico"><i class="bi bi-check-lg"></i></div>
+        <div class="body">
+          <div class="name">Isabella Reyes</div>
+          <div class="empresa">Servicios S.A.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 5 — Card oscura</span>
+    <div class="mock-bg">
+      <div class="d5">
+        <div class="ico"><i class="bi bi-check-lg"></i></div>
+        <div class="title">Registro exitoso</div>
+        <div class="name">Isabella Reyes</div>
+        <div class="empresa">Servicios S.A.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 6 — Minimalista</span>
+    <div class="mock-bg">
+      <div class="d6">
+        <div class="dot"></div>
+        <div>
+          <div class="title">Registro exitoso</div>
+          <div class="name">Isabella Reyes</div>
+          <div class="empresa">Servicios S.A.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 7 — Glassmorphism</span>
+    <div class="mock-bg">
+      <div class="d7">
+        <div class="ico"><i class="bi bi-person-check"></i></div>
+        <div class="title">Registro exitoso</div>
+        <div class="name">Isabella Reyes</div>
+        <div class="empresa">Servicios S.A.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 8 — Ticket / recibo</span>
+    <div class="mock-bg">
+      <div class="d8">
+        <div class="header">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>Registro exitoso</span>
+        </div>
+        <div class="body">
+          <div class="name">Isabella Reyes</div>
+          <div class="empresa">Servicios S.A.</div>
+          <div class="hora"><i class="bi bi-clock"></i> 13:45</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 9 — Avatar inicial</span>
+    <div class="mock-bg">
+      <div class="d9" style="position:relative;">
+        <div class="check"><i class="bi bi-check-lg"></i></div>
+        <div class="avatar">IR</div>
+        <div class="name">Isabella Reyes</div>
+        <div class="empresa">Servicios S.A.</div>
+        <div class="tag">✓ Registrado</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="card-wrap">
+    <span class="label">Diseño 10 — Barra de progreso</span>
+    <div class="mock-bg">
+      <div class="d10">
+        <div class="ico"><i class="bi bi-check-lg"></i></div>
+        <div class="title">Registro exitoso</div>
+        <div class="name">Isabella Reyes</div>
+        <div class="empresa">Servicios S.A.</div>
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
