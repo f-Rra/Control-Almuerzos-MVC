@@ -140,5 +140,24 @@ namespace SCA_MVC.Controllers
                 hora = DateTime.Now.ToString("HH:mm")
             });
         }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> FinalizarDirecto()
+        {
+            var activo = await _servicioNegocio.ObtenerActivoGlobalAsync();
+            if (activo != null)
+            {
+                int totalNormal = await _registroNegocio.ContarAsync(activo.IdServicio);
+                int totalGral = totalNormal + activo.TotalInvitados;
+                
+                // Calculamos duración aproximada en minutos
+                double mnts = (DateTime.Now - (activo.HoraInicio ?? activo.Fecha)).TotalMinutes;
+                int duracion = (int)Math.Max(1, mnts);
+
+                await _servicioNegocio.FinalizarServicioAsync(activo.IdServicio, totalNormal, activo.TotalInvitados, duracion);
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
     }
 }

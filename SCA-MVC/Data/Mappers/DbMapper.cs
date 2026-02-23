@@ -34,6 +34,12 @@ namespace SCA_MVC.Data.Mappers
             return reader.IsDBNull(ordinal) ? default : reader.GetDateTime(ordinal);
         }
 
+        public static DateTime? GetNullableDateTime(SqlDataReader reader, string column)
+        {
+            var ordinal = reader.GetOrdinal(column);
+            return reader.IsDBNull(ordinal) ? null : reader.GetDateTime(ordinal);
+        }
+
         public static TimeSpan GetTimeSpan(SqlDataReader reader, string column)
         {
             var ordinal = reader.GetOrdinal(column);

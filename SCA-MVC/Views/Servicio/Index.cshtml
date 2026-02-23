@@ -164,17 +164,42 @@
 
 @section Scripts {
     <script>
-        // ─── Cronómetro: cuenta desde 0 al cargar la página ───
+        // ─── Persistencia del Cronómetro ───
         if (document.getElementById('crono-activo')) {
-            const inicioEpoch = Date.now(); // momento exacto de carga de página
+            // Obtenemos la hora de inicio real desde el servidor
+            const horaInicioServer = new Date('@(Model.ServicioActivo?.HoraInicio?.ToString("yyyy-MM-ddTHH:mm:ss") ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"))');
+            
             setInterval(() => {
-                const secsTotal = Math.floor((Date.now() - inicioEpoch) / 1000);
-                const h = String(Math.floor(secsTotal / 3600)).padStart(2, '0');
-                const m = String(Math.floor((secsTotal % 3600) / 60)).padStart(2, '0');
-                const s = String(secsTotal % 60).padStart(2, '0');
+                const ahora = new Date();
+                const secsTotal = Math.floor((ahora - horaInicioServer) / 1000);
+                
+                // Si por algún desajuste de reloj diera negativo, mostramos 0
+                const displaySecs = Math.max(0, secsTotal);
+                
+                const h = String(Math.floor(displaySecs / 3600)).padStart(2, '0');
+                const m = String(Math.floor((displaySecs % 3600) / 60)).padStart(2, '0');
+                const s = String(displaySecs % 60).padStart(2, '0');
                 document.getElementById('cronometro').textContent = `${h}:${m}:${s}`;
             }, 1000);
         }
+
+        // ─── Auto-finalización al cerrar el navegador ───
+        let isInternalNavigation = false;
+
+        // Marcamos como navegación interna cuando se hace click en cualquier link o se envía un formulario
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) {
+                isInternalNavigation = true;
+            }
+        });
+        document.addEventListener('submit', () => { isInternalNavigation = true; });
+
+        window.addEventListener('beforeunload', (event) => {
+            // Solo disparamos si hay un servicio activo Y NO es una navegación interna
+            if (document.getElementById('crono-activo') && !isInternalNavigation) {
+               navigator.sendBeacon('/Servicio/FinalizarDirecto');
+            }
+        });
 
         // Registro por credencial
         async function registrarPorCredencial() {

@@ -16,6 +16,8 @@ namespace SCA_MVC.Models
         [Display(Name = "Fecha")]
         public DateTime Fecha { get; set; }
 
+        public DateTime? HoraInicio { get; set; }
+
         [Display(Name = "Proyección")]
         public int? Proyeccion { get; set; }
 

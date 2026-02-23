@@ -12,6 +12,7 @@ namespace SCA_MVC.Data.Mappers
                 IdServicio = DbMapper.GetInt32(reader, nameof(Servicio.IdServicio)),
                 IdLugar = DbMapper.GetInt32(reader, nameof(Servicio.IdLugar)),
                 Fecha = DbMapper.GetDateTime(reader, nameof(Servicio.Fecha)),
+                HoraInicio = DbMapper.GetNullableDateTime(reader, nameof(Servicio.HoraInicio)),
                 Proyeccion = DbMapper.GetNullableInt32(reader, nameof(Servicio.Proyeccion)),
                 DuracionMinutos = DbMapper.GetNullableInt32(reader, nameof(Servicio.DuracionMinutos)),
                 TotalComensales = DbMapper.GetInt32(reader, nameof(Servicio.TotalComensales)),

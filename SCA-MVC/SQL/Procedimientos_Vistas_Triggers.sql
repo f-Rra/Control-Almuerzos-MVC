@@ -42,6 +42,7 @@ BEGIN
         s.DuracionMinutos,
         s.TotalComensales,
         s.TotalInvitados,
+        s.HoraInicio,
         l.Nombre as NombreLugar
     FROM Servicios s
     INNER JOIN Lugares l ON s.IdLugar = l.IdLugar
@@ -61,7 +62,8 @@ BEGIN
         Proyeccion,
         DuracionMinutos,
         TotalComensales, 
-        TotalInvitados
+        TotalInvitados,
+        HoraInicio
     FROM Servicios
     WHERE IdLugar = @IdLugar 
       AND Fecha = CAST(GETDATE() AS DATE)
@@ -80,7 +82,8 @@ BEGIN
         s.Proyeccion,
         s.DuracionMinutos,
         s.TotalComensales, 
-        s.TotalInvitados
+        s.TotalInvitados,
+        s.HoraInicio
     FROM Servicios s
     INNER JOIN Lugares l ON s.IdLugar = l.IdLugar
     WHERE s.DuracionMinutos IS NOT NULL 
@@ -99,7 +102,8 @@ BEGIN
         s.Proyeccion,
         s.DuracionMinutos,
         s.TotalComensales, 
-        s.TotalInvitados
+        s.TotalInvitados,
+        s.HoraInicio
     FROM Servicios s
     INNER JOIN Lugares l ON s.IdLugar = l.IdLugar
     WHERE s.DuracionMinutos IS NULL
@@ -124,8 +128,8 @@ BEGIN
     END
     
     -- Insertar el nuevo servicio
-    INSERT INTO Servicios (IdLugar, Fecha, Proyeccion, TotalInvitados)
-    VALUES (@IdLugar, @FechaServicio, @Proyeccion, @Invitados);
+    INSERT INTO Servicios (IdLugar, Fecha, Proyeccion, TotalInvitados, HoraInicio)
+    VALUES (@IdLugar, @FechaServicio, @Proyeccion, @Invitados, GETDATE());
     
     SELECT SCOPE_IDENTITY() AS IdServicio;
 END
