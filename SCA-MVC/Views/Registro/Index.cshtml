@@ -20,20 +20,37 @@
     }
     else
     {
-        <!-- ═══ 1. RESUMEN DE ESTADO (Cargado en Runtime por JS) ═══ -->
+        <!-- ═══ 1. RESUMEN DE ESTADO ═══ -->
         <div class="summary-row">
+            <div class="sm-card registrados">
+                <div class="sm-ico registrados"><i class="bi bi-person-check-fill"></i></div>
+                <div class="sm-info">
+                    <div class="sm-label">Registrados</div>
+                    <div class="sm-value" id="kpi-registrados">@ViewBag.Registrados</div>
+                </div>
+            </div>
+            <div class="sm-card pendientes">
+                <div class="sm-ico pendientes"><i class="bi bi-person-dash-fill"></i></div>
+                <div class="sm-info">
+                    <div class="sm-label">Pendientes</div>
+                    <div class="sm-value" id="kpi-pendientes">@ViewBag.Pendientes</div>
+                </div>
+            </div>
             <div class="sm-card total">
                 <div class="sm-ico total"><i class="bi bi-people-fill"></i></div>
                 <div class="sm-info">
-                    <div class="sm-label">Sin Almorzar</div>
-                    <div class="sm-value" id="count-total">@Model.Count</div>
+                    <div class="sm-label">Total</div>
+                    <div class="sm-value">@ViewBag.Proyectados</div>
                 </div>
             </div>
-            <div class="sm-card info">
-                <div class="sm-ico"><i class="bi bi-info-circle"></i></div>
+            <div class="sm-card">
+                <div class="sm-ico progreso"><i class="bi bi-graph-up"></i></div>
                 <div class="sm-info">
-                    <div class="sm-label">Instrucciones</div>
-                    <p class="mb-0 opacity-75 small">Seleccione los empleados y presione "Agregar" para registrarlos masivamente.</p>
+                    <div class="sm-label">Progreso</div>
+                    <div class="prog-mini">
+                        <div class="prog-mini-track"><div class="prog-mini-fill" id="kpi-progreso-barra" style="width:@(((double)ViewBag.Progreso).ToString("0"))%"></div></div>
+                        <div class="prog-mini-pct" id="kpi-progreso-texto">@(((double)ViewBag.Progreso).ToString("0"))%</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,22 +119,27 @@
 
 @section Scripts {
     <script>
+        // Variables globales del servicio
         const idServicio = @(idServicio ?? 0);
         const idLugar = @(idLugar ?? 0);
 
-        // Actualizar contador de seleccionados
+        // ══════════════════════════════════════════
+        // GESTIÓN DE SELECCIÓN
+        // ══════════════════════════════════════════
+
+        // Actualiza el contador visual de empleados seleccionados y habilita/deshabilita el botón
         function updateSelectionCount() {
             const count = document.querySelectorAll('.emp-check:checked').length;
             document.getElementById('span-sel-count').textContent = count;
             document.getElementById('btn-registrar-masivo').disabled = count === 0;
             
-            // Pintar filas seleccionadas
+            // Efecto visual: Resaltar filas marcadas
             document.querySelectorAll('.emp-check').forEach(chk => {
                 chk.closest('tr').classList.toggle('rm-selected', chk.checked);
             });
         }
 
-        // Delegación de eventos para checkboxes
+        // Manejo de eventos para checkboxes individuales y "seleccionar todos"
         document.addEventListener('change', e => {
             if (e.target.classList.contains('emp-check')) {
                 updateSelectionCount();
@@ -130,7 +152,11 @@
             }
         });
 
-        // Filtrado dinámico (AJAX)
+        // ══════════════════════════════════════════
+        // FILTRADO DINÁMICO (AJAX)
+        // ══════════════════════════════════════════
+
+        // Consulta al servidor los empleados que faltan almorzar según empresa y búsqueda por nombre
         async function aplicarFiltros() {
             const idEmpresa = document.getElementById('filtro-empresa').value;
             const nombre = document.getElementById('filtro-nombre').value;
@@ -139,10 +165,11 @@
             const data = await response.json();
 
             if (data.success === false) {
-                alert(data.message);
+                if (window.showMessage) showMessage('error', 'Error', data.message);
                 return;
             }
 
+            // Reconstrucción de la tabla
             const tbody = document.querySelector('#tabla-empleados tbody');
             tbody.innerHTML = '';
             
@@ -163,46 +190,59 @@
                 tbody.insertAdjacentHTML('beforeend', tr);
             });
 
-            document.getElementById('count-total').textContent = data.length;
+            // Reiniciar estado de selección
             document.getElementById('check-all').checked = false;
             updateSelectionCount();
         }
 
+        // Eventos para disparar el filtrado
         document.getElementById('filtro-empresa')?.addEventListener('change', aplicarFiltros);
         
+        // Búsqueda en tiempo real con debounce (400ms) para no saturar al servidor
         let typingTimer;
         document.getElementById('filtro-nombre')?.addEventListener('input', () => {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(aplicarFiltros, 400);
         });
 
-        // Registro masivo
+        // ══════════════════════════════════════════
+        // REGISTRO MASIVO
+        // ══════════════════════════════════════════
+
+        // Envía la lista de IDs de empleados al servidor y actualiza los KPIs superiores
         document.getElementById('btn-registrar-masivo')?.addEventListener('click', async () => {
             const selectedIds = Array.from(document.querySelectorAll('.emp-check:checked')).map(chk => parseInt(chk.value));
             
             if (selectedIds.length === 0) return;
 
-            if (confirm(`¿Registrar almuerzo para los ${selectedIds.length} empleados seleccionados?`)) {
-                const response = await fetch('/Registro/RegistrarMultiples', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        idServicio: idServicio,
-                        idLugar: idLugar,
-                        idsEmpleados: selectedIds
-                    })
-                });
+            const response = await fetch('/Registro/RegistrarMultiples', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    idServicio: idServicio,
+                    idLugar: idLugar,
+                    idsEmpleados: selectedIds
+                })
+            });
 
-                const data = await response.json();
-                if (data.success) {
-                    if (window.showToast) showToast('success', 'Registro exitoso', `Se registraron ${data.count} empleados.`);
-                    else alert(`Se registraron ${data.count} empleados.`);
-                    
-                    // Recargar lista filtrada para que desaparezcan los ya registrados
-                    aplicarFiltros();
-                } else {
-                    alert('Error: ' + data.message);
+            const data = await response.json();
+            if (data.success) {
+                // Feedback premium: Muestra notificación de éxito y actualiza cards y tabla
+                if (window.showMessage) {
+                    showMessage('success', 'Registro exitoso', `Se registraron ${data.count} empleados correctamente.`, 2500);
                 }
+
+                // Sincronización dinámica de cards superiores
+                document.getElementById('kpi-registrados').textContent = data.registrados;
+                document.getElementById('kpi-pendientes').textContent = data.pendientes;
+                document.getElementById('kpi-progreso-texto').textContent = Math.round(data.progreso) + '%';
+                document.getElementById('kpi-progreso-barra').style.width = data.progreso + '%';
+                
+                // Actualizar listado para remover a los recién registrados
+                aplicarFiltros();
+            } else {
+                if (window.showMessage) showMessage('error', 'Error en registro', data.message);
+                else alert('Error: ' + data.message);
             }
         });
     </script>
