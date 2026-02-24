@@ -1610,6 +1610,7 @@ body {
     transition: 0.25s;
     white-space: nowrap;
     box-shadow: 0 4px 12px var(--primary-glow);
+    text-decoration: none;
 }
 
 .btn-exportar:hover {

@@ -1,3 +1,4 @@
+@model SCA_MVC.ViewModels.ReporteViewModel
 @{
     ViewData["Title"] = "Reportes";
 }
@@ -5,122 +6,225 @@
 <div class="rpt-wrap">
 
 <!-- ═══ 1. CONFIGURACIÓN DEL REPORTE ═══ -->
+<form method="get" id="form-reporte">
 <div class="panel">
     <div class="config-row">
         <div class="cfg-title"><i class="bi bi-bar-chart-line-fill"></i> Reportes</div>
         <div class="cfg-sep"></div>
         <div class="cfg-inputs">
-            <div class="cfg-item"><label>Desde</label><input type="date" value="2026-01-28"/></div>
-            <div class="cfg-item"><label>Hasta</label><input type="date" value="2026-02-03"/></div>
-            <div class="cfg-item"><label>Lugar</label><select><option>Todos</option><option>Comedor</option><option>Quincho</option></select></div>
+            <div class="cfg-item">
+                <label>Desde</label>
+                <input type="date" name="desde" id="input-desde" value="@Model.FechaDesde.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="cfg-item">
+                <label>Hasta</label>
+                <input type="date" name="hasta" id="input-hasta" value="@Model.FechaHasta.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="cfg-item">
+                <label>Lugar</label>
+                <select name="idLugar" id="sel-lugar">
+                    <option value="">Todos</option>
+                    @foreach (var lugar in ViewBag.Lugares)
+                    {
+                        if (Model.IdLugar == lugar.IdLugar)
+                        {
+                            <option value="@lugar.IdLugar" selected="selected">@lugar.Nombre</option>
+                        }
+                        else
+                        {
+                            <option value="@lugar.IdLugar">@lugar.Nombre</option>
+                        }
+                    }
+                </select>
+            </div>
             <div class="cfg-item">
                 <label>Tipo de reporte</label>
-                <select class="rpt-tipo-select">
-                    <option>Lista de servicios</option>
-                    <option>Asistencias por empresas</option>
-                    <option>Cobertura vs proyección</option>
-                    <option>Distribución por día de semana</option>
+                <select id="rpt-tipo-select" name="tipo">
+                    @{ var t = Model.TipoReporte; }
+                    @if (t == "servicios") { <option value="servicios" selected="selected">Lista de Servicios</option> } else { <option value="servicios">Lista de Servicios</option> }
+                    @if (t == "empresas")  { <option value="empresas"  selected="selected">Asistencias por Empresa</option> } else { <option value="empresas">Asistencias por Empresa</option> }
+                    @if (t == "cobertura") { <option value="cobertura" selected="selected">Cobertura vs Proyección</option> } else { <option value="cobertura">Cobertura vs Proyección</option> }
+                    @if (t == "dias")      { <option value="dias"      selected="selected">Distribución por Día de Semana</option> } else { <option value="dias">Distribución por Día de Semana</option> }
                 </select>
             </div>
         </div>
         <div class="cfg-sep"></div>
         <div class="cfg-btn-wrap">
-            <button class="btn-srv btn-iniciar"><i class="bi bi-play-fill"></i> Generar Reporte</button>
+            <button type="submit" class="btn-srv btn-iniciar"><i class="bi bi-play-fill"></i> Generar Reporte</button>
         </div>
     </div>
 </div>
+</form>
 
 <!-- ═══ 2. TABLA DE RESULTADOS ═══ -->
 <div class="panel registro-section">
     <div class="registro-inner">
         <div class="rpt-ph">
-            <h2><i class="bi bi-table"></i> Lista de servicios</h2>
+            <h2 id="rpt-titulo">
+                @if (Model.TipoReporte == "servicios")
+                {
+                    <i class="bi bi-list-ul"></i>@(" Lista de Servicios")
+                }
+                else if (Model.TipoReporte == "empresas")
+                {
+                    <i class="bi bi-building"></i>@(" Asistencias por Empresa")
+                }
+                else if (Model.TipoReporte == "dias")
+                {
+                    <i class="bi bi-calendar-week"></i>@(" Distribución por Día de Semana")
+                }
+                else
+                {
+                    <i class="bi bi-bar-chart-steps"></i>@(" Cobertura vs Proyección")
+                }
+            </h2>
             <div class="rpt-ph-right">
-                <span class="rpt-ph-count"><strong>7</strong> registros</span>
-                <button class="btn-exportar"><i class="bi bi-file-earmark-pdf"></i> Exportar PDF</button>
+                <span class="rpt-ph-count"><strong id="rpt-count">
+                    @if (Model.TipoReporte == "servicios") { @Model.ListaServicios.Count }
+                    else if (Model.TipoReporte == "empresas") { @Model.AsistenciasPorEmpresa.Count }
+                    else if (Model.TipoReporte == "dias") { @Model.AsistenciasPorDia.Count }
+                    else { @Model.CoberturaVsProyeccion.Count }
+                </strong> registros</span>
+                <a href="@Url.Action("ExportarPDF", new { desde = Model.FechaDesde, hasta = Model.FechaHasta, idLugar = Model.IdLugar, tipo = Model.TipoReporte })"
+                   class="btn-exportar">
+                    <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+                </a>
             </div>
         </div>
+
         <div class="table-wrap">
-            <table class="reg-table">
-                <thead>
-                    <tr>
-                        <th style="width:40px">#</th>
-                        <th>Fecha</th>
-                        <th>Proyección</th>
-                        <th>Duración (min)</th>
-                        <th>Total Comensales</th>
-                        <th>Total Invitados</th>
-                        <th>Total General</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="td-num">1</td>
-                        <td class="td-fecha">03/02/2026</td>
-                        <td>200</td>
-                        <td class="td-muted">95</td>
-                        <td>156</td>
-                        <td>15</td>
-                        <td class="td-total">171</td>
-                    </tr>
-                    <tr>
-                        <td class="td-num">2</td>
-                        <td class="td-fecha">02/02/2026</td>
-                        <td>180</td>
-                        <td class="td-muted">88</td>
-                        <td>142</td>
-                        <td>12</td>
-                        <td class="td-total">154</td>
-                    </tr>
-                    <tr>
-                        <td class="td-num">3</td>
-                        <td class="td-fecha">01/02/2026</td>
-                        <td>190</td>
-                        <td class="td-muted">102</td>
-                        <td>165</td>
-                        <td>18</td>
-                        <td class="td-total">183</td>
-                    </tr>
-                    <tr>
-                        <td class="td-num">4</td>
-                        <td class="td-fecha">31/01/2026</td>
-                        <td>200</td>
-                        <td class="td-muted">91</td>
-                        <td>178</td>
-                        <td>10</td>
-                        <td class="td-total">188</td>
-                    </tr>
-                    <tr>
-                        <td class="td-num">5</td>
-                        <td class="td-fecha">30/01/2026</td>
-                        <td>210</td>
-                        <td class="td-muted">85</td>
-                        <td>189</td>
-                        <td>20</td>
-                        <td class="td-total">209</td>
-                    </tr>
-                    <tr>
-                        <td class="td-num">6</td>
-                        <td class="td-fecha">29/01/2026</td>
-                        <td>195</td>
-                        <td class="td-muted">97</td>
-                        <td>160</td>
-                        <td>14</td>
-                        <td class="td-total">174</td>
-                    </tr>
-                    <tr>
-                        <td class="td-num">7</td>
-                        <td class="td-fecha">28/01/2026</td>
-                        <td>200</td>
-                        <td class="td-muted">90</td>
-                        <td>170</td>
-                        <td>16</td>
-                        <td class="td-total">186</td>
-                    </tr>
-                </tbody>
-            </table>
+
+            @* ── Vista: Lista de Servicios ── *@
+            @if (Model.TipoReporte == "servicios")
+            {
+                <table class="reg-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">#</th>
+                            <th>Fecha</th>
+                            <th>Lugar</th>
+                            <th>Proyección</th>
+                            <th>Duración (min)</th>
+                            <th>Comensales</th>
+                            <th>Invitados</th>
+                            <th>Total General</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int i = 1; }
+                        @foreach (var x in Model.ListaServicios)
+                        {
+                            <tr>
+                                <td class="td-num">@i</td>
+                                <td class="td-fecha">@x.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@x.Lugar</td>
+                                <td>@x.Proyeccion</td>
+                                <td class="td-muted">@(x.DuracionMinutos?.ToString() ?? "–")</td>
+                                <td>@x.TotalComensales</td>
+                                <td>@x.TotalInvitados</td>
+                                <td class="td-total">@x.TotalGeneral</td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @* ── Vista: Cobertura vs Proyección ── *@
+            @if (Model.TipoReporte == "cobertura" || Model.TipoReporte == "")
+            {
+                <table class="reg-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">#</th>
+                            <th>Fecha</th>
+                            <th>Lugar</th>
+                            <th>Proyección</th>
+                            <th>Atendidos</th>
+                            <th>Diferencia</th>
+                            <th>Cobertura</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int ic = 1; }
+                        @foreach (var x in Model.CoberturaVsProyeccion)
+                        {
+                            <tr>
+                                <td class="td-num">@ic</td>
+                                <td class="td-fecha">@x.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@x.Lugar</td>
+                                <td>@x.Proyeccion</td>
+                                <td class="td-total">@x.Atendidos</td>
+                                <td class="@(x.Diferencia < 0 ? "td-neg" : x.Diferencia > 0 ? "td-pos" : "td-muted")">
+                                    @(x.Diferencia > 0 ? "+" : "")@x.Diferencia
+                                </td>
+                                <td>@(x.CoberturaPorcentaje?.ToString("F1") ?? "—")%</td>
+                            </tr>
+                            ic++;
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @* ── Vista: Asistencias por empresa ── *@
+            @if (Model.TipoReporte == "empresas")
+            {
+                <table class="reg-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">#</th>
+                            <th>Empresa</th>
+                            <th>Total Asistencias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int j = 1; }
+                        @foreach (var x in Model.AsistenciasPorEmpresa)
+                        {
+                            <tr>
+                                <td class="td-num">@j</td>
+                                <td>@x.Empresa</td>
+                                <td class="td-total">@x.TotalAsistencias</td>
+                            </tr>
+                            j++;
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @* ── Vista: Distribución por día de semana ── *@
+            @if (Model.TipoReporte == "dias")
+            {
+                <table class="reg-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px">#</th>
+                            <th>Día</th>
+                            <th>Total Almuerzos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int k = 1; }
+                        @foreach (var x in Model.AsistenciasPorDia)
+                        {
+                            <tr>
+                                <td class="td-num">@k</td>
+                                <td>@x.Dia</td>
+                                <td class="td-total">@x.Total</td>
+                            </tr>
+                            k++;
+                        }
+                    </tbody>
+                </table>
+            }
+
         </div>
-        <div class="rpt-info"><i class="bi bi-info-circle"></i> 28/01/2026 – 03/02/2026 · Todos los lugares</div>
+
+        <div class="rpt-info">
+            <i class="bi bi-info-circle"></i>
+            @Model.FechaDesde.ToString("dd/MM/yyyy") – @Model.FechaHasta.ToString("dd/MM/yyyy")
+            · @(Model.IdLugar.HasValue ? ((IEnumerable<SCA_MVC.Models.Lugar>)ViewBag.Lugares).FirstOrDefault(l => l.IdLugar == Model.IdLugar)?.Nombre ?? "Todos" : "Todos los lugares")
+        </div>
     </div>
 </div>
 
