@@ -1,93 +1,167 @@
-﻿@{
+﻿@model SCA_MVC.ViewModels.DashboardViewModel
+@{
     ViewData["Title"] = "Inicio";
+    var sel = Model.ServicioSeleccionado;
+    int maxRef = Model.ComparativaSemanal.Any() ? Model.ComparativaSemanal.Max(c => c.MaxRef) : 1;
+    if (maxRef == 0) maxRef = 1;
 }
 
 <div class="layout">
     <div class="panel list-panel">
         <div class="ph"><h2><i class="bi bi-clock-history"></i> Últimos Servicios</h2></div>
-        <div class="card-list">
-            <div class="svc-card selected">
-                <div class="svc-icon comedor"><i class="bi bi-building"></i></div>
-                <div class="svc-info">
-                    <div class="svc-top"><span class="svc-name">Comedor</span></div>
-                    <div class="svc-nums"><span class="svc-n">Comensales: <span>182</span></span><span class="svc-n">Invitados: <span>15</span></span></div>
+        <div class="card-list" id="svc-list">
+            @{ bool first = true; }
+            @foreach (var s in Model.UltimosServicios)
+            {
+                var isComedor = s.Lugar.ToLower().Contains("comedor");
+                var css = first ? "svc-card selected" : "svc-card";
+                first = false;
+                <div class="@css" data-id="@s.IdServicio"
+                     data-lugar="@s.Lugar"
+                     data-fecha="@s.Fecha.ToString("dd/MM/yyyy")"
+                     data-proyeccion="@s.Proyeccion"
+                     data-duracion="@(s.DuracionMinutos?.ToString() ?? "—")"
+                     data-comensales="@s.TotalComensales"
+                     data-invitados="@s.TotalInvitados"
+                     data-total="@s.TotalGeneral"
+                     data-cobertura="@(s.Proyeccion > 0 ? (int)((double)s.TotalComensales / s.Proyeccion * 100) : 0)"
+                     data-iscomedor="@(isComedor ? "1" : "0")">
+                    <div class="svc-icon @(isComedor ? "comedor" : "quincho")">
+                        <i class="bi @(isComedor ? "bi-building" : "bi-tree")"></i>
+                    </div>
+                    <div class="svc-info">
+                        <div class="svc-top"><span class="svc-name">@s.Lugar</span></div>
+                        <div class="svc-nums">
+                            <span class="svc-n">Comensales: <span>@s.TotalComensales</span></span>
+                            <span class="svc-n">Invitados: <span>@s.TotalInvitados</span></span>
+                        </div>
+                    </div>
+                    <span class="svc-date">@s.Fecha.ToString("dd/MM/yyyy")</span>
+                    <div class="svc-total"><div class="t-label">Total</div><div class="t-val">@s.TotalGeneral</div></div>
                 </div>
-                <span class="svc-date">07/02/2026</span>
-                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">197</div></div>
-            </div>
-
-            <div class="svc-card">
-                <div class="svc-icon quincho"><i class="bi bi-tree"></i></div>
-                <div class="svc-info">
-                    <div class="svc-top"><span class="svc-name">Quincho</span></div>
-                    <div class="svc-nums"><span class="svc-n">Comensales: <span>45</span></span><span class="svc-n">Invitados: <span>8</span></span></div>
+            }
+            @if (!Model.UltimosServicios.Any())
+            {
+                <div style="padding:24px; color:#999; text-align:center">
+                    <i class="bi bi-inbox" style="font-size:2rem"></i>
+                    <p>No hay servicios en los últimos 30 días.</p>
                 </div>
-                <span class="svc-date">07/02/2026</span>
-                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">53</div></div>
-            </div>
-
-            <div class="svc-card">
-                <div class="svc-icon comedor"><i class="bi bi-building"></i></div>
-                <div class="svc-info">
-                    <div class="svc-top"><span class="svc-name">Comedor</span></div>
-                    <div class="svc-nums"><span class="svc-n">Comensales: <span>195</span></span><span class="svc-n">Invitados: <span>12</span></span></div>
-                </div>
-                <span class="svc-date">06/02/2026</span>
-                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">207</div></div>
-            </div>
-
-            <div class="svc-card">
-                <div class="svc-icon quincho"><i class="bi bi-tree"></i></div>
-                <div class="svc-info">
-                    <div class="svc-top"><span class="svc-name">Quincho</span></div>
-                    <div class="svc-nums"><span class="svc-n">Comensales: <span>38</span></span><span class="svc-n">Invitados: <span>5</span></span></div>
-                </div>
-                <span class="svc-date">06/02/2026</span>
-                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">43</div></div>
-            </div>
-
-            <div class="svc-card">
-                <div class="svc-icon comedor"><i class="bi bi-building"></i></div>
-                <div class="svc-info">
-                    <div class="svc-top"><span class="svc-name">Comedor</span></div>
-                    <div class="svc-nums"><span class="svc-n">Comensales: <span>201</span></span><span class="svc-n">Invitados: <span>18</span></span></div>
-                </div>
-                <span class="svc-date">05/02/2026</span>
-                <div class="svc-total"><div class="t-label">Total</div><div class="t-val">219</div></div>
-            </div>
+            }
         </div>
     </div>
 
     <div class="detail-col">
         <div class="panel">
             <div class="ph"><h2><i class="bi bi-info-circle-fill"></i> Detalle del Servicio</h2></div>
-            <div class="det-body">
-                <div class="det-hero">
-                    <div class="svc-icon comedor" style="width:56px;height:56px;border-radius:16px;font-size:1.5rem"><i class="bi bi-building"></i></div>
-                    <div class="det-hero-info"><h3>Comedor</h3><p>07/02/2026</p></div>
+            @if (sel != null)
+            {
+                var isComedor = sel.Lugar.ToLower().Contains("comedor");
+                var cob = sel.Proyeccion > 0 ? (int)((double)sel.TotalComensales / sel.Proyeccion * 100) : 0;
+                <div class="det-body" id="det-body">
+                    <div class="det-hero">
+                        <div class="svc-icon @(isComedor ? "comedor" : "quincho")" id="det-icon-wrap" style="width:56px;height:56px;border-radius:16px;font-size:1.5rem">
+                            <i class="bi @(isComedor ? "bi-building" : "bi-tree")" id="det-icon"></i>
+                        </div>
+                        <div class="det-hero-info">
+                            <h3 id="det-lugar">@sel.Lugar</h3>
+                            <p id="det-fecha">@sel.Fecha.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                    <div class="det-grid">
+                        <div class="dg-item">
+                            <div class="dg-ico"><i class="bi bi-bullseye"></i></div>
+                            <div><div class="dg-l">Proyección</div><div class="dg-v gold" id="det-proyeccion">@sel.Proyeccion</div></div>
+                        </div>
+                        <div class="dg-item">
+                            <div class="dg-ico"><i class="bi bi-clock"></i></div>
+                            <div><div class="dg-l">Duración</div><div class="dg-v" id="det-duracion">@(sel.DuracionMinutos.HasValue ? sel.DuracionMinutos + " min" : "—")</div></div>
+                        </div>
+                        <div class="dg-item">
+                            <div class="dg-ico"><i class="bi bi-people"></i></div>
+                            <div><div class="dg-l">Comensales</div><div class="dg-v" id="det-comensales">@sel.TotalComensales</div></div>
+                        </div>
+                        <div class="dg-item">
+                            <div class="dg-ico"><i class="bi bi-person-plus"></i></div>
+                            <div><div class="dg-l">Invitados</div><div class="dg-v" id="det-invitados">@sel.TotalInvitados</div></div>
+                        </div>
+                        <div class="cov">
+                            <div class="cov-head">
+                                <span>Cobertura vs Proyección</span>
+                                <span id="det-cob-pct">@cob%</span>
+                            </div>
+                            <div class="cov-track">
+                                <div class="cov-fill" id="det-cob-bar" style="width:@(Math.Min(cob,100))%"></div>
+                            </div>
+                        </div>
+                        <div class="det-total">
+                            <div><div class="dg-l">Total General</div><div class="dg-v" id="det-total">@sel.TotalGeneral</div></div>
+                            <i class="bi bi-people-fill" style="font-size:1.4rem;opacity:0.25"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="det-grid">
-                    <div class="dg-item"><img src="~/images/proyeccion.png" /><div><div class="dg-l">Proyección</div><div class="dg-v gold">200</div></div></div>
-                    <div class="dg-item"><img src="~/images/duracion.png" /><div><div class="dg-l">Duración</div><div class="dg-v">85 min</div></div></div>
-                    <div class="dg-item"><img src="~/images/comensales.png" /><div><div class="dg-l">Comensales</div><div class="dg-v">182</div></div></div>
-                    <div class="dg-item"><img src="~/images/invitados.png" /><div><div class="dg-l">Invitados</div><div class="dg-v">15</div></div></div>
-                    <div class="det-total"><div><div class="dg-l">Total General</div><div class="dg-v">197</div></div><i class="bi bi-people-fill" style="font-size:2rem;opacity:0.25"></i></div>
-                    <div class="cov"><div class="cov-head"><span>Cobertura vs Proyección</span><span>91%</span></div><div class="cov-track"><div class="cov-fill" style="width:91%"></div></div></div>
+            }
+            else
+            {
+                <div style="padding:24px; color:#999; text-align:center">
+                    <i class="bi bi-inbox" style="font-size:2rem"></i>
+                    <p>Sin datos disponibles.</p>
                 </div>
-            </div>
+            }
         </div>
 
         <div class="panel">
             <div class="comp-body">
-                <h3><i class="bi bi-bar-chart-line"></i> Comparativa Semanal</h3>
+                <h3><i class="bi bi-bar-chart-line"></i> Comparativa Últimos 7 Días</h3>
                 <div class="mini-bars">
-                    <div class="mb-item"><span class="mb-label">Lun</span><div class="mb-track"><div class="mb-fill gold" style="width:88%"></div></div><span class="mb-val">219</span></div>
-                    <div class="mb-item"><span class="mb-label">Mar</span><div class="mb-track"><div class="mb-fill gold" style="width:83%"></div></div><span class="mb-val">207</span></div>
-                    <div class="mb-item"><span class="mb-label">Mié</span><div class="mb-track"><div class="mb-fill gold" style="width:79%"></div></div><span class="mb-val">197</span></div>
-                    <div class="mb-item"><span class="mb-label">Jue</span><div class="mb-track"><div class="mb-fill gold" style="width:17%"></div></div><span class="mb-val">43</span></div>
-                    <div class="mb-item"><span class="mb-label">Vie</span><div class="mb-track"><div class="mb-fill gold" style="width:21%"></div></div><span class="mb-val">53</span></div>
+                    @foreach (var d in Model.ComparativaSemanal)
+                    {
+                        var pct = maxRef > 0 ? (int)((double)d.Total / maxRef * 100) : 0;
+                        <div class="mb-item">
+                            <span class="mb-label">@d.Dia</span>
+                            <div class="mb-track"><div class="mb-fill gold" style="width:@pct%"></div></div>
+                            <span class="mb-val">@d.Total</span>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    document.querySelectorAll('.svc-card').forEach(card => {
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+
+            const lugar      = card.dataset.lugar;
+            const fecha      = card.dataset.fecha;
+            const proy       = card.dataset.proyeccion;
+            const dur        = card.dataset.duracion;
+            const com        = card.dataset.comensales;
+            const inv        = card.dataset.invitados;
+            const total      = card.dataset.total;
+            const cob        = parseInt(card.dataset.cobertura) || 0;
+            const isComedor  = card.dataset.iscomedor === '1';
+
+            document.getElementById('det-lugar').textContent      = lugar;
+            document.getElementById('det-fecha').textContent      = fecha;
+            document.getElementById('det-proyeccion').textContent = proy;
+            document.getElementById('det-duracion').textContent   = (dur && dur !== '—') ? dur + ' min' : '—';
+            document.getElementById('det-comensales').textContent = com;
+            document.getElementById('det-invitados').textContent  = inv;
+            document.getElementById('det-total').textContent      = total;
+            document.getElementById('det-cob-pct').textContent    = Math.min(cob, 100) + '%';
+            document.getElementById('det-cob-bar').style.width    = Math.min(cob, 100) + '%';
+
+            // Actualizar icono y clase del héroe
+            const wrap = document.getElementById('det-icon-wrap');
+            const icon = document.getElementById('det-icon');
+            wrap.className = 'svc-icon ' + (isComedor ? 'comedor' : 'quincho');
+            wrap.style.cssText = 'width:56px;height:56px;border-radius:16px;font-size:1.5rem';
+            icon.className = 'bi ' + (isComedor ? 'bi-building' : 'bi-tree');
+        });
+    });
+</script>
+}

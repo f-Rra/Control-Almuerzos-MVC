@@ -19,6 +19,7 @@ builder.Services.AddScoped<IServicioNegocio, ServicioNegocio>();
 builder.Services.AddScoped<IRegistroNegocio, RegistroNegocio>();
 builder.Services.AddScoped<ILugarNegocio, LugarNegocio>();
 builder.Services.AddScoped<IReporteNegocio, ReporteNegocio>();
+builder.Services.AddScoped<IEstadisticasNegocio, EstadisticasNegocio>();
 
 // Configuración de QuestPDF para uso comunitario
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;

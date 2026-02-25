@@ -1,3 +1,4 @@
+@model SCA_MVC.ViewModels.EstadisticasViewModel
 @{
     ViewData["Title"] = "Estadísticas";
 }
@@ -18,21 +19,21 @@
                 <div class="est-kpi-ico"><i class="bi bi-people"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Total Registrados</span>
-                    <span class="est-kpi-value">156</span>
+                    <span class="est-kpi-value">@Model.TotalEmpleados</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico activo"><i class="bi bi-person-check"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Activos</span>
-                    <span class="est-kpi-value activo">142</span>
+                    <span class="est-kpi-value activo">@Model.EmpleadosActivos</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico inactivo"><i class="bi bi-person-x"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Inactivos</span>
-                    <span class="est-kpi-value inactivo">14</span>
+                    <span class="est-kpi-value inactivo">@Model.EmpleadosInactivos</span>
                 </div>
             </div>
         </div>
@@ -49,21 +50,21 @@
                 <div class="est-kpi-ico empresa"><i class="bi bi-building-check"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Total Activas</span>
-                    <span class="est-kpi-value">8</span>
+                    <span class="est-kpi-value">@Model.TotalEmpresasActivas</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico"><i class="bi bi-diagram-3"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Con Empleados</span>
-                    <span class="est-kpi-value">7</span>
+                    <span class="est-kpi-value">@Model.EmpresasConEmpleados</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico promedio"><i class="bi bi-calculator"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Promedio (Empleados)</span>
-                    <span class="est-kpi-value promedio">19</span>
+                    <span class="est-kpi-value promedio">@Model.PromedioEmpleados.ToString("F1")</span>
                 </div>
             </div>
         </div>
@@ -80,21 +81,21 @@
                 <div class="est-kpi-ico servicio"><i class="bi bi-calendar-event"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Este Mes</span>
-                    <span class="est-kpi-value">23</span>
+                    <span class="est-kpi-value">@Model.ServiciosEsteMes</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico"><i class="bi bi-calendar-range"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Total del Año</span>
-                    <span class="est-kpi-value">187</span>
+                    <span class="est-kpi-value">@Model.ServiciosEsteAnio</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico promedio"><i class="bi bi-graph-up"></i></div>
                 <div class="est-kpi-info">
                     <span class="est-kpi-label">Promedio / Día</span>
-                    <span class="est-kpi-value promedio">1.2</span>
+                    <span class="est-kpi-value promedio">@Model.PromedioPorDia</span>
                 </div>
             </div>
         </div>
@@ -105,7 +106,7 @@
 <!-- ═══ FILA INFERIOR (2 columnas) ═══ -->
 <div class="est-grid-bottom">
 
-    <!-- ── Asistencias y Tendencias ── -->
+    <!-- ── Asistencias y Tendencias — placeholder hasta tener SP ── -->
     <div class="panel est-card est-card-wide">
         <div class="est-card-head">
             <div class="est-card-ico asist"><i class="bi bi-clipboard-data"></i></div>
@@ -116,49 +117,35 @@
             <div class="est-kpi">
                 <div class="est-kpi-ico asist"><i class="bi bi-clipboard-check"></i></div>
                 <div class="est-kpi-info">
-                    <span class="est-kpi-label">Asistencias Totales</span>
-                    <span class="est-kpi-value">3,284</span>
+                    <span class="est-kpi-label">Servicios Realizados</span>
+                    <span class="est-kpi-value">@Model.ServiciosEsteMes</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico empl"><i class="bi bi-person-badge"></i></div>
                 <div class="est-kpi-info">
-                    <span class="est-kpi-label">Asist. Empleados</span>
-                    <span class="est-kpi-value">2,910</span>
+                    <span class="est-kpi-label">Empleados Activos</span>
+                    <span class="est-kpi-value">@Model.EmpleadosActivos</span>
                 </div>
             </div>
             <div class="est-kpi">
-                <div class="est-kpi-ico invitado"><i class="bi bi-person-plus"></i></div>
+                <div class="est-kpi-ico empresa"><i class="bi bi-building"></i></div>
                 <div class="est-kpi-info">
-                    <span class="est-kpi-label">Asist. Invitados</span>
-                    <span class="est-kpi-value invitado">374</span>
+                    <span class="est-kpi-label">Empresas Participantes</span>
+                    <span class="est-kpi-value">@Model.EmpresasConEmpleados</span>
                 </div>
             </div>
             <div class="est-kpi">
                 <div class="est-kpi-ico promedio"><i class="bi bi-graph-up-arrow"></i></div>
                 <div class="est-kpi-info">
-                    <span class="est-kpi-label">Promedio Diario</span>
-                    <span class="est-kpi-value promedio">142</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico cobertura"><i class="bi bi-pie-chart"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Cobertura Proyección vs Promedio</span>
-                    <span class="est-kpi-value cobertura">87.50%</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico duracion"><i class="bi bi-clock-history"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Duración Promedio de Servicio</span>
-                    <span class="est-kpi-value duracion">1h 45m</span>
+                    <span class="est-kpi-label">Promedio Empleados / Empresa</span>
+                    <span class="est-kpi-value promedio">@Model.PromedioEmpleados.ToString("F1")</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ── Top 5 Empresas ── -->
+    <!-- ── Top Empresas ── -->
     <div class="panel est-card">
         <div class="est-card-head">
             <div class="est-card-ico top"><i class="bi bi-trophy"></i></div>
@@ -166,71 +153,34 @@
             <span class="est-card-badge">Mes Actual</span>
         </div>
         <div class="est-card-body est-top-list">
-            <!-- 1 -->
-            <div class="est-top-item">
-                <span class="est-top-rank">1</span>
-                <div class="est-top-info">
-                    <div class="est-top-head-row">
-                        <span class="est-top-name">Administración</span>
-                        <span class="est-top-pct">32.4%</span>
+            @if (Model.TopEmpresas.Any())
+            {
+                int maxAsis = Model.TopEmpresas.Max(e => e.TotalAsistencias);
+                if (maxAsis == 0) maxAsis = 1;
+                foreach (var e in Model.TopEmpresas)
+                {
+                    var barWidth = (int)((double)e.TotalAsistencias / maxAsis * 100);
+                    <div class="est-top-item">
+                        <span class="est-top-rank">@e.Ranking</span>
+                        <div class="est-top-info">
+                            <div class="est-top-head-row">
+                                <span class="est-top-name">@e.NombreEmpresa</span>
+                                <span class="est-top-pct">@e.Porcentaje.ToString("F1")%</span>
+                            </div>
+                            <div class="est-top-bar">
+                                <div class="est-top-fill" style="width:@barWidth%"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="est-top-bar">
-                        <div class="est-top-fill" style="width:100%"></div>
-                    </div>
+                }
+            }
+            else
+            {
+                <div style="padding:16px; color:#999; text-align:center">
+                    <i class="bi bi-inbox" style="font-size:1.5rem"></i>
+                    <p>Sin datos este mes.</p>
                 </div>
-            </div>
-            <!-- 2 -->
-            <div class="est-top-item">
-                <span class="est-top-rank">2</span>
-                <div class="est-top-info">
-                    <div class="est-top-head-row">
-                        <span class="est-top-name">Gastronomía</span>
-                        <span class="est-top-pct">24.1%</span>
-                    </div>
-                    <div class="est-top-bar">
-                        <div class="est-top-fill" style="width:74%"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- 3 -->
-            <div class="est-top-item">
-                <span class="est-top-rank">3</span>
-                <div class="est-top-info">
-                    <div class="est-top-head-row">
-                        <span class="est-top-name">Logística</span>
-                        <span class="est-top-pct">18.7%</span>
-                    </div>
-                    <div class="est-top-bar">
-                        <div class="est-top-fill" style="width:58%"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- 4 -->
-            <div class="est-top-item">
-                <span class="est-top-rank">4</span>
-                <div class="est-top-info">
-                    <div class="est-top-head-row">
-                        <span class="est-top-name">Mantenimiento</span>
-                        <span class="est-top-pct">14.2%</span>
-                    </div>
-                    <div class="est-top-bar">
-                        <div class="est-top-fill" style="width:44%"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- 5 -->
-            <div class="est-top-item">
-                <span class="est-top-rank">5</span>
-                <div class="est-top-info">
-                    <div class="est-top-head-row">
-                        <span class="est-top-name">Producción</span>
-                        <span class="est-top-pct">10.6%</span>
-                    </div>
-                    <div class="est-top-bar">
-                        <div class="est-top-fill" style="width:33%"></div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 

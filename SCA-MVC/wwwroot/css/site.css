@@ -552,7 +552,6 @@ body {
     flex-direction: column;
     gap: 16px;
     min-height: 0;
-    overflow-y: auto;
 }
 
 .panel {
@@ -645,6 +644,19 @@ body {
     object-fit: contain;
 }
 
+.dg-ico {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255, 193, 7, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.95rem;
+    color: #B8860B;
+}
+
 .dg-item .dg-l {
     font-size: 0.72rem;
     color: #999;
@@ -664,8 +676,8 @@ body {
 
 .det-total {
     grid-column: 1/3;
-    padding: 16px;
-    border-radius: 14px;
+    padding: 10px 16px;
+    border-radius: 12px;
     background: linear-gradient(135deg, var(--primary), #FFD54F);
     display: flex;
     justify-content: space-between;
@@ -680,7 +692,7 @@ body {
 }
 
 .det-total .dg-v {
-    font-size: 1.7rem;
+    font-size: 1.3rem;
     font-weight: 900;
 }
 
