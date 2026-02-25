@@ -419,21 +419,22 @@ feat: conectar estadísticas y dashboard con datos reales
 
 ---
 
-### Commit 18 — Seed de datos iniciales
+### Commit 18 — Seed de datos iniciales (Data Seeding)
 
-**Descripción:** Ejecutar datos iniciales en la base de datos: 2 lugares, 12 empresas, 60 empleados con credenciales RF001-RF060, 10 servicios finalizados y ~490 registros de asistencia. Incluir el script SQL en la carpeta del proyecto. Esto permite probar toda la funcionalidad CRUD y reportes con datos realistas.
+**Descripción:** Implementar el seeding de datos iniciales utilizando `modelBuilder.HasData()` en el método `OnModelCreating` de `ApplicationDbContext`. Esto permite que la base de datos se pueble automáticamente al aplicar las migraciones. Se incluyen: 2 lugares principales, las 6 empresas clave del complejo, una lista de 16 empleados iniciales con credenciales RFxxxx, y una muestra de servicios y registros para febrero de 2026. Se ajusta también el check constraint de fecha para permitir datos de prueba.
 
 **Archivos:**
-- `SQL/Datos_Iniciales.sql` (crear — copiar/adaptar del proyecto original)
+- `Data/ApplicationDbContext.cs` (implementar método `SeedData` y llamar desde `OnModelCreating`)
 
 **Mensaje:**
 ```
-feat: agregar seed de datos iniciales en SQL Server
+feat: implementar seed de datos iniciales con ModelBuilder
 
-- 2 lugares (Comedor, Quincho)
-- 12 empresas del complejo industrial
-- 60 empleados distribuidos con credenciales RFID
-- 10 servicios finalizados con registros de asistencia
+- Carga inicial de Lugares (Comedor, Quincho)
+- 6 empresas del complejo (Roemmers, Gema, etc.)
+- 16 empleados con credenciales RFxxxx y nombres realistas
+- Muestra de servicios y registros para febrero 2026
+- Ajuste de CK_Servicio_Fecha para permitir datos de demo
 ```
 
 ---

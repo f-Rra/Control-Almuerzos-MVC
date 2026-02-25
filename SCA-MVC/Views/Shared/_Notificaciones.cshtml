@@ -1,0 +1,69 @@
+@using SCA_MVC.Helpers
+
+@{
+    var tipo = TempData[MensajesUI.KEY_TIPO]?.ToString();
+    var contenido = TempData[MensajesUI.KEY_CONTENIDO]?.ToString();
+}
+
+@if (!string.IsNullOrEmpty(tipo) && !string.IsNullOrEmpty(contenido))
+{
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="appToast" class="toast align-items-center text-white bg-@GetClaseBg(tipo) border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center gap-2 py-3 px-4">
+                    <i class="bi @GetIcono(tipo) fs-4"></i>
+                    <div>
+                        <strong class="d-block mb-1">@GetTitulo(tipo)</strong>
+                        <span class="opacity-90">@contenido</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastEl = document.getElementById('appToast');
+            if (toastEl) {
+                var toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+                toast.show();
+            }
+        });
+    </script>
+}
+
+@functions {
+    string GetClaseBg(string tipo)
+    {
+        return tipo switch
+        {
+            "Exito" => "success",
+            "Error" => "danger",
+            "Advertencia" => "warning",
+            _ => "info"
+        };
+    }
+
+    string GetIcono(string tipo)
+    {
+        return tipo switch
+        {
+            "Exito" => "bi-check-circle-fill",
+            "Error" => "bi-exclamation-triangle-fill",
+            "Advertencia" => "bi-exclamation-circle-fill",
+            _ => "bi-info-circle-fill"
+        };
+    }
+
+    string GetTitulo(string tipo)
+    {
+        return tipo switch
+        {
+            "Exito" => "¡Muy bien!",
+            "Error" => "¡Error!",
+            "Advertencia" => "Atención",
+            _ => "Información"
+        };
+    }
+}
