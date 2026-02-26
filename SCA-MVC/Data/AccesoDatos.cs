@@ -21,6 +21,7 @@ namespace SCA_MVC.Data
                 await using var command = CrearComando(connection, sql, commandType, parametros);
 
                 await connection.OpenAsync();
+                await using (var setOptions = new SqlCommand("SET QUOTED_IDENTIFIER ON", connection)) { await setOptions.ExecuteNonQueryAsync(); }
                 return await command.ExecuteNonQueryAsync();
             }
             catch (SqlException ex)
@@ -41,6 +42,7 @@ namespace SCA_MVC.Data
                 await using var command = CrearComando(connection, sql, commandType, parametros);
 
                 await connection.OpenAsync();
+                await using (var setOptions = new SqlCommand("SET QUOTED_IDENTIFIER ON", connection)) { await setOptions.ExecuteNonQueryAsync(); }
                 await using var reader = await command.ExecuteReaderAsync();
 
                 if (await reader.ReadAsync())
@@ -70,6 +72,7 @@ namespace SCA_MVC.Data
                 await using var command = CrearComando(connection, sql, commandType, parametros);
 
                 await connection.OpenAsync();
+                await using (var setOptions = new SqlCommand("SET QUOTED_IDENTIFIER ON", connection)) { await setOptions.ExecuteNonQueryAsync(); }
                 await using var reader = await command.ExecuteReaderAsync();
 
                 while (await reader.ReadAsync())
@@ -93,6 +96,7 @@ namespace SCA_MVC.Data
                 await using var command = CrearComando(connection, sql, commandType, parametros);
 
                 await connection.OpenAsync();
+                await using (var setOptions = new SqlCommand("SET QUOTED_IDENTIFIER ON", connection)) { await setOptions.ExecuteNonQueryAsync(); }
                 return await command.ExecuteScalarAsync();
             }
             catch (SqlException ex)

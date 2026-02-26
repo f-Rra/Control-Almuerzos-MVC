@@ -28,8 +28,9 @@ namespace SCA_MVC.Controllers
         {
             var model = new ReporteViewModel
             {
-                FechaDesde  = desde   ?? DateTime.Today.AddDays(-7),
-                FechaHasta  = hasta   ?? DateTime.Today,
+                // Ajustado a febrero 2026 para coincidir con los datos del Seed
+                FechaDesde  = desde   ?? new DateTime(2026, 2, 1),
+                FechaHasta  = hasta   ?? new DateTime(2026, 2, 28),
                 IdLugar     = idLugar,
                 TipoReporte = tipo
             };

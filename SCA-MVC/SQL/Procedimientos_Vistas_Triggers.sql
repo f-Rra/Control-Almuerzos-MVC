@@ -1,4 +1,8 @@
 
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
+GO
+
 -- =============================================
 -- PROCEDIMIENTOS DE LUGARES
 -- =============================================
