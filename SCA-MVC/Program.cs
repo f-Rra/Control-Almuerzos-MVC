@@ -12,7 +12,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<AccesoDatos>();
 builder.Services.AddScoped<IEmpresaNegocio, EmpresaNegocio>();
 builder.Services.AddScoped<IEmpleadoNegocio, EmpleadoNegocio>();
 builder.Services.AddScoped<IServicioNegocio, ServicioNegocio>();

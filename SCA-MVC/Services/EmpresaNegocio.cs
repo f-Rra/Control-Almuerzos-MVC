@@ -1,92 +1,88 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
-using SCA_MVC.Data.Mappers;
 using SCA_MVC.Models;
-using System.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SCA_MVC.Services
 {
     public class EmpresaNegocio : IEmpresaNegocio
     {
-        private readonly AccesoDatos _accesoDatos;
+        private readonly ApplicationDbContext _context;
 
-        public EmpresaNegocio(AccesoDatos accesoDatos)
+        public EmpresaNegocio(ApplicationDbContext context)
         {
-            _accesoDatos = accesoDatos;
+            _context = context;
         }
 
         public Task<List<Empresa>> ListarAsync()
         {
-            return _accesoDatos.ListarAsync("sp_ListarEmpresas", CommandType.StoredProcedure, MapEmpresaBasica);
+            return _context.Empresas.ToListAsync();
         }
 
-        public Task<List<Empresa>> ListarConEmpleadosAsync()
+        public async Task<List<Empresa>> ListarConEmpleadosAsync()
         {
-            return _accesoDatos.ListarAsync("sp_ListarEmpresasConEmpleados", CommandType.StoredProcedure, EmpresaMapper.Map);
+            var empresas = await _context.Empresas
+                .Include(e => e.Empleados.Where(emp => emp.Estado))
+                .ToListAsync();
+                
+            foreach (var emp in empresas)
+            {
+                emp.CantidadEmpleados = emp.Empleados.Count;
+            }
+            return empresas;
         }
 
         public Task<Empresa?> BuscarPorIdAsync(int idEmpresa)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdEmpresa", idEmpresa)
-            };
-
-            return _accesoDatos.ObtenerPrimeroAsync("sp_BuscarEmpresaPorId", CommandType.StoredProcedure, EmpresaMapper.Map, parametros);
+            return _context.Empresas.FirstOrDefaultAsync(e => e.IdEmpresa == idEmpresa);
         }
 
         public async Task<int> AgregarAsync(Empresa empresa)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@Nombre", empresa.Nombre),
-                new SqlParameter("@Estado", empresa.Estado)
-            };
-
-            var id = await _accesoDatos.EscalarAsync("sp_AgregarEmpresa", CommandType.StoredProcedure, parametros);
-            return Convert.ToInt32(id);
+            _context.Empresas.Add(empresa);
+            await _context.SaveChangesAsync();
+            return empresa.IdEmpresa;
         }
 
-        public Task ModificarAsync(Empresa empresa)
+        public async Task ModificarAsync(Empresa empresa)
         {
-            var parametros = new[]
+            var entity = await _context.Empresas.FindAsync(empresa.IdEmpresa);
+            if (entity != null)
             {
-                new SqlParameter("@IdEmpresa", empresa.IdEmpresa),
-                new SqlParameter("@Nombre", empresa.Nombre),
-                new SqlParameter("@Estado", empresa.Estado)
-            };
-
-            return _accesoDatos.EjecutarAsync("sp_ModificarEmpresa", CommandType.StoredProcedure, parametros);
+                entity.Nombre = empresa.Nombre;
+                entity.Estado = empresa.Estado;
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task EliminarAsync(int idEmpresa)
+        public async Task EliminarAsync(int idEmpresa)
         {
-            var parametros = new[]
+            var entity = await _context.Empresas.FindAsync(idEmpresa);
+            if (entity != null)
             {
-                new SqlParameter("@IdEmpresa", idEmpresa)
-            };
-
-            return _accesoDatos.EjecutarAsync("sp_DesactivarEmpresa", CommandType.StoredProcedure, parametros);
+                entity.Estado = false;
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<List<Empresa>> FiltrarAsync(string? filtro)
+        public async Task<List<Empresa>> FiltrarAsync(string? filtro)
         {
-            var parametros = new[]
+            var query = _context.Empresas.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(filtro))
             {
-                new SqlParameter("@Filtro", (object?)filtro ?? DBNull.Value)
-            };
+                query = query.Where(e => e.Nombre.Contains(filtro));
+            }
+            var empresas = await query
+                .Include(e => e.Empleados.Where(emp => emp.Estado))
+                .ToListAsync();
 
-            return _accesoDatos.ListarAsync("sp_FiltrarEmpresas", CommandType.StoredProcedure, EmpresaMapper.Map, parametros);
-        }
-
-        private static Empresa MapEmpresaBasica(SqlDataReader reader)
-        {
-            return new Empresa
+            foreach (var emp in empresas)
             {
-                IdEmpresa = DbMapper.GetInt32(reader, nameof(Empresa.IdEmpresa)),
-                Nombre = DbMapper.GetString(reader, nameof(Empresa.Nombre)),
-                Estado = true
-            };
+                emp.CantidadEmpleados = emp.Empleados.Count;
+            }
+            return empresas;
         }
     }
 }

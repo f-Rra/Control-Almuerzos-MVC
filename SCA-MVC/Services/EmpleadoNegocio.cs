@@ -1,8 +1,6 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
-using SCA_MVC.Data.Mappers;
 using SCA_MVC.Models;
-using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,180 +9,118 @@ namespace SCA_MVC.Services
 {
     public class EmpleadoNegocio : IEmpleadoNegocio
     {
-        #region Atributos y Constructor
-        private readonly AccesoDatos _accesoDatos;
+        private readonly ApplicationDbContext _context;
 
-        public EmpleadoNegocio(AccesoDatos accesoDatos)
+        public EmpleadoNegocio(ApplicationDbContext context)
         {
-            _accesoDatos = accesoDatos;
+            _context = context;
         }
-        #endregion
 
-        #region Métodos de Lectura
         public Task<List<Empleado>> ListarAsync()
         {
-            return _accesoDatos.ListarAsync("sp_ListarEmpleados", CommandType.StoredProcedure, EmpleadoMapper.Map);
+            return _context.Empleados.Include(e => e.Empresa).ToListAsync();
         }
 
         public Task<Empleado?> BuscarPorCredencialAsync(string idCredencial)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@Credencial", idCredencial)
-            };
-
-            return _accesoDatos.ObtenerPrimeroAsync("sp_BuscarEmpleadoPorCredencial", CommandType.StoredProcedure, MapEmpleadoSinEstado, parametros);
+            return _context.Empleados.Include(e => e.Empresa)
+                .FirstOrDefaultAsync(e => e.IdCredencial == idCredencial);
         }
 
         public Task<Empleado?> BuscarPorIdAsync(int idEmpleado)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdEmpleado", idEmpleado)
-            };
-
-            return _accesoDatos.ObtenerPrimeroAsync("sp_BuscarEmpleadoPorId", CommandType.StoredProcedure, MapEmpleadoDetalle, parametros);
+            return _context.Empleados.Include(e => e.Empresa)
+                .FirstOrDefaultAsync(e => e.IdEmpleado == idEmpleado);
         }
 
         public async Task<bool> ExisteCredencialAsync(string idCredencial)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdCredencial", idCredencial)
-            };
-
-            var resultado = await _accesoDatos.EscalarAsync("sp_VerificarCredencial", CommandType.StoredProcedure, parametros);
-            return Convert.ToInt32(resultado) > 0;
+            return await _context.Empleados.AnyAsync(e => e.IdCredencial == idCredencial);
         }
-        #endregion
 
-        #region Métodos de Escritura (CUD)
         public async Task<int> AgregarAsync(Empleado empleado)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdCredencial", empleado.IdCredencial),
-                new SqlParameter("@Nombre", empleado.Nombre),
-                new SqlParameter("@Apellido", empleado.Apellido),
-                new SqlParameter("@IdEmpresa", empleado.IdEmpresa),
-                new SqlParameter("@Estado", empleado.Estado)
-            };
-
-            var id = await _accesoDatos.EscalarAsync("sp_AgregarEmpleado", CommandType.StoredProcedure, parametros);
-            return Convert.ToInt32(id);
+            _context.Empleados.Add(empleado);
+            await _context.SaveChangesAsync();
+            return empleado.IdEmpleado;
         }
 
-        public Task ModificarAsync(Empleado empleado)
+        public async Task ModificarAsync(Empleado empleado)
         {
-            var parametros = new[]
+            var entity = await _context.Empleados.FindAsync(empleado.IdEmpleado);
+            if (entity != null)
             {
-                new SqlParameter("@IdEmpleado", empleado.IdEmpleado),
-                new SqlParameter("@IdCredencial", empleado.IdCredencial),
-                new SqlParameter("@Nombre", empleado.Nombre),
-                new SqlParameter("@Apellido", empleado.Apellido),
-                new SqlParameter("@IdEmpresa", empleado.IdEmpresa),
-                new SqlParameter("@Estado", empleado.Estado)
-            };
-
-            return _accesoDatos.EjecutarAsync("sp_ModificarEmpleado", CommandType.StoredProcedure, parametros);
+                entity.IdCredencial = empleado.IdCredencial;
+                entity.Nombre = empleado.Nombre;
+                entity.Apellido = empleado.Apellido;
+                entity.IdEmpresa = empleado.IdEmpresa;
+                entity.Estado = empleado.Estado;
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task EliminarAsync(int idEmpleado)
+        public async Task EliminarAsync(int idEmpleado)
         {
-            var parametros = new[]
+            var entity = await _context.Empleados.FindAsync(idEmpleado);
+            if (entity != null)
             {
-                new SqlParameter("@IdEmpleado", idEmpleado)
-            };
-
-            return _accesoDatos.EjecutarAsync("sp_DesactivarEmpleado", CommandType.StoredProcedure, parametros);
+                entity.Estado = false;
+                await _context.SaveChangesAsync();
+            }
         }
-        #endregion
 
-        #region Métodos de Filtrado y Registro Manual
         public Task<List<Empleado>> FiltrarEmpleadosAsync(string? filtro, int? idEmpresa)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@Filtro", (object?)filtro ?? DBNull.Value),
-                new SqlParameter("@IdEmpresa", (object?)idEmpresa ?? DBNull.Value)
-            };
+            var query = _context.Empleados.Include(e => e.Empresa).AsQueryable();
 
-            return _accesoDatos.ListarAsync("sp_FiltrarEmpleados", CommandType.StoredProcedure, EmpleadoMapper.Map, parametros);
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                query = query.Where(e => e.Nombre.Contains(filtro) || 
+                                         e.Apellido.Contains(filtro) || 
+                                         e.IdCredencial.Contains(filtro));
+            }
+
+            if (idEmpresa.HasValue && idEmpresa.Value > 0)
+            {
+                query = query.Where(e => e.IdEmpresa == idEmpresa.Value);
+            }
+
+            return query.ToListAsync();
         }
 
-        public Task<List<Empleado>> EmpleadosSinAlmorzarAsync(int idServicio)
+        public async Task<List<Empleado>> EmpleadosSinAlmorzarAsync(int idServicio)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdServicio", idServicio)
-            };
+            var registrados = _context.Registros
+                .Where(r => r.IdServicio == idServicio && r.IdEmpleado != null)
+                .Select(r => r.IdEmpleado);
 
-            return _accesoDatos.ListarAsync("sp_EmpleadosSinAlmorzar", CommandType.StoredProcedure, MapEmpleadoSinAlmorzar, parametros);
+            return await _context.Empleados
+                .Include(e => e.Empresa)
+                .Where(e => e.Estado && !registrados.Contains(e.IdEmpleado))
+                .ToListAsync();
         }
 
-        public Task<List<Empleado>> FiltrarSinAlmorzarAsync(int idServicio, int? idEmpresa, string? nombre)
+        public async Task<List<Empleado>> FiltrarSinAlmorzarAsync(int idServicio, int? idEmpresa, string? nombre)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdServicio", idServicio),
-                new SqlParameter("@IdEmpresa", (object?)idEmpresa ?? DBNull.Value),
-                new SqlParameter("@Nombre", (object?)nombre ?? DBNull.Value)
-            };
+            var registrados = _context.Registros
+                .Where(r => r.IdServicio == idServicio && r.IdEmpleado != null)
+                .Select(r => r.IdEmpleado);
 
-            return _accesoDatos.ListarAsync("sp_FiltrarEmpleadosSinAlmorzar", CommandType.StoredProcedure, MapEmpleadoSinAlmorzar, parametros);
-        }
-        #endregion
+            var query = _context.Empleados
+                .Include(e => e.Empresa)
+                .Where(e => e.Estado && !registrados.Contains(e.IdEmpleado));
 
-        #region Mappers Privados
-        private static Empleado MapEmpleadoSinEstado(SqlDataReader reader)
-        {
-            return new Empleado
+            if (idEmpresa.HasValue && idEmpresa.Value > 0)
             {
-                IdEmpleado  = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpleado)),
-                Nombre      = DbMapper.GetString(reader, nameof(Empleado.Nombre)),
-                Apellido    = DbMapper.GetString(reader, nameof(Empleado.Apellido)),
-                IdCredencial = DbMapper.GetString(reader, nameof(Empleado.IdCredencial)),
-                IdEmpresa   = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
-                Estado      = true,
-                // El SP devuelve emp.Nombre as Empresa — lo cargamos en la navegación
-                Empresa = new Empresa
-                {
-                    IdEmpresa = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
-                    Nombre    = DbMapper.GetString(reader, "Empresa")
-                }
-            };
-        }
+                query = query.Where(e => e.IdEmpresa == idEmpresa.Value);
+            }
 
-        private static Empleado MapEmpleadoDetalle(SqlDataReader reader)
-        {
-            return new Empleado
+            if (!string.IsNullOrWhiteSpace(nombre))
             {
-                IdEmpleado = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpleado)),
-                Nombre = DbMapper.GetString(reader, nameof(Empleado.Nombre)),
-                Apellido = DbMapper.GetString(reader, nameof(Empleado.Apellido)),
-                IdCredencial = DbMapper.GetString(reader, nameof(Empleado.IdCredencial)),
-                IdEmpresa = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
-                Estado = DbMapper.GetBoolean(reader, nameof(Empleado.Estado))
-            };
-        }
+                query = query.Where(e => e.Nombre.Contains(nombre) || e.Apellido.Contains(nombre));
+            }
 
-        private static Empleado MapEmpleadoSinAlmorzar(SqlDataReader reader)
-        {
-            return new Empleado
-            {
-                IdEmpleado = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpleado)),
-                Nombre = DbMapper.GetString(reader, nameof(Empleado.Nombre)),
-                Apellido = DbMapper.GetString(reader, nameof(Empleado.Apellido)),
-                IdCredencial = DbMapper.GetString(reader, nameof(Empleado.IdCredencial)),
-                IdEmpresa = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
-                Estado = true,
-                Empresa = new Empresa
-                {
-                    IdEmpresa = DbMapper.GetInt32(reader, nameof(Empleado.IdEmpresa)),
-                    Nombre = DbMapper.GetString(reader, "Empresa")
-                }
-            };
+            return await query.ToListAsync();
         }
-        #endregion
     }
 }

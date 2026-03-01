@@ -1,89 +1,79 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
-using SCA_MVC.Data.Mappers;
 using SCA_MVC.Models;
-using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SCA_MVC.Services
 {
     public class RegistroNegocio : IRegistroNegocio
     {
-        private readonly AccesoDatos _accesoDatos;
+        private readonly ApplicationDbContext _context;
 
-        public RegistroNegocio(AccesoDatos accesoDatos)
+        public RegistroNegocio(ApplicationDbContext context)
         {
-            _accesoDatos = accesoDatos;
+            _context = context;
         }
 
-        public Task RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar)
+        public async Task RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar)
         {
-            var parametros = new[]
+            var registro = new Registro
             {
-                new SqlParameter("@IdEmpleado", idEmpleado),
-                new SqlParameter("@IdEmpresa", idEmpresa),
-                new SqlParameter("@IdServicio", idServicio),
-                new SqlParameter("@IdLugar", idLugar)
+                IdEmpleado = idEmpleado,
+                IdEmpresa = idEmpresa,
+                IdServicio = idServicio,
+                IdLugar = idLugar,
+                Fecha = DateTime.Today,
+                Hora = DateTime.Now.TimeOfDay
             };
 
-            return _accesoDatos.EjecutarAsync("sp_RegistrarEmpleado", CommandType.StoredProcedure, parametros);
+            _context.Registros.Add(registro);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<List<Registro>> ListarPorServicioAsync(int idServicio)
+        public async Task<List<Registro>> ListarPorServicioAsync(int idServicio)
         {
-            var parametros = new[]
+            var registros = await _context.Registros
+                .Include(r => r.Empleado)
+                .ThenInclude(e => e.Empresa)
+                .Where(r => r.IdServicio == idServicio)
+                .ToListAsync();
+                
+            foreach (var r in registros)
             {
-                new SqlParameter("@IdServicio", idServicio)
-            };
-
-            return _accesoDatos.ListarAsync("sp_ListarRegistrosPorServicio", CommandType.StoredProcedure, MapRegistroListado, parametros);
+                r.NombreEmpleado = r.Empleado != null ? $"{r.Empleado.Nombre} {r.Empleado.Apellido}" : "-";
+                r.NombreEmpresa = r.Empleado?.Empresa?.Nombre ?? "-";
+            }
+            return registros;
         }
 
-        public async Task<bool> YaRegistradoAsync(int idEmpleado, int idServicio)
+        public Task<bool> YaRegistradoAsync(int idEmpleado, int idServicio)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdEmpleado", idEmpleado),
-                new SqlParameter("@IdServicio", idServicio)
-            };
-
-            var resultado = await _accesoDatos.EscalarAsync("sp_VerificarEmpleadoRegistrado", CommandType.StoredProcedure, parametros);
-            return Convert.ToInt32(resultado) > 0;
+            return _context.Registros
+                .AnyAsync(r => r.IdEmpleado == idEmpleado && r.IdServicio == idServicio);
         }
 
-        public async Task<int> ContarAsync(int idServicio)
+        public Task<int> ContarAsync(int idServicio)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdServicio", idServicio)
-            };
-
-            var resultado = await _accesoDatos.EscalarAsync("sp_ContarRegistrosPorServicio", CommandType.StoredProcedure, parametros);
-            return Convert.ToInt32(resultado);
+            return _context.Registros.CountAsync(r => r.IdServicio == idServicio);
         }
 
-        public Task<List<Registro>> PorEmpresaYFechaAsync(int idEmpresa, DateTime fechaInicio, DateTime fechaFin)
+        public async Task<List<Registro>> PorEmpresaYFechaAsync(int idEmpresa, DateTime fechaInicio, DateTime fechaFin)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@IdEmpresa", idEmpresa),
-                new SqlParameter("@FechaInicio", fechaInicio.Date),
-                new SqlParameter("@FechaFin", fechaFin.Date)
-            };
+            var registros = await _context.Registros
+                .Include(r => r.Empleado)
+                .Include(r => r.Empresa)
+                .Where(r => r.IdEmpresa == idEmpresa && r.Fecha >= fechaInicio.Date && r.Fecha <= fechaFin.Date)
+                .ToListAsync();
 
-            return _accesoDatos.ListarAsync("sp_ObtenerRegistrosPorEmpresaYFecha", CommandType.StoredProcedure, RegistroMapper.Map, parametros);
-        }
-
-        private static Registro MapRegistroListado(SqlDataReader reader)
-        {
-            return new Registro
+            foreach (var r in registros)
             {
-                IdRegistro    = DbMapper.GetInt32(reader, nameof(Registro.IdRegistro)),
-                Fecha         = DbMapper.GetDateTime(reader, nameof(Registro.Fecha)),
-                Hora          = DbMapper.GetTimeSpan(reader, nameof(Registro.Hora)),
-                // El SP devuelve strings ya combinados, los mapeamos directamente
-                NombreEmpleado = DbMapper.GetString(reader, "Empleado"),
-                NombreEmpresa  = DbMapper.GetString(reader, "Empresa")
-            };
+                r.NombreEmpleado = r.Empleado != null ? $"{r.Empleado.Nombre} {r.Empleado.Apellido}" : "-";
+                r.NombreEmpresa = r.Empleado?.Empresa?.Nombre ?? "-";
+            }
+            return registros;
         }
     }
 }

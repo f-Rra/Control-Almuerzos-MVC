@@ -1,43 +1,28 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
-using SCA_MVC.Data.Mappers;
 using SCA_MVC.Models;
-using System.Data;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SCA_MVC.Services
 {
     public class LugarNegocio : ILugarNegocio
     {
-        private readonly AccesoDatos _accesoDatos;
+        private readonly ApplicationDbContext _context;
 
-        public LugarNegocio(AccesoDatos accesoDatos)
+        public LugarNegocio(ApplicationDbContext context)
         {
-            _accesoDatos = accesoDatos;
+            _context = context;
         }
 
         public Task<List<Lugar>> ListarAsync()
         {
-            return _accesoDatos.ListarAsync("sp_ListarLugares", CommandType.StoredProcedure, MapLugarBasico);
+            return _context.Lugares.ToListAsync();
         }
 
         public Task<Lugar?> BuscarPorNombreAsync(string nombre)
         {
-            var parametros = new[]
-            {
-                new SqlParameter("@Nombre", nombre)
-            };
-
-            return _accesoDatos.ObtenerPrimeroAsync("sp_ObtenerLugarPorNombre", CommandType.StoredProcedure, LugarMapper.Map, parametros);
-        }
-
-        private static Lugar MapLugarBasico(SqlDataReader reader)
-        {
-            return new Lugar
-            {
-                IdLugar = DbMapper.GetInt32(reader, nameof(Lugar.IdLugar)),
-                Nombre = DbMapper.GetString(reader, nameof(Lugar.Nombre)),
-                Estado = true
-            };
+            return _context.Lugares.FirstOrDefaultAsync(l => l.Nombre == nombre);
         }
     }
 }

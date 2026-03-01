@@ -1,81 +1,63 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
 using SCA_MVC.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SCA_MVC.Services
 {
     public class EstadisticasNegocio : IEstadisticasNegocio
     {
-        private readonly AccesoDatos _db;
+        private readonly ApplicationDbContext _db;
 
-        public EstadisticasNegocio(AccesoDatos db) => _db = db;
+        public EstadisticasNegocio(ApplicationDbContext db) => _db = db;
 
         public async Task<EstadisticasViewModel> ObtenerTodosAsync()
         {
             var vm = new EstadisticasViewModel();
 
-            // ── Empleados ─────────────────────────────────────────────
-            var empleados = await _db.ListarAsync(
-                "sp_ObtenerEstadisticasEmpleados",
-                CommandType.StoredProcedure,
-                r =>
-                {
-                    vm.TotalEmpleados     = r.GetInt32(r.GetOrdinal("TotalRegistrados"));
-                    vm.EmpleadosActivos   = r.GetInt32(r.GetOrdinal("TotalActivos"));
-                    vm.EmpleadosInactivos = r.GetInt32(r.GetOrdinal("TotalInactivos"));
-                    return true; // dummy para satisfacer Func<SqlDataReader, T>
-                },
-                Array.Empty<SqlParameter>());
+            var empleados = await _db.Empleados.ToListAsync();
+            vm.TotalEmpleados = empleados.Count;
+            vm.EmpleadosActivos = empleados.Count(e => e.Estado);
+            vm.EmpleadosInactivos = empleados.Count(e => !e.Estado);
 
-            // ── Empresas ──────────────────────────────────────────────
-            await _db.ListarAsync(
-                "sp_ObtenerEstadisticasEmpresas",
-                CommandType.StoredProcedure,
-                r =>
-                {
-                    vm.TotalEmpresasActivas = r.GetInt32(r.GetOrdinal("TotalActivas"));
-                    vm.EmpresasConEmpleados = r.GetInt32(r.GetOrdinal("TotalConEmpleados"));
-                    vm.PromedioEmpleados    = Convert.ToDecimal(r["PromedioEmpleados"]);
-                    return true;
-                },
-                Array.Empty<SqlParameter>());
+            var empresas = await _db.Empresas.Include(e => e.Empleados).ToListAsync();
+            vm.TotalEmpresasActivas = empresas.Count(e => e.Estado);
+            vm.EmpresasConEmpleados = empresas.Count(e => e.Estado && e.Empleados.Any(emp => emp.Estado));
+            vm.PromedioEmpleados = vm.EmpresasConEmpleados > 0 
+                ? Math.Round((decimal)vm.EmpleadosActivos / vm.EmpresasConEmpleados, 1) 
+                : 0;
 
-            // ── Servicios ─────────────────────────────────────────────
-            await _db.ListarAsync(
-                "sp_ObtenerEstadisticasServicios",
-                CommandType.StoredProcedure,
-                r =>
-                {
-                    vm.ServiciosEsteMes  = r.GetInt32(r.GetOrdinal("ServiciosEsteMes"));
-                    vm.ServiciosEsteAnio = r.GetInt32(r.GetOrdinal("ServiciosEsteAnio"));
-                    vm.PromedioPorDia    = r.GetInt32(r.GetOrdinal("PromedioPorDia"));
-                    return true;
-                },
-                Array.Empty<SqlParameter>());
+            var servicios = await _db.Servicios.ToListAsync();
+            vm.ServiciosEsteMes = servicios.Count(s => s.Fecha.Month == DateTime.Today.Month && s.Fecha.Year == DateTime.Today.Year);
+            vm.ServiciosEsteAnio = servicios.Count(s => s.Fecha.Year == DateTime.Today.Year);
+            
+            var diasTranscurridos = Math.Max(1, DateTime.Today.Day);
+            vm.PromedioPorDia = (int)Math.Round((double)vm.ServiciosEsteMes / diasTranscurridos);
 
-            // ── Top 5 Empresas — mes actual ───────────────────────────
-            var inicio = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            var fin    = DateTime.Today;
+            // Top 5 Empresas
+            var inicioMes = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            var finMes = DateTime.Today;
 
-            vm.TopEmpresas = await _db.ListarAsync(
-                "sp_ObtenerTop5EmpresasPorAsistencias",
-                CommandType.StoredProcedure,
-                r => new TopEmpresaItem
-                {
-                    Ranking          = Convert.ToInt32(r["Ranking"]),
-                    NombreEmpresa    = r.GetString(r.GetOrdinal("NombreEmpresa")),
-                    TotalAsistencias = Convert.ToInt32(r["TotalAsistencias"]),
-                    Porcentaje       = Convert.ToDecimal(r["Porcentaje"])
-                },
-                new[]
-                {
-                    new SqlParameter("@FechaInicio", inicio),
-                    new SqlParameter("@FechaFin",    fin)
-                });
+            var asistenciasMes = await _db.Registros
+                .Where(r => r.Fecha >= inicioMes && r.Fecha <= finMes)
+                .Include(r => r.Empresa)
+                .GroupBy(r => r.Empresa)
+                .Select(g => new { Empresa = g.Key, Conteos = g.Count() })
+                .OrderByDescending(x => x.Conteos)
+                .Take(5)
+                .ToListAsync();
+
+            var totalAsistencias = await _db.Registros.CountAsync(r => r.Fecha >= inicioMes && r.Fecha <= finMes);
+
+            vm.TopEmpresas = asistenciasMes.Select((x, i) => new TopEmpresaItem
+            {
+                Ranking = i + 1,
+                NombreEmpresa = x.Empresa?.Nombre ?? "-",
+                TotalAsistencias = x.Conteos,
+                Porcentaje = totalAsistencias > 0 ? Math.Round((decimal)x.Conteos / totalAsistencias * 100, 2) : 0
+            }).ToList();
 
             return vm;
         }
