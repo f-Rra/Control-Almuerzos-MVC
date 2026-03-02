@@ -20,128 +20,24 @@ namespace SCA_MVC.Data
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<Registro> Registros { get; set; }
 
-        // OnModelCreating: configuración de relaciones con Fluent API
+        // OnModelCreating: punto de entrada para toda la configuración del modelo
         // ------------------------------------------------------------------------------------------
-        // ESTA SECCIÓN CONTIENE LA EXPLICACIÓN DIDÁCTICA DEL MODELADO DE CLASES CON EF CORE.
-        // Aquí personalizamos cómo nuestras clases (Entidades) se mapean a la Base de Datos.
+        // Acá personalizamos cómo nuestras clases (Entidades) se mapean a la Base de Datos.
         // Sobrepasamos las convenciones automáticas de EF Core para configurar:
         // - Claves foráneas específicas (HasForeignKey)
         // - Comportamientos de eliminación en cascada (OnDelete)
         // - Índices únicos para evitar duplicados en la BD (HasIndex.IsUnique)
         // - Valores por defecto y restricciones a nivel de SQL Server
+        //
+        // ✅ REFACTOR C24: cada entidad tiene su clase en Data/Configurations/
+        // ApplyConfigurationsFromAssembly() las detecta y aplica automáticamente.
         // ------------------------------------------------------------------------------------------
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // ===== CONFIGURACIÓN DE RELACIONES =====
-
-            // Relación: Empresa → Empleados (1:N)
-            // Una empresa tiene muchos empleados, un empleado pertenece a una empresa
-            modelBuilder.Entity<Empresa>()
-                .HasMany(e => e.Empleados)           // Una Empresa tiene muchos Empleados
-                .WithOne(emp => emp.Empresa)         // Cada Empleado tiene una Empresa
-                .HasForeignKey(emp => emp.IdEmpresa) // La FK es IdEmpresa
-                .OnDelete(DeleteBehavior.Restrict)   // NO permitir eliminar Empresa si tiene Empleados
-                .HasConstraintName("FK_Empleados_Empresa"); // Nombre del constraint en BD
-
-            // Relación: Empresa → Registros (1:N)
-            // Una empresa tiene muchos registros, un registro pertenece a una empresa
-            modelBuilder.Entity<Empresa>()
-                .HasMany(e => e.Registros)
-                .WithOne(r => r.Empresa)
-                .HasForeignKey(r => r.IdEmpresa)
-                .OnDelete(DeleteBehavior.Restrict)   // Preservar registros históricos
-                .HasConstraintName("FK_Registros_Empresa");
-
-            // Relación: Empleado → Registros (1:N, NULLABLE)
-            // Un empleado puede tener muchos registros, un registro puede tener empleado (o ser invitado)
-            // ⚠️ IMPORTANTE: IdEmpleado es nullable para permitir invitados
-            modelBuilder.Entity<Empleado>()
-                .HasMany(e => e.Registros)
-                .WithOne(r => r.Empleado)
-                .HasForeignKey(r => r.IdEmpleado)
-                .OnDelete(DeleteBehavior.SetNull)    // Si eliminas empleado, IdEmpleado = null
-                .IsRequired(false)                    // La relación es opcional (permite invitados)
-                .HasConstraintName("FK_Registros_Empleado");
-
-            // Relación: Lugar → Servicios (1:N)
-            // Un lugar tiene muchos servicios, un servicio pertenece a un lugar
-            modelBuilder.Entity<Lugar>()
-                .HasMany(l => l.Servicios)
-                .WithOne(s => s.Lugar)
-                .HasForeignKey(s => s.IdLugar)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Servicios_Lugar");
-
-            // Relación: Lugar → Registros (1:N)
-            // Un lugar tiene muchos registros, un registro pertenece a un lugar
-            modelBuilder.Entity<Lugar>()
-                .HasMany(l => l.Registros)
-                .WithOne(r => r.Lugar)
-                .HasForeignKey(r => r.IdLugar)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Registros_Lugar");
-
-            // Relación: Servicio → Registros (1:N)
-            // Un servicio tiene muchos registros, un registro pertenece a un servicio
-            modelBuilder.Entity<Servicio>()
-                .HasMany(s => s.Registros)
-                .WithOne(r => r.Servicio)
-                .HasForeignKey(r => r.IdServicio)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Registros_Servicio");
-
-            // ===== CONFIGURACIÓN DE ÍNDICES ÚNICOS =====
-
-            // Índice único en Empleado.IdCredencial
-            // Garantiza que no haya dos empleados con la misma credencial RFID
-            modelBuilder.Entity<Empleado>()
-                .HasIndex(e => e.IdCredencial)
-                .IsUnique()
-                .HasDatabaseName("IX_Empleado_IdCredencial");
-
-            // Índice único compuesto en Registro (IdEmpleado, IdServicio)
-            // Evita que un empleado se registre dos veces en el mismo servicio
-            // ⚠️ IMPORTANTE: HasFilter para excluir nulls (permite múltiples invitados)
-            modelBuilder.Entity<Registro>()
-                .HasIndex(r => new { r.IdEmpleado, r.IdServicio })
-                .IsUnique()
-                .HasFilter("[IdEmpleado] IS NOT NULL")  // Solo aplica cuando IdEmpleado no es null
-                .HasDatabaseName("IX_Registro_Empleado_Servicio");
-
-            // ===== CONFIGURACIÓN DE VALORES POR DEFECTO =====
-
-            // Valores por defecto para Estado = true
-            modelBuilder.Entity<Empresa>()
-                .Property(e => e.Estado)
-                .HasDefaultValue(true);
-
-            modelBuilder.Entity<Empleado>()
-                .Property(e => e.Estado)
-                .HasDefaultValue(true);
-
-            modelBuilder.Entity<Lugar>()
-                .Property(l => l.Estado)
-                .HasDefaultValue(true);
-
-            // Valores por defecto para totales = 0
-            modelBuilder.Entity<Servicio>()
-                .Property(s => s.TotalComensales)
-                .HasDefaultValue(0);
-
-            modelBuilder.Entity<Servicio>()
-                .Property(s => s.TotalInvitados)
-                .HasDefaultValue(0);
-
-            // ===== CONFIGURACIÓN DE CHECK CONSTRAINTS =====
-
-            // ===== CONFIGURACIÓN DE CHECK CONSTRAINTS =====
-            // Relajamos el check de fecha para permitir datos de prueba futuros si es necesario
-            modelBuilder.Entity<Servicio>()
-                .ToTable(t => t.HasCheckConstraint(
-                    "CK_Servicio_Fecha",
-                    "[Fecha] <= '2030-01-01'"));
+            // Aplica todas las clases IEntityTypeConfiguration<T> del ensamblado
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
             // ===== SEEDING DE DATOS (HASDATA) =====
             SeedData(modelBuilder);
