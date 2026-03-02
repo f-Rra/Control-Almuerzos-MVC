@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using SCA_MVC.Services;
 using SCA_MVC.ViewModels;
@@ -134,17 +135,13 @@ namespace SCA_MVC.Controllers
 
                 var idCreado = await _empleadoNegocio.AgregarAsync(nuevoEmpleado);
 
-                TempData["ToastType"] = "success";
-                TempData["ToastTitle"] = "Empleado creado";
-                TempData["ToastMessage"] = $"El empleado '{nuevoEmpleado.Nombre} {nuevoEmpleado.Apellido}' se creó correctamente.";
+                TempData.MostrarExito($"El empleado '{nuevoEmpleado.Nombre} {nuevoEmpleado.Apellido}' se creó correctamente.", "Empleado creado");
 
                 return RedirectToAction(nameof(Index), new { idEmpleado = idCreado });
             }
             catch (Exception ex)
             {
-                TempData["ToastType"] = "error";
-                TempData["ToastTitle"] = "Error";
-                TempData["ToastMessage"] = $"Error al crear el empleado: {ex.Message}";
+                TempData.MostrarError($"Error al crear el empleado: {ex.Message}");
                 return await RecargarConErrores(vm);
             }
         }
@@ -198,17 +195,13 @@ namespace SCA_MVC.Controllers
                     Estado = vm.EmpleadoActual.Estado
                 });
 
-                TempData["ToastType"] = "success";
-                TempData["ToastTitle"] = "Empleado actualizado";
-                TempData["ToastMessage"] = $"El empleado '{vm.EmpleadoActual.Nombre} {vm.EmpleadoActual.Apellido}' se actualizó correctamente.";
+                TempData.MostrarExito($"El empleado '{vm.EmpleadoActual.Nombre} {vm.EmpleadoActual.Apellido}' se actualizó correctamente.", "Empleado actualizado");
 
                 return RedirectToAction(nameof(Index), new { idEmpleado = vm.EmpleadoActual.IdEmpleado });
             }
             catch (Exception ex)
             {
-                TempData["ToastType"] = "error";
-                TempData["ToastTitle"] = "Error";
-                TempData["ToastMessage"] = $"Error al actualizar el empleado: {ex.Message}";
+                TempData.MostrarError($"Error al actualizar el empleado: {ex.Message}");
                 return await RecargarConErrores(vm);
             }
         }
@@ -230,23 +223,17 @@ namespace SCA_MVC.Controllers
                     // Guardia: si ya está desactivado, evitar operación redundante
                     if (empleado != null && !empleado.Estado)
                     {
-                        TempData["ToastType"] = "warning";
-                        TempData["ToastTitle"] = "Empleado ya inactivo";
-                        TempData["ToastMessage"] = $"El empleado '{empleado.NombreCompleto}' ya se encuentra desactivado.";
+                        TempData.MostrarAdvertencia($"El empleado '{empleado.NombreCompleto}' ya se encuentra desactivado.", "Empleado ya inactivo");
                         return RedirectToAction(nameof(Index), new { idEmpleado });
                     }
 
                     await _empleadoNegocio.EliminarAsync(idEmpleado);
 
-                    TempData["ToastType"] = "success";
-                    TempData["ToastTitle"] = "Empleado desactivado";
-                    TempData["ToastMessage"] = $"El empleado '{empleado?.NombreCompleto}' fue desactivado correctamente.";
+                    TempData.MostrarExito($"El empleado '{empleado?.NombreCompleto}' fue desactivado correctamente.", "Empleado desactivado");
                 }
                 catch (Exception ex)
                 {
-                    TempData["ToastType"] = "error";
-                    TempData["ToastTitle"] = "Error";
-                    TempData["ToastMessage"] = $"Error al eliminar el empleado: {ex.Message}";
+                    TempData.MostrarError($"Error al eliminar el empleado: {ex.Message}");
                 }
             }
 

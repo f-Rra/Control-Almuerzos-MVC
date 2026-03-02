@@ -21,6 +21,15 @@ namespace SCA_MVC.Data
         public DbSet<Registro> Registros { get; set; }
 
         // OnModelCreating: configuración de relaciones con Fluent API
+        // ------------------------------------------------------------------------------------------
+        // ESTA SECCIÓN CONTIENE LA EXPLICACIÓN DIDÁCTICA DEL MODELADO DE CLASES CON EF CORE.
+        // Aquí personalizamos cómo nuestras clases (Entidades) se mapean a la Base de Datos.
+        // Sobrepasamos las convenciones automáticas de EF Core para configurar:
+        // - Claves foráneas específicas (HasForeignKey)
+        // - Comportamientos de eliminación en cascada (OnDelete)
+        // - Índices únicos para evitar duplicados en la BD (HasIndex.IsUnique)
+        // - Valores por defecto y restricciones a nivel de SQL Server
+        // ------------------------------------------------------------------------------------------
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

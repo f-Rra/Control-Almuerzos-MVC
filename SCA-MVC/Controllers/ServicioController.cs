@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using SCA_MVC.Services;
 using SCA_MVC.ViewModels;
@@ -79,23 +80,19 @@ namespace SCA_MVC.Controllers
             var existente = await _servicioNegocio.ObtenerActivoAsync(idLugar);
             if (existente != null)
             {
-                TempData["ToastType"] = "error";
-                TempData["ToastTitle"] = "Error";
-                TempData["ToastMessage"] = "Ya existe un servicio activo en este lugar.";
+                TempData.MostrarError("Ya existe un servicio activo en este lugar.");
                 return RedirectToAction(nameof(Index));
             }
 
             if (proyeccion < 0 || proyeccion > 1000)
             {
-                TempData["ToastType"] = "warning";
-                TempData["ToastMessage"] = "La proyección debe estar entre 0 y 1000.";
+                TempData.MostrarAdvertencia("La proyección debe estar entre 0 y 1000.");
                 return RedirectToAction(nameof(Index));
             }
 
             await _servicioNegocio.CrearServicioAsync(idLugar, proyeccion, invitados);
 
-            TempData["ToastType"]    = "success";
-            TempData["ToastTitle"]   = "Servicio iniciado correctamente";
+            TempData.MostrarExito("Servicio iniciado correctamente.");
             return RedirectToAction(nameof(Index));
         }
 
@@ -108,8 +105,7 @@ namespace SCA_MVC.Controllers
 
             await _servicioNegocio.FinalizarServicioAsync(idServicio, totalComensales, invitados, Math.Max(1, duracionMinutos));
 
-            TempData["ToastType"]    = "success";
-            TempData["ToastTitle"]   = "Servicio finalizado correctamente";
+            TempData.MostrarExito("Servicio finalizado correctamente.");
             return RedirectToAction(nameof(Index));
         }
 
