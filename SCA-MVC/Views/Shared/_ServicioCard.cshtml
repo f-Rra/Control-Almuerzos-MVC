@@ -1,0 +1,56 @@
+@* ═══════════════════════════════════════════════════════════════════════
+   _ServicioCard.cshtml — Vista Parcial: Tarjeta de Servicio
+   ──────────────────────────────────────────────────────────
+   Modelo: (SCA_MVC.ViewModels.ServicioReporte Servicio, bool IsSelected)
+
+   Uso (dentro del foreach de Home/Index):
+   <partial name="_ServicioCard"
+            model="@((Servicio: s, IsSelected: primerItem))" />
+
+   IsSelected: true solo para el primer elemento de la lista.
+   La card lleva los data-* atributos que usa el JS de selección
+   interactiva para actualizar el panel de detalle del Dashboard.
+   ═══════════════════════════════════════════════════════════════════════ *@
+@model (SCA_MVC.ViewModels.ServicioReporte Servicio, bool IsSelected)
+
+@{
+    var s         = Model.Servicio;
+    var isComedor = s.Lugar.ToLower().Contains("comedor");
+    var cobertura = s.Proyeccion > 0
+                    ? (int)((double)s.TotalComensales / s.Proyeccion * 100)
+                    : 0;
+    var cssClass  = Model.IsSelected ? "svc-card selected" : "svc-card";
+}
+
+<div class="@cssClass"
+     data-id="@s.IdServicio"
+     data-lugar="@s.Lugar"
+     data-fecha="@s.Fecha.ToString("dd/MM/yyyy")"
+     data-proyeccion="@s.Proyeccion"
+     data-duracion="@(s.DuracionMinutos?.ToString() ?? "—")"
+     data-comensales="@s.TotalComensales"
+     data-invitados="@s.TotalInvitados"
+     data-total="@s.TotalGeneral"
+     data-cobertura="@cobertura"
+     data-iscomedor="@(isComedor ? "1" : "0")">
+
+    <div class="svc-icon @(isComedor ? "comedor" : "quincho")">
+        <i class="bi @(isComedor ? "bi-building" : "bi-tree")"></i>
+    </div>
+
+    <div class="svc-info">
+        <div class="svc-top"><span class="svc-name">@s.Lugar</span></div>
+        <div class="svc-nums">
+            <span class="svc-n">Comensales: <span>@s.TotalComensales</span></span>
+            <span class="svc-n">Invitados: <span>@s.TotalInvitados</span></span>
+        </div>
+    </div>
+
+    <span class="svc-date">@s.Fecha.ToString("dd/MM/yyyy")</span>
+
+    <div class="svc-total">
+        <div class="t-label">Total</div>
+        <div class="t-val">@s.TotalGeneral</div>
+    </div>
+
+</div>

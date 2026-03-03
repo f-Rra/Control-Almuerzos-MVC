@@ -1,0 +1,24 @@
+@* ═══════════════════════════════════════════════════════════════════════
+   _KpiCard.cshtml — Vista Parcial: Indicador KPI
+   ─────────────────────────────────────────────
+   Modelo: (string Icono, string IcoColor, string Label, string Valor)
+
+   Uso:
+   <partial name="_KpiCard"
+            model="@((Icono: "bi-people", IcoColor: "activo",
+                       Label: "Activos", Valor: Model.EmpleadosActivos.ToString()))" />
+
+   IcoColor aceptados: "" (neutro) | activo | inactivo | empresa |
+                        servicio | promedio | asist | empl | top
+   ═══════════════════════════════════════════════════════════════════════ *@
+@model (string Icono, string IcoColor, string Label, string Valor)
+
+<div class="est-kpi">
+    <div class="est-kpi-ico @Model.IcoColor">
+        <i class="bi @Model.Icono"></i>
+    </div>
+    <div class="est-kpi-info">
+        <span class="est-kpi-label">@Model.Label</span>
+        <span class="est-kpi-value @Model.IcoColor">@Model.Valor</span>
+    </div>
+</div>

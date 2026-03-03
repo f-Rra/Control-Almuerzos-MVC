@@ -12,14 +12,7 @@
         <div class="cfg-title"><i class="bi bi-bar-chart-line-fill"></i> Reportes</div>
         <div class="cfg-sep"></div>
         <div class="cfg-inputs">
-            <div class="cfg-item">
-                <label>Desde</label>
-                <input type="date" name="desde" id="input-desde" value="@Model.FechaDesde.ToString("yyyy-MM-dd")" />
-            </div>
-            <div class="cfg-item">
-                <label>Hasta</label>
-                <input type="date" name="hasta" id="input-hasta" value="@Model.FechaHasta.ToString("yyyy-MM-dd")" />
-            </div>
+            <partial name="_FiltroFechas" model="@((Desde: Model.FechaDesde, Hasta: Model.FechaHasta))" />
             <div class="cfg-item">
                 <label>Lugar</label>
                 <select name="idLugar" id="sel-lugar">

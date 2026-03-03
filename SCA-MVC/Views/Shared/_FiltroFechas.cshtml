@@ -1,0 +1,32 @@
+@* ═══════════════════════════════════════════════════════════════════════
+   _FiltroFechas.cshtml — Vista Parcial: Selector de Rango de Fechas
+   ──────────────────────────────────────────────────────────────────
+   Modelo: (System.DateTime Desde, System.DateTime Hasta)
+
+   Renderiza dos cfg-item (Desde / Hasta) listos para ser incluidos
+   dentro de cualquier .config-row / .cfg-inputs.
+
+   Uso:
+   <partial name="_FiltroFechas"
+            model="@((Desde: Model.FechaDesde, Hasta: Model.FechaHasta))" />
+
+   Los inputs usan name="desde" y name="hasta" para que el form GET
+   los envíe con los mismos nombres que espera el controlador.
+   ═══════════════════════════════════════════════════════════════════════ *@
+@model (System.DateTime Desde, System.DateTime Hasta)
+
+<div class="cfg-item">
+    <label>Desde</label>
+    <input type="date"
+           name="desde"
+           id="input-desde"
+           value="@Model.Desde.ToString("yyyy-MM-dd")" />
+</div>
+
+<div class="cfg-item">
+    <label>Hasta</label>
+    <input type="date"
+           name="hasta"
+           id="input-hasta"
+           value="@Model.Hasta.ToString("yyyy-MM-dd")" />
+</div>

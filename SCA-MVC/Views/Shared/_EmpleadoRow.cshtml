@@ -1,0 +1,90 @@
+@* ═══════════════════════════════════════════════════════════════════════
+   _EmpleadoRow.cshtml — Vista Parcial: Fila de empleado en tabla
+   ───────────────────────────────────────────────────────────────
+   Modelo:
+     Empleado      — objeto Empleado completo con la propiedad Include(Empresa)
+     SeleccionadoId — IdEmpleado actualmente seleccionado (para resaltar fila)
+     Filtro         — texto de búsqueda activo (se preserva en los links)
+     EmpresaFiltroId — filtro de empresa activo (se preserva en los links)
+     Numero         — número de fila correlativo (1, 2, 3...)
+
+   Uso (en el foreach de Empleado/Index.cshtml):
+   @{ int num = 1; }
+   @foreach (var emp in Model.Empleados)
+   {
+       <partial name="_EmpleadoRow"
+                model="@((Empleado: emp,
+                          SeleccionadoId: Model.EmpleadoSeleccionadoId,
+                          Filtro: Model.Filtro,
+                          EmpresaFiltroId: Model.EmpresaFiltroId,
+                          Numero: num))" />
+       num++;
+   }
+   ═══════════════════════════════════════════════════════════════════════ *@
+@model (SCA_MVC.Models.Empleado Empleado, int? SeleccionadoId, string Filtro, int? EmpresaFiltroId, int Numero)
+
+@{
+    var emp        = Model.Empleado;
+    var isSelected = emp.IdEmpleado == Model.SeleccionadoId;
+}
+
+<tr class="@(isSelected ? "emp-row-selected" : "")">
+
+    <td class="td-num">
+        <a asp-action="Index"
+           asp-route-idEmpleado="@emp.IdEmpleado"
+           asp-route-filtro="@Model.Filtro"
+           asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+           class="text-decoration-none text-reset d-block">@Model.Numero</a>
+    </td>
+
+    <td>
+        <a asp-action="Index"
+           asp-route-idEmpleado="@emp.IdEmpleado"
+           asp-route-filtro="@Model.Filtro"
+           asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+           class="text-decoration-none text-reset d-block">
+            <div class="td-emp-cell">
+                <div class="td-emp-ico"><i class="bi bi-person-fill"></i></div>
+                <span class="td-empleado">@emp.Nombre</span>
+            </div>
+        </a>
+    </td>
+
+    <td>
+        <a asp-action="Index"
+           asp-route-idEmpleado="@emp.IdEmpleado"
+           asp-route-filtro="@Model.Filtro"
+           asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+           class="text-decoration-none text-reset d-block">@emp.Apellido</a>
+    </td>
+
+    <td class="td-empresa">
+        <a asp-action="Index"
+           asp-route-idEmpleado="@emp.IdEmpleado"
+           asp-route-filtro="@Model.Filtro"
+           asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+           class="text-decoration-none text-reset d-block">@(emp.Empresa?.Nombre ?? "-")</a>
+    </td>
+
+    <td class="td-cred">
+        <a asp-action="Index"
+           asp-route-idEmpleado="@emp.IdEmpleado"
+           asp-route-filtro="@Model.Filtro"
+           asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+           class="text-decoration-none text-reset d-block">@emp.IdCredencial</a>
+    </td>
+
+    <td>
+        <a asp-action="Index"
+           asp-route-idEmpleado="@emp.IdEmpleado"
+           asp-route-filtro="@Model.Filtro"
+           asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
+           class="text-decoration-none text-reset d-block">
+            <span class="emp-badge @(emp.Estado ? "activo" : "inactivo")">
+                @(emp.Estado ? "Activo" : "Inactivo")
+            </span>
+        </a>
+    </td>
+
+</tr>

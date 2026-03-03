@@ -80,61 +80,12 @@
                                 int num = 1;
                                 foreach (var emp in Model.Empleados)
                                 {
-                                    var isSelected = emp.IdEmpleado == Model.EmpleadoSeleccionadoId;
-                                    @* Cada fila es un link al mismo Index con el idEmpleado — igual que Empresa *@
-                                    <tr class="@(isSelected ? "emp-row-selected" : "")">
-                                        <td class="td-num">
-                                            <a asp-action="Index"
-                                               asp-route-idEmpleado="@emp.IdEmpleado"
-                                               asp-route-filtro="@Model.Filtro"
-                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
-                                               class="text-decoration-none text-reset d-block">@num</a>
-                                        </td>
-                                        <td>
-                                            <a asp-action="Index"
-                                               asp-route-idEmpleado="@emp.IdEmpleado"
-                                               asp-route-filtro="@Model.Filtro"
-                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
-                                               class="text-decoration-none text-reset d-block">
-                                                <div class="td-emp-cell">
-                                                    <div class="td-emp-ico"><i class="bi bi-person-fill"></i></div>
-                                                    <span class="td-empleado">@emp.Nombre</span>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a asp-action="Index"
-                                               asp-route-idEmpleado="@emp.IdEmpleado"
-                                               asp-route-filtro="@Model.Filtro"
-                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
-                                               class="text-decoration-none text-reset d-block">@emp.Apellido</a>
-                                        </td>
-                                        <td class="td-empresa">
-                                            <a asp-action="Index"
-                                               asp-route-idEmpleado="@emp.IdEmpleado"
-                                               asp-route-filtro="@Model.Filtro"
-                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
-                                               class="text-decoration-none text-reset d-block">@(emp.Empresa?.Nombre ?? "-")</a>
-                                        </td>
-                                        <td class="td-cred">
-                                            <a asp-action="Index"
-                                               asp-route-idEmpleado="@emp.IdEmpleado"
-                                               asp-route-filtro="@Model.Filtro"
-                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
-                                               class="text-decoration-none text-reset d-block">@emp.IdCredencial</a>
-                                        </td>
-                                        <td>
-                                            <a asp-action="Index"
-                                               asp-route-idEmpleado="@emp.IdEmpleado"
-                                               asp-route-filtro="@Model.Filtro"
-                                               asp-route-empresaFiltroId="@Model.EmpresaFiltroId"
-                                               class="text-decoration-none text-reset d-block">
-                                                <span class="emp-badge @(emp.Estado ? "activo" : "inactivo")">
-                                                    @(emp.Estado ? "Activo" : "Inactivo")
-                                                </span>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    @await Html.PartialAsync("_EmpleadoRow",
+                                        (Empleado: emp,
+                                         SeleccionadoId: Model.EmpleadoSeleccionadoId,
+                                         Filtro: Model.Filtro,
+                                         EmpresaFiltroId: Model.EmpresaFiltroId,
+                                         Numero: num))
                                     num++;
                                 }
                             }

@@ -15,27 +15,9 @@
             <span class="est-card-title">Empleados</span>
         </div>
         <div class="est-card-body">
-            <div class="est-kpi">
-                <div class="est-kpi-ico"><i class="bi bi-people"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Total Registrados</span>
-                    <span class="est-kpi-value">@Model.TotalEmpleados</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico activo"><i class="bi bi-person-check"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Activos</span>
-                    <span class="est-kpi-value activo">@Model.EmpleadosActivos</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico inactivo"><i class="bi bi-person-x"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Inactivos</span>
-                    <span class="est-kpi-value inactivo">@Model.EmpleadosInactivos</span>
-                </div>
-            </div>
+            <partial name="_KpiCard" model="@((Icono: "bi-people",       IcoColor: "",         Label: "Total Registrados", Valor: Model.TotalEmpleados.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-person-check", IcoColor: "activo",   Label: "Activos",           Valor: Model.EmpleadosActivos.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-person-x",     IcoColor: "inactivo", Label: "Inactivos",         Valor: Model.EmpleadosInactivos.ToString()))" />
         </div>
     </div>
 
@@ -46,27 +28,9 @@
             <span class="est-card-title">Empresas</span>
         </div>
         <div class="est-card-body">
-            <div class="est-kpi">
-                <div class="est-kpi-ico empresa"><i class="bi bi-building-check"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Total Activas</span>
-                    <span class="est-kpi-value">@Model.TotalEmpresasActivas</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico"><i class="bi bi-diagram-3"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Con Empleados</span>
-                    <span class="est-kpi-value">@Model.EmpresasConEmpleados</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico promedio"><i class="bi bi-calculator"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Promedio (Empleados)</span>
-                    <span class="est-kpi-value promedio">@Model.PromedioEmpleados.ToString("F1")</span>
-                </div>
-            </div>
+            <partial name="_KpiCard" model="@((Icono: "bi-building-check", IcoColor: "empresa",  Label: "Total Activas",       Valor: Model.TotalEmpresasActivas.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-diagram-3",      IcoColor: "",         Label: "Con Empleados",      Valor: Model.EmpresasConEmpleados.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-calculator",     IcoColor: "promedio", Label: "Promedio (Empleados)", Valor: Model.PromedioEmpleados.ToString("F1")))" />
         </div>
     </div>
 
@@ -77,27 +41,9 @@
             <span class="est-card-title">Servicios</span>
         </div>
         <div class="est-card-body">
-            <div class="est-kpi">
-                <div class="est-kpi-ico servicio"><i class="bi bi-calendar-event"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Este Mes</span>
-                    <span class="est-kpi-value">@Model.ServiciosEsteMes</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico"><i class="bi bi-calendar-range"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Total del Año</span>
-                    <span class="est-kpi-value">@Model.ServiciosEsteAnio</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico promedio"><i class="bi bi-graph-up"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Promedio / Día</span>
-                    <span class="est-kpi-value promedio">@Model.PromedioPorDia</span>
-                </div>
-            </div>
+            <partial name="_KpiCard" model="@((Icono: "bi-calendar-event", IcoColor: "servicio", Label: "Este Mes",      Valor: Model.ServiciosEsteMes.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-calendar-range", IcoColor: "",          Label: "Total del Año", Valor: Model.ServiciosEsteAnio.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-graph-up",       IcoColor: "promedio",  Label: "Promedio / Día", Valor: Model.PromedioPorDia.ToString()))" />
         </div>
     </div>
 
@@ -114,34 +60,10 @@
             <span class="est-card-badge">Mes Actual</span>
         </div>
         <div class="est-card-body est-body-grid">
-            <div class="est-kpi">
-                <div class="est-kpi-ico asist"><i class="bi bi-clipboard-check"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Servicios Realizados</span>
-                    <span class="est-kpi-value">@Model.ServiciosEsteMes</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico empl"><i class="bi bi-person-badge"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Empleados Activos</span>
-                    <span class="est-kpi-value">@Model.EmpleadosActivos</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico empresa"><i class="bi bi-building"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Empresas Participantes</span>
-                    <span class="est-kpi-value">@Model.EmpresasConEmpleados</span>
-                </div>
-            </div>
-            <div class="est-kpi">
-                <div class="est-kpi-ico promedio"><i class="bi bi-graph-up-arrow"></i></div>
-                <div class="est-kpi-info">
-                    <span class="est-kpi-label">Promedio Empleados / Empresa</span>
-                    <span class="est-kpi-value promedio">@Model.PromedioEmpleados.ToString("F1")</span>
-                </div>
-            </div>
+            <partial name="_KpiCard" model="@((Icono: "bi-clipboard-check", IcoColor: "asist",    Label: "Servicios Realizados",        Valor: Model.ServiciosEsteMes.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-person-badge",    IcoColor: "empl",     Label: "Empleados Activos",           Valor: Model.EmpleadosActivos.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-building",        IcoColor: "empresa",  Label: "Empresas Participantes",       Valor: Model.EmpresasConEmpleados.ToString()))" />
+            <partial name="_KpiCard" model="@((Icono: "bi-graph-up-arrow",  IcoColor: "promedio", Label: "Promedio Empleados / Empresa", Valor: Model.PromedioEmpleados.ToString("F1")))" />
         </div>
     </div>
 

@@ -1,0 +1,65 @@
+@* ═══════════════════════════════════════════════════════════════════════
+   _Paginacion.cshtml — Vista Parcial: Controles de Paginación
+   ─────────────────────────────────────────────────────────────
+   Modelo:
+     PaginaActual — número de página actual (1-based)
+     TotalPaginas — total de páginas disponibles
+     Accion       — nombre de la acción del controlador (ej: "Index")
+     Controlador  — nombre del controlador (ej: "Empleado")
+
+   Uso:
+   <partial name="_Paginacion"
+            model="@((PaginaActual: ViewBag.PaginaActual,
+                       TotalPaginas: ViewBag.TotalPaginas,
+                       Accion: "Index",
+                       Controlador: "Empleado"))" />
+
+   Si TotalPaginas <= 1 no renderiza nada (no hay necesidad de paginar).
+   ═══════════════════════════════════════════════════════════════════════ *@
+@model (int PaginaActual, int TotalPaginas, string Accion, string Controlador)
+
+@if (Model.TotalPaginas > 1)
+{
+    <div class="paginacion">
+
+        @* ── Botón Anterior ── *@
+        @if (Model.PaginaActual > 1)
+        {
+            <a class="pag-btn"
+               asp-controller="@Model.Controlador"
+               asp-action="@Model.Accion"
+               asp-route-pagina="@(Model.PaginaActual - 1)">
+                <i class="bi bi-chevron-left"></i> Anterior
+            </a>
+        }
+        else
+        {
+            <span class="pag-btn disabled">
+                <i class="bi bi-chevron-left"></i> Anterior
+            </span>
+        }
+
+        @* ── Indicador de página ── *@
+        <span class="pag-info">
+            Página <strong>@Model.PaginaActual</strong> de <strong>@Model.TotalPaginas</strong>
+        </span>
+
+        @* ── Botón Siguiente ── *@
+        @if (Model.PaginaActual < Model.TotalPaginas)
+        {
+            <a class="pag-btn"
+               asp-controller="@Model.Controlador"
+               asp-action="@Model.Accion"
+               asp-route-pagina="@(Model.PaginaActual + 1)">
+                Siguiente <i class="bi bi-chevron-right"></i>
+            </a>
+        }
+        else
+        {
+            <span class="pag-btn disabled">
+                Siguiente <i class="bi bi-chevron-right"></i>
+            </span>
+        }
+
+    </div>
+}
