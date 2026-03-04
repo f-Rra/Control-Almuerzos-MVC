@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Models;
 using System;
@@ -5,35 +6,22 @@ using System.Collections.Generic;
 
 namespace SCA_MVC.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        // Constructor: recibe opciones de configuración
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        // DbSets: representan las tablas en la BD
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Empleado> Empleados { get; set; }
         public DbSet<Lugar> Lugares { get; set; }
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<Registro> Registros { get; set; }
 
-        // OnModelCreating: punto de entrada para toda la configuración del modelo
-        // ------------------------------------------------------------------------------------------
-        // Acá personalizamos cómo nuestras clases (Entidades) se mapean a la Base de Datos.
-        // Sobrepasamos las convenciones automáticas de EF Core para configurar:
-        // - Claves foráneas específicas (HasForeignKey)
-        // - Comportamientos de eliminación en cascada (OnDelete)
-        // - Índices únicos para evitar duplicados en la BD (HasIndex.IsUnique)
-        // - Valores por defecto y restricciones a nivel de SQL Server
-        //
-        // ✅ REFACTOR C24: cada entidad tiene su clase en Data/Configurations/
-        // ApplyConfigurationsFromAssembly() las detecta y aplica automáticamente.
-        // ------------------------------------------------------------------------------------------
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Llama a base para que Identity configure sus propias tablas primero
             base.OnModelCreating(modelBuilder);
 
             // Aplica todas las clases IEntityTypeConfiguration<T> del ensamblado
