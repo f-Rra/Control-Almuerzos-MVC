@@ -58,11 +58,27 @@
     <div class="right-panel">
         <nav class="topbar">
             <div class="user-area">
-                <div class="pill">
-                    <div class="avatar">AD</div>
-                    <span class="uname">Administrador</span>
-                </div>
-                <a href="#" class="logout"><i class="bi bi-power"></i></a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    var nombreUsuario = User.FindFirst("NombreUsuario")?.Value ?? User.Identity.Name ?? "usuario";
+                    <div class="pill">
+                        <div class="avatar"><i class="bi bi-person-circle"></i></div>
+                        <span class="uname">@nombreUsuario</span>
+                    </div>
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="margin:0;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="logout" title="Cerrar sesión">
+                            <i class="bi bi-power"></i>
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="pill">
+                        <div class="avatar"><i class="bi bi-person"></i></div>
+                        <span class="uname">Iniciar Sesión</span>
+                    </a>
+                }
             </div>
         </nav>
 

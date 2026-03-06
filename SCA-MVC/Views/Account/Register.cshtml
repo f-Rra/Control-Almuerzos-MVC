@@ -1,0 +1,122 @@
+@model SCA_MVC.ViewModels.RegisterViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Registrar Usuario";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — SCA</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.11.2/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="auth-body">
+    <div class="shader"><div class="orb o1"></div><div class="orb o2"></div></div>
+
+    <div class="auth-wrap">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="~/images/logo.png" alt="SCA" />
+                <h1>Control de Almuerzos</h1>
+            </div>
+
+            <h2 class="auth-title">Crear Cuenta</h2>
+            <p class="auth-subtitle">Completá los datos para registrarte</p>
+
+            <form asp-action="Register" method="post" class="auth-form">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="auth-error"></div>
+
+                <div class="auth-field">
+                    <label asp-for="NombreUsuario">
+                        <i class="bi bi-at"></i> Usuario
+                    </label>
+                    <input asp-for="NombreUsuario" class="auth-input" placeholder="southex.operador" autocomplete="username" />
+                    <span asp-validation-for="NombreUsuario" class="auth-val-msg"></span>
+                </div>
+
+                <div class="auth-row">
+                    <div class="auth-field">
+                        <label asp-for="Nombre">
+                            <i class="bi bi-person"></i> Nombre
+                        </label>
+                        <input asp-for="Nombre" class="auth-input" placeholder="Juan" />
+                        <span asp-validation-for="Nombre" class="auth-val-msg"></span>
+                    </div>
+                    <div class="auth-field">
+                        <label asp-for="Apellido">
+                            <i class="bi bi-person"></i> Apellido
+                        </label>
+                        <input asp-for="Apellido" class="auth-input" placeholder="Pérez" />
+                        <span asp-validation-for="Apellido" class="auth-val-msg"></span>
+                    </div>
+                </div>
+
+                <div class="auth-field">
+                    <label asp-for="Email">
+                        <i class="bi bi-envelope"></i> Email
+                    </label>
+                    <input asp-for="Email" type="email" class="auth-input" placeholder="usuario@empresa.com" autocomplete="username" />
+                    <span asp-validation-for="Email" class="auth-val-msg"></span>
+                </div>
+
+                <div class="auth-field">
+                    <label asp-for="Password">
+                        <i class="bi bi-lock"></i> Contraseña
+                    </label>
+                    <div class="auth-input-wrap">
+                        <input asp-for="Password" type="password" class="auth-input" placeholder="••••••••" autocomplete="new-password" id="passwordInput" />
+                        <button type="button" class="auth-eye" onclick="togglePassword('passwordInput', 'eyeIcon1')">
+                            <i class="bi bi-eye" id="eyeIcon1"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="auth-val-msg"></span>
+                </div>
+
+                <div class="auth-field">
+                    <label asp-for="ConfirmPassword">
+                        <i class="bi bi-lock-fill"></i> Confirmar Contraseña
+                    </label>
+                    <div class="auth-input-wrap">
+                        <input asp-for="ConfirmPassword" type="password" class="auth-input" placeholder="••••••••" autocomplete="new-password" id="confirmInput" />
+                        <button type="button" class="auth-eye" onclick="togglePassword('confirmInput', 'eyeIcon2')">
+                            <i class="bi bi-eye" id="eyeIcon2"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="auth-val-msg"></span>
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <i class="bi bi-person-plus"></i> Crear Cuenta
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>¿Ya tenés cuenta? <a asp-action="Login">Iniciá sesión</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        }
+    </script>
+</body>
+</html>

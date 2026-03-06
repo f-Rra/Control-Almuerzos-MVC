@@ -1,0 +1,41 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Acceso Denegado";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — SCA</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.11.2/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="auth-body">
+    <div class="shader"><div class="orb o1"></div><div class="orb o2"></div></div>
+
+    <div class="auth-wrap">
+        <div class="auth-card auth-denied">
+            <div class="auth-denied-icon">
+                <i class="bi bi-shield-exclamation"></i>
+            </div>
+            <h2 class="auth-title">Acceso Denegado</h2>
+            <p class="auth-subtitle">No tenés permisos para acceder a este recurso.</p>
+
+            <div class="auth-denied-actions">
+                <a asp-controller="Home" asp-action="Index" class="auth-btn">
+                    <i class="bi bi-house"></i> Volver al inicio
+                </a>
+                <form asp-controller="Account" asp-action="Logout" method="post" style="margin: 0;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="auth-btn auth-btn-outline">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

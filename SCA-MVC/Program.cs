@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
+using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using SCA_MVC.Services;
 
@@ -36,8 +37,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.User.RequireUniqueEmail         = true;
     options.SignIn.RequireConfirmedAccount  = false;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>()  // Usa nuestra BD
-.AddDefaultTokenProviders();                        // Para reset de contraseña
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders()
+.AddErrorDescriber<SpanishIdentityErrorDescriber>();
+
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppUserClaimsPrincipalFactory>();
 
 // Cookie de autenticación: redirige a /Account/Login si no está autenticado
 builder.Services.ConfigureApplicationCookie(options =>

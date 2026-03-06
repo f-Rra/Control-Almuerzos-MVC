@@ -21,5 +21,9 @@ namespace SCA_MVC.Models
 
         /// <summary>Nombre completo calculado (no mapeado a columna).</summary>
         public string NombreCompleto => $"{Nombre} {Apellido}".Trim();
+
+        /// <summary>Nombre de usuario para mostrar en el sistema (ej: southex.operador).</summary>
+        [PersonalData]
+        public string NombreUsuario { get; set; } = string.Empty;
     }
 }

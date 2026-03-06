@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login Cards &mdash; SCA</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ── VARIABLES ── */
+:root {
+  --p: #FFC107;
+  --pg: rgba(255,193,7,.35);
+  --bg: #FDF6E3;
+  --gb: rgba(0,0,0,.05);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Outfit', sans-serif; }
+
+/* ── NAVBAR ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: rgba(255,255,255,.95); backdrop-filter: blur(14px);
+  border-bottom: 2px solid var(--p);
+  display: flex; align-items: center; gap: 3px; padding: 8px 12px; flex-wrap: wrap;
+}
+.nav a {
+  padding: 5px 11px; border-radius: 8px; font-weight: 700;
+  font-size: .75rem; text-decoration: none; color: #999; transition: .2s;
+}
+.nav a:hover, .nav a.on { background: var(--p); color: #1A1A1A; }
+.nav span { margin-left: auto; font-size: .7rem; color: #ccc; }
+
+/* ── SECCIONES ── */
+.ds {
+  display: none; min-height: 100vh; background: var(--bg);
+  align-items: center; justify-content: center;
+  padding-top: 52px; position: relative;
+}
+.ds.on { display: flex; }
+
+/* ── ORBS ── */
+.orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.o1 {
+  position: absolute; width: 450px; height: 450px; border-radius: 50%;
+  background: rgba(255,193,7,.15); top: -8%; left: -4%;
+  filter: blur(90px); animation: drift 15s infinite ease-in-out;
+}
+.o2 {
+  position: absolute; width: 350px; height: 350px; border-radius: 50%;
+  background: rgba(255,255,255,.8); bottom: 8%; right: 6%;
+  filter: blur(90px); animation: drift 15s 7s infinite ease-in-out;
+}
+@keyframes drift { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-22px); } }
+
+/* ── WRAPPER ── */
+.cw { position: relative; z-index: 1; width: 100%; max-width: 420px; margin: 0 auto; padding: 0 16px; }
+
+/* ── FORM BASE (compartido) ── */
+.ff { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
+.fl { font-size: .82rem; font-weight: 600; color: #666; display: flex; align-items: center; gap: 5px; }
+.fl i { color: var(--p); }
+.fi {
+  padding: 11px 14px; border-radius: 12px;
+  border: 1.5px solid rgba(0,0,0,.09);
+  background: rgba(255,255,255,.7);
+  font-family: 'Outfit', sans-serif; font-size: .93rem;
+  color: #1A1A1A; outline: none; width: 100%; transition: .2s;
+}
+.fi:focus { border-color: var(--p); box-shadow: 0 0 0 3px var(--pg); }
+.fck { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: #999; margin-bottom: 20px; }
+.fck input { accent-color: var(--p); width: 15px; height: 15px; }
+.fb {
+  width: 100%; padding: 13px; border-radius: 14px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--p), #FFD54F);
+  color: #1A1A1A; font-family: 'Outfit', sans-serif; font-size: .97rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 16px var(--pg); transition: .2s;
+}
+.fb:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.fft { text-align: center; margin-top: 18px; font-size: .85rem; color: #bbb; }
+.fft a { color: #B8860B; font-weight: 700; text-decoration: none; }
+.sub { font-size: .84rem; color: #bbb; margin-bottom: 26px; }
+
+/* ════════════════════════════════════════
+   D1  Inputs con solo borde inferior
+   ════════════════════════════════════════ */
+#d1 .card {
+  background: rgba(255,255,255,.65); backdrop-filter: blur(14px);
+  border: 1px solid var(--gb); border-radius: 22px; padding: 44px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.06);
+}
+#d1 .top {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 30px; padding-bottom: 22px;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+#d1 .top i { font-size: 2rem; color: var(--p); }
+#d1 .top h1 { font-size: 1.3rem; font-weight: 900; }
+#d1 .top p { font-size: .82rem; color: #bbb; margin-top: 2px; }
+#d1 .fi {
+  border: none; border-bottom: 2px solid rgba(0,0,0,.1);
+  border-radius: 0; background: transparent; padding: 10px 2px;
+}
+#d1 .fi:focus { border-bottom-color: var(--p); box-shadow: none; }
+
+/* ════════════════════════════════════════
+   D2  Franja superior ambar
+   ════════════════════════════════════════ */
+#d2 .card {
+  background: rgba(255,255,255,.7); backdrop-filter: blur(14px);
+  border: 1px solid var(--gb); border-radius: 22px; overflow: hidden;
+  box-shadow: 0 16px 50px rgba(0,0,0,.06);
+}
+#d2 .ch {
+  background: rgba(255,193,7,.1); border-bottom: 1px solid rgba(255,193,7,.2);
+  padding: 26px 36px; display: flex; align-items: center; gap: 14px;
+}
+#d2 .ch i { font-size: 1.8rem; color: var(--p); }
+#d2 .ch h1 { font-size: 1.2rem; font-weight: 900; }
+#d2 .ch p { font-size: .82rem; color: #bbb; margin-top: 2px; }
+#d2 .cb { padding: 30px 36px; }
+
+/* ════════════════════════════════════════
+   D3  Logo flotante sobre la card
+   ════════════════════════════════════════ */
+#d3 .cw { padding-top: 36px; }
+#d3 .lc {
+  width: 70px; height: 70px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--p), #FFD54F);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem; color: #1A1A1A;
+  box-shadow: 0 8px 24px var(--pg);
+  margin: 0 auto -35px; position: relative; z-index: 2;
+}
+#d3 .card {
+  background: rgba(255,255,255,.7); backdrop-filter: blur(14px);
+  border: 1px solid var(--gb); border-radius: 22px;
+  padding: 52px 44px 40px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.06);
+}
+#d3 h1 { font-size: 1.4rem; font-weight: 900; text-align: center; margin-bottom: 4px; }
+#d3 .sub { text-align: center; }
+
+/* ════════════════════════════════════════
+   D4  Inputs tipo pill con icono ambar
+   ════════════════════════════════════════ */
+#d4 .card {
+  background: rgba(255,255,255,.65); backdrop-filter: blur(14px);
+  border: 1px solid var(--gb); border-radius: 28px; padding: 44px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.06);
+}
+#d4 .top { text-align: center; margin-bottom: 28px; }
+#d4 .top i { font-size: 2.2rem; color: var(--p); display: block; margin-bottom: 8px; }
+#d4 .top h1 { font-size: 1.4rem; font-weight: 900; }
+#d4 .top .sub { margin-top: 4px; text-align: center; }
+#d4 .fw { position: relative; }
+#d4 .fico {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,193,7,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; color: var(--p); pointer-events: none;
+}
+#d4 .fi { border-radius: 50px; padding-left: 50px; }
+#d4 .fb { border-radius: 50px; }
+
+/* ════════════════════════════════════════
+   D5  Borde izquierdo ambar (estilo sidebar)
+   ════════════════════════════════════════ */
+#d5 .card {
+  background: #fff;
+  border-left: 4px solid var(--p);
+  border-radius: 0 18px 18px 0; padding: 44px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+}
+#d5 .eyebrow {
+  font-size: .7rem; font-weight: 700; color: #ccc;
+  text-transform: uppercase; letter-spacing: 1px;
+  display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+}
+#d5 .eyebrow i { color: var(--p); }
+#d5 h1 { font-size: 1.4rem; font-weight: 900; }
+#d5 .sub { margin-top: 3px; }
+#d5 .fi { background: #F9F5ED; border-color: transparent; }
+#d5 .fi:focus { background: #fff; border-color: var(--p); }
+
+/* ════════════════════════════════════════
+   D6  Chip / badge flotando encima del card
+   ════════════════════════════════════════ */
+#d6 .cw { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+#d6 .chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,193,7,.14); border: 1px solid rgba(255,193,7,.3);
+  border-radius: 50px; padding: 7px 20px;
+  font-size: .8rem; font-weight: 700; color: #8a6400;
+}
+#d6 .card {
+  background: rgba(255,255,255,.65); backdrop-filter: blur(14px);
+  border: 1px solid var(--gb); border-radius: 22px; padding: 40px 44px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.06); width: 100%;
+}
+#d6 h1 { font-size: 1.4rem; font-weight: 900; margin-bottom: 4px; }
+
+/* ════════════════════════════════════════
+   D7  Dos tonos: ambar arriba, blanco abajo
+   ════════════════════════════════════════ */
+#d7 .card {
+  background: rgba(255,255,255,.7); backdrop-filter: blur(14px);
+  border: 1px solid var(--gb); border-radius: 22px; overflow: hidden;
+  box-shadow: 0 16px 50px rgba(0,0,0,.06);
+}
+#d7 .ct {
+  background: linear-gradient(150deg, rgba(255,193,7,.16), rgba(255,213,79,.06));
+  border-bottom: 1px solid rgba(255,193,7,.16);
+  padding: 34px; text-align: center;
+}
+#d7 .ct i { font-size: 2.3rem; color: var(--p); display: block; margin-bottom: 8px; }
+#d7 .ct h1 { font-size: 1.3rem; font-weight: 900; }
+#d7 .ct p { font-size: .83rem; color: #aaa; margin-top: 5px; }
+#d7 .cf { padding: 30px 34px; }
+
+/* ════════════════════════════════════════
+   D8  Tipografia grande / editorial
+   ════════════════════════════════════════ */
+#d8 .card {
+  background: #fff; border-radius: 18px; padding: 48px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.1);
+}
+#d8 h1 { font-size: 2.5rem; font-weight: 900; line-height: 1.05; margin-bottom: 10px; }
+#d8 h1 em { color: var(--p); font-style: normal; }
+#d8 .sub { color: #ccc; margin-bottom: 32px; }
+#d8 .fl { font-size: .68rem; text-transform: uppercase; letter-spacing: 1.2px; color: #bbb; font-weight: 700; }
+#d8 .fi { background: #F7F7F5; border-color: transparent; border-radius: 10px; }
+#d8 .fi:focus { background: #fff; border-color: var(--p); }
+
+/* ════════════════════════════════════════
+   D9  Icono integrado dentro del input
+   ════════════════════════════════════════ */
+#d9 .card {
+  background: rgba(255,255,255,.65); backdrop-filter: blur(14px);
+  border: 1px solid var(--gb); border-radius: 22px; padding: 44px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.06);
+}
+#d9 h1 { font-size: 1.45rem; font-weight: 900; margin-bottom: 4px; }
+#d9 .fiw {
+  display: flex; align-items: stretch;
+  background: rgba(255,255,255,.7);
+  border: 1.5px solid rgba(0,0,0,.09);
+  border-radius: 12px; overflow: hidden; transition: .2s;
+}
+#d9 .fiw:focus-within { border-color: var(--p); box-shadow: 0 0 0 3px var(--pg); }
+#d9 .fii {
+  width: 44px; display: flex; align-items: center; justify-content: center;
+  background: rgba(255,193,7,.1); border-right: 1px solid rgba(255,193,7,.18);
+  color: var(--p); font-size: .9rem; flex-shrink: 0;
+}
+#d9 .fiw input {
+  flex: 1; border: none; background: transparent;
+  padding: 11px 14px; font-family: 'Outfit', sans-serif;
+  font-size: .93rem; color: #1A1A1A; outline: none;
+}
+
+/* ════════════════════════════════════════
+   D10  Card oscura sobre fondo crema
+   ════════════════════════════════════════ */
+#d10 .card {
+  background: #1C1C1C;
+  border: 1px solid rgba(255,193,7,.14);
+  border-radius: 24px; padding: 48px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.04);
+}
+#d10 h1 { font-size: 1.45rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+#d10 .sub { color: rgba(255,255,255,.28); }
+#d10 .fl { color: rgba(255,255,255,.38); }
+#d10 .fi {
+  background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.09); color: #fff;
+}
+#d10 .fi::placeholder { color: rgba(255,255,255,.2); }
+#d10 .fi:focus { border-color: rgba(255,193,7,.5); background: rgba(255,193,7,.06); box-shadow: 0 0 0 3px rgba(255,193,7,.15); }
+#d10 .fck { color: rgba(255,255,255,.28); }
+#d10 .fft { color: rgba(255,255,255,.22); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="on" onclick="show(1,this);return false" href="#">1 &mdash; Underline</a>
+  <a onclick="show(2,this);return false" href="#">2 &mdash; Franja</a>
+  <a onclick="show(3,this);return false" href="#">3 &mdash; Logo float</a>
+  <a onclick="show(4,this);return false" href="#">4 &mdash; Pill</a>
+  <a onclick="show(5,this);return false" href="#">5 &mdash; Left bar</a>
+  <a onclick="show(6,this);return false" href="#">6 &mdash; Badge</a>
+  <a onclick="show(7,this);return false" href="#">7 &mdash; Dos tonos</a>
+  <a onclick="show(8,this);return false" href="#">8 &mdash; Bold</a>
+  <a onclick="show(9,this);return false" href="#">9 &mdash; Icon field</a>
+  <a onclick="show(10,this);return false" href="#">10 &mdash; Dark card</a>
+  <span>login-disenos.html</span>
+</nav>
+
+<div class="orbs"><div class="o1"></div><div class="o2"></div></div>
+
+<!-- ════ D1 — Underline inputs ════ -->
+<section id="d1" class="ds on">
+<div class="cw">
+  <div class="card">
+    <div class="top">
+      <i class="bi bi-cup-hot-fill"></i>
+      <div>
+        <h1>Iniciar sesi&oacute;n</h1>
+        <p>Ingres&aacute; tus credenciales para continuar</p>
+      </div>
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+      <input class="fi" type="email" placeholder="usuario@empresa.com">
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+      <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D2 — Franja ambar superior ════ -->
+<section id="d2" class="ds">
+<div class="cw">
+  <div class="card">
+    <div class="ch">
+      <i class="bi bi-cup-hot-fill"></i>
+      <div>
+        <h1>Control de Almuerzos</h1>
+        <p>Ingres&aacute; tus credenciales para continuar</p>
+      </div>
+    </div>
+    <div class="cb">
+      <div class="ff">
+        <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+        <input class="fi" type="email" placeholder="usuario@empresa.com">
+      </div>
+      <div class="ff">
+        <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+        <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+      </div>
+      <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+      <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+      <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D3 — Logo flotante ════ -->
+<section id="d3" class="ds">
+<div class="cw">
+  <div class="lc"><i class="bi bi-cup-hot-fill"></i></div>
+  <div class="card">
+    <h1>Iniciar sesi&oacute;n</h1>
+    <p class="sub">Ingres&aacute; tus credenciales para continuar</p>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+      <input class="fi" type="email" placeholder="usuario@empresa.com">
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+      <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D4 — Pill inputs ════ -->
+<section id="d4" class="ds">
+<div class="cw">
+  <div class="card">
+    <div class="top">
+      <i class="bi bi-cup-hot-fill"></i>
+      <h1>Iniciar sesi&oacute;n</h1>
+      <p class="sub">Ingres&aacute; tus credenciales para continuar</p>
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+      <div class="fw">
+        <div class="fico"><i class="bi bi-envelope"></i></div>
+        <input class="fi" type="email" placeholder="usuario@empresa.com">
+      </div>
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+      <div class="fw">
+        <div class="fico"><i class="bi bi-lock"></i></div>
+        <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+      </div>
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D5 — Left bar (estilo sidebar) ════ -->
+<section id="d5" class="ds">
+<div class="cw">
+  <div class="card">
+    <div class="eyebrow"><i class="bi bi-cup-hot-fill"></i> Control de Almuerzos</div>
+    <h1>Iniciar sesi&oacute;n</h1>
+    <p class="sub">Ingres&aacute; tus credenciales para continuar</p>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+      <input class="fi" type="email" placeholder="usuario@empresa.com">
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+      <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D6 — Chip badge sobre la card ════ -->
+<section id="d6" class="ds">
+<div class="cw">
+  <div class="chip"><i class="bi bi-shield-lock"></i> Sistema de Control de Almuerzos</div>
+  <div class="card">
+    <h1>Iniciar sesi&oacute;n</h1>
+    <p class="sub">Ingres&aacute; tus credenciales para continuar</p>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+      <input class="fi" type="email" placeholder="usuario@empresa.com">
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+      <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D7 — Dos tonos ════ -->
+<section id="d7" class="ds">
+<div class="cw">
+  <div class="card">
+    <div class="ct">
+      <i class="bi bi-cup-hot-fill"></i>
+      <h1>Control de Almuerzos</h1>
+      <p>Ingres&aacute; tus credenciales para continuar</p>
+    </div>
+    <div class="cf">
+      <div class="ff">
+        <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+        <input class="fi" type="email" placeholder="usuario@empresa.com">
+      </div>
+      <div class="ff">
+        <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+        <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+      </div>
+      <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+      <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+      <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D8 — Tipografia bold / editorial ════ -->
+<section id="d8" class="ds">
+<div class="cw">
+  <div class="card">
+    <h1>Inici&aacute;<br><em>sesi&oacute;n</em>.</h1>
+    <p class="sub">Ingres&aacute; tus credenciales para continuar</p>
+    <div class="ff">
+      <label class="fl">Email</label>
+      <input class="fi" type="email" placeholder="usuario@empresa.com">
+    </div>
+    <div class="ff">
+      <label class="fl">Contrase&ntilde;a</label>
+      <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D9 — Icono integrado en el input ════ -->
+<section id="d9" class="ds">
+<div class="cw">
+  <div class="card">
+    <h1>Iniciar sesi&oacute;n</h1>
+    <p class="sub">Ingres&aacute; tus credenciales para continuar</p>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+      <div class="fiw">
+        <div class="fii"><i class="bi bi-envelope"></i></div>
+        <input type="email" placeholder="usuario@empresa.com">
+      </div>
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+      <div class="fiw">
+        <div class="fii"><i class="bi bi-lock"></i></div>
+        <input type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+      </div>
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<!-- ════ D10 — Card oscura sobre fondo crema ════ -->
+<section id="d10" class="ds">
+<div class="cw">
+  <div class="card">
+    <h1>Iniciar sesi&oacute;n</h1>
+    <p class="sub">Ingres&aacute; tus credenciales para continuar</p>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-envelope"></i> Email</label>
+      <input class="fi" type="email" placeholder="usuario@empresa.com">
+    </div>
+    <div class="ff">
+      <label class="fl"><i class="bi bi-lock"></i> Contrase&ntilde;a</label>
+      <input class="fi" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+    </div>
+    <div class="fck"><input type="checkbox"><span>Recordarme</span></div>
+    <button class="fb"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+    <div class="fft">&iquest;No ten&eacute;s cuenta? <a href="#">Registrate</a></div>
+  </div>
+</div>
+</section>
+
+<script>
+function show(n, el) {
+  document.querySelectorAll('.ds').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('on'));
+  document.getElementById('d' + n).classList.add('on');
+  el.classList.add('on');
+}
+</script>
+</body>
+</html>
