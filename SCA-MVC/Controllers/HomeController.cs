@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SCA_MVC.Services;
 using SCA_MVC.ViewModels;
@@ -10,6 +11,7 @@ using SCA_MVC.Models;
 
 namespace SCA_MVC.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

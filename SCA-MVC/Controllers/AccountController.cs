@@ -31,7 +31,11 @@ namespace SCA_MVC.Controllers
         public IActionResult Login(string? returnUrl = null)
         {
             if (_signInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("Admin"))
+                    return RedirectToAction("Index", "Admin");
                 return RedirectToAction("Index", "Home");
+            }
 
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -59,6 +63,10 @@ namespace SCA_MVC.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 var nombre = user?.NombreUsuario ?? model.Email;
                 TempData.MostrarExito($"Bienvenido, {nombre}.", "¡Hola!");
+
+                if (user != null && await _userManager.IsInRoleAsync(user, "Admin"))
+                    return RedirectToAction("Index", "Admin");
+
                 return RedirectToLocal(returnUrl);
             }
 
@@ -114,6 +122,8 @@ namespace SCA_MVC.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                var nombre = user.NombreUsuario.Length > 0 ? user.NombreUsuario : user.Email ?? "usuario";
+                TempData.MostrarExito($"Bienvenido, {nombre}. Tu cuenta ha sido creada exitosamente.", "¡Registro exitoso!");
                 return RedirectToAction("Index", "Home");
             }
 

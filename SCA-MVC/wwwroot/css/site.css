@@ -223,6 +223,29 @@ body {
     flex: 1;
 }
 
+/* Separador visual entre secciones del sidebar (ej. operacional / admin) */
+.side-separator {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 8px 20px 12px;
+    border-radius: 2px;
+}
+
+/* Íconos Bootstrap Icons dentro del nav lateral */
+.mi .ico.ico-bi {
+    font-size: 1.45rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.4s;
+}
+
+.mi.active .ico.ico-bi,
+.mi:hover .ico.ico-bi {
+    color: #a07800;
+}
+
 .mi {
     display: flex;
     align-items: center;
@@ -3133,6 +3156,22 @@ body {
     flex-direction: column;
     gap: 12px;
     margin-top: 28px;
+    width: 100%;
+    align-items: stretch;
+}
+
+.auth-denied-actions form {
+    width: 100%;
+}
+
+.auth-denied-actions .auth-btn,
+.auth-denied-actions button.auth-btn-outline {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
 }
 
 /* logout como button */

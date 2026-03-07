@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SCA_MVC.Models;
 using SCA_MVC.Services;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SCA_MVC.Controllers
 {
+    [Authorize]
     public class RegistroController : Controller
     {
         #region Atributos y Constructor

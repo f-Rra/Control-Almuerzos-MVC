@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SCA_MVC.Helpers;
 using SCA_MVC.Models;
@@ -6,6 +7,7 @@ using SCA_MVC.ViewModels;
 
 namespace SCA_MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EmpleadoController : Controller
     {
         #region Dependencias (Inyección de dependencias)

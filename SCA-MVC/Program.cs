@@ -66,6 +66,42 @@ QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var app = builder.Build();
 
+// ── Seeding de roles y usuario admin por defecto ─────────────────────────────
+// Se ejecuta al arrancar la aplicación. Si los roles o el admin ya existen,
+// no se vuelven a crear (operación idempotente).
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    // Crear roles si no existen
+    string[] roles = ["Admin", "Usuario"];
+    foreach (var rol in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(rol))
+            await roleManager.CreateAsync(new IdentityRole(rol));
+    }
+
+    // Crear usuario administrador por defecto si no existe
+    const string adminEmail    = "admin@sca.com";
+    const string adminPassword = "Admin123";
+
+    if (await userManager.FindByEmailAsync(adminEmail) is null)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName       = adminEmail,
+            Email          = adminEmail,
+            NombreUsuario  = "Administrador",
+            EmailConfirmed = true
+        };
+
+        var resultado = await userManager.CreateAsync(adminUser, adminPassword);
+        if (resultado.Succeeded)
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

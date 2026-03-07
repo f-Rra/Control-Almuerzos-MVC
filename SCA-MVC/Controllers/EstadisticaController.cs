@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SCA_MVC.Services;
 using System.Threading.Tasks;
 
 namespace SCA_MVC.Controllers
 {
+    [Authorize]
     public class EstadisticaController : Controller
     {
         private readonly IEstadisticasNegocio _estadisticasNegocio;

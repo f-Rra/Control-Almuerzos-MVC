@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SCA_MVC.Helpers;
 using SCA_MVC.Models;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SCA_MVC.Controllers
 {
+    [Authorize]
     public class ServicioController : Controller
     {
         private readonly IServicioNegocio _servicioNegocio;

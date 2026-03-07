@@ -26,31 +26,59 @@
                 var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
             }
             <nav>
-                <a asp-controller="Home" asp-action="Index" class="mi @(controller == "Home" ? "active" : "")" data-tip="Inicio">
-                    <div class="bar"></div>
-                    <div class="ico"><img src="~/images/home.png" /></div>
-                    <span class="lbl">INICIO</span>
-                </a>
-                <a asp-controller="Servicio" asp-action="Index" class="mi @(controller == "Servicio" ? "active" : "")" data-tip="Servicios">
-                    <div class="bar"></div>
-                    <div class="ico"><img src="~/images/servicio.png" /></div>
-                    <span class="lbl">SERVICIOS</span>
-                </a>
-                <a asp-controller="Registro" asp-action="Index" class="mi @(controller == "Registro" ? "active" : "")" data-tip="Registro Manual">
-                    <div class="bar"></div>
-                    <div class="ico"><img src="~/images/registro.png" /></div>
-                    <span class="lbl">REGISTRO MANUAL</span>
-                </a>
-                <a asp-controller="Reporte" asp-action="Index" class="mi @(controller == "Reporte" ? "active" : "")" data-tip="Reportes">
-                    <div class="bar"></div>
-                    <div class="ico"><img src="~/images/Reporte.png" /></div>
-                    <span class="lbl">REPORTES</span>
-                </a>
-                <a asp-controller="Estadistica" asp-action="Index" class="mi @(controller == "Estadistica" ? "active" : "")" data-tip="Estadísticas">
-                    <div class="bar"></div>
-                    <div class="ico"><img src="~/images/estadisticas.png" /></div>
-                    <span class="lbl">ESTADÍSTICAS</span>
-                </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <!-- Nav exclusiva del Administrador -->
+                    <a asp-controller="Admin" asp-action="Index" class="mi @(controller == "Admin" ? "active" : "")" data-tip="Inicio">
+                        <div class="bar"></div>
+                        <div class="ico"><img src="~/images/home.png" /></div>
+                        <span class="lbl">INICIO</span>
+                    </a>
+                    <a asp-controller="Empresa" asp-action="Index" class="mi @(controller == "Empresa" ? "active" : "")" data-tip="Empresas">
+                        <div class="bar"></div>
+                        <div class="ico ico-bi"><i class="bi bi-building"></i></div>
+                        <span class="lbl">EMPRESAS</span>
+                    </a>
+                    <a asp-controller="Empleado" asp-action="Index" class="mi @(controller == "Empleado" ? "active" : "")" data-tip="Empleados">
+                        <div class="bar"></div>
+                        <div class="ico ico-bi"><i class="bi bi-people"></i></div>
+                        <span class="lbl">EMPLEADOS</span>
+                    </a>
+                    <a asp-controller="Estadistica" asp-action="Index" class="mi @(controller == "Estadistica" ? "active" : "")" data-tip="Estadísticas">
+                        <div class="bar"></div>
+                        <div class="ico"><img src="~/images/estadisticas.png" /></div>
+                        <span class="lbl">ESTADÍSTICAS</span>
+                    </a>
+                }
+                else
+                {
+                    <!-- Nav operacional para usuarios regulares -->
+                    <a asp-controller="Home" asp-action="Index" class="mi @(controller == "Home" ? "active" : "")" data-tip="Inicio">
+                        <div class="bar"></div>
+                        <div class="ico"><img src="~/images/home.png" /></div>
+                        <span class="lbl">INICIO</span>
+                    </a>
+                    <a asp-controller="Servicio" asp-action="Index" class="mi @(controller == "Servicio" ? "active" : "")" data-tip="Servicios">
+                        <div class="bar"></div>
+                        <div class="ico"><img src="~/images/servicio.png" /></div>
+                        <span class="lbl">SERVICIOS</span>
+                    </a>
+                    <a asp-controller="Registro" asp-action="Index" class="mi @(controller == "Registro" ? "active" : "")" data-tip="Registro Manual">
+                        <div class="bar"></div>
+                        <div class="ico"><img src="~/images/registro.png" /></div>
+                        <span class="lbl">REGISTRO MANUAL</span>
+                    </a>
+                    <a asp-controller="Reporte" asp-action="Index" class="mi @(controller == "Reporte" ? "active" : "")" data-tip="Reportes">
+                        <div class="bar"></div>
+                        <div class="ico"><img src="~/images/Reporte.png" /></div>
+                        <span class="lbl">REPORTES</span>
+                    </a>
+                    <a asp-controller="Estadistica" asp-action="Index" class="mi @(controller == "Estadistica" ? "active" : "")" data-tip="Estadísticas">
+                        <div class="bar"></div>
+                        <div class="ico"><img src="~/images/estadisticas.png" /></div>
+                        <span class="lbl">ESTADÍSTICAS</span>
+                    </a>
+                }
             </nav>
         </div>
     </aside>

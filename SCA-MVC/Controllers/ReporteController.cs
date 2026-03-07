@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SCA_MVC.Services;
 using SCA_MVC.ViewModels;
@@ -10,6 +11,7 @@ using QuestPDF.Infrastructure;
 
 namespace SCA_MVC.Controllers
 {
+    [Authorize]
     public class ReporteController : Controller
     {
         private readonly IReporteNegocio _reporteNegocio;
