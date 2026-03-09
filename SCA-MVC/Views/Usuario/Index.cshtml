@@ -1,0 +1,252 @@
+@model SCA_MVC.ViewModels.UsuarioViewModel
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="emp-wrap">
+
+<!-- ═══ FORM DE FILTRO (hidden, para submit por GET) ═══ -->
+<form method="get" asp-action="Index" id="filtro-form">
+    <input type="hidden" name="idUsuario" value="@Model.UsuarioSeleccionadoId" />
+</form>
+
+<!-- ═══ LAYOUT 2 COLUMNAS ═══ -->
+<div class="emp-grid">
+
+    <!-- ═══ COLUMNA IZQUIERDA — LISTA DE USUARIOS ═══ -->
+    <div class="emp-list-col">
+        <div class="panel registro-section">
+            <div class="registro-inner">
+                <div class="emp-ph">
+                    <h2><i class="bi bi-people-fill"></i> Lista de Usuarios</h2>
+                    <div class="emp-ph-right">
+                        <span class="emp-ph-count"><strong>@Model.Usuarios.Count</strong> usuarios</span>
+                    </div>
+                </div>
+
+                <div class="emp-filter-row">
+                    <div class="rm-search">
+                        <i class="bi bi-search"></i>
+                        <input type="text"
+                               id="input-filtro"
+                               placeholder="Buscar por nombre, usuario o email..."
+                               value="@Model.Filtro"
+                               form="filtro-form"
+                               name="filtro" />
+                    </div>
+                    <a asp-action="Index" asp-route-nuevo="true" class="btn-nueva-emp text-decoration-none">
+                        <i class="bi bi-plus-circle"></i> Nuevo Usuario
+                    </a>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="reg-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40px">#</th>
+                                <th>Usuario</th>
+                                <th>Nombre Completo</th>
+                                <th style="width:100px">Rol</th>
+                                <th style="width:100px">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.Usuarios.Any())
+                            {
+                                <tr>
+                                    <td colspan="5" style="text-align:center; padding: 2rem; opacity:.6;">
+                                        <i class="bi bi-inbox" style="font-size:1.5rem"></i><br />
+                                        No se encontraron usuarios@(Model.Filtro != null ? $" para \"{Model.Filtro}\"" : "")
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                int num = 1;
+                                foreach (var usuario in Model.Usuarios)
+                                {
+                                    var selectedClass = usuario.Id == Model.UsuarioSeleccionadoId ? "emp-row-selected" : "";
+                                    <tr class="@selectedClass emp-row">
+                                        <td class="td-num">
+                                            <a asp-action="Index"
+                                               asp-route-idUsuario="@usuario.Id"
+                                               asp-route-filtro="@Model.Filtro"
+                                               class="text-decoration-none text-reset d-block">@num</a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index"
+                                               asp-route-idUsuario="@usuario.Id"
+                                               asp-route-filtro="@Model.Filtro"
+                                               class="text-decoration-none text-reset d-block">
+                                                <div class="td-emp-cell">
+                                                    <div class="td-emp-ico"><i class="bi bi-person-circle"></i></div>
+                                                    <span class="td-empleado">@usuario.NombreUsuario</span>
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index"
+                                               asp-route-idUsuario="@usuario.Id"
+                                               asp-route-filtro="@Model.Filtro"
+                                               class="text-decoration-none text-reset d-block">
+                                                @usuario.NombreCompleto
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index"
+                                               asp-route-idUsuario="@usuario.Id"
+                                               asp-route-filtro="@Model.Filtro"
+                                               class="text-decoration-none text-reset d-block">
+                                                <span class="usr-badge @(usuario.Rol == "Admin" ? "usr-admin" : "usr-usuario")">
+                                                    @usuario.Rol
+                                                </span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Index"
+                                               asp-route-idUsuario="@usuario.Id"
+                                               asp-route-filtro="@Model.Filtro"
+                                               class="text-decoration-none text-reset d-block">
+                                                <span class="emp-badge @(usuario.Activo ? "activo" : "inactivo")">
+                                                    @(usuario.Activo ? "Activo" : "Inactivo")
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    num++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ COLUMNA DERECHA — FORMULARIO ALTA / EDICIÓN ═══ -->
+    <div class="emp-detail-col">
+        <div class="panel">
+            <div class="config-row">
+                <div class="cfg-title">
+                    <i class="bi bi-person-gear"></i>
+                    @(string.IsNullOrEmpty(Model.UsuarioActual.Id) ? "Nuevo Usuario" : "Editar Usuario")
+                </div>
+            </div>
+
+            <div class="emp-form">
+
+                @* Form oculto para desactivar / reactivar *@
+                <form asp-action="Delete" method="post" id="delete-usuario-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idUsuario" value="@Model.UsuarioActual.Id" />
+                </form>
+
+                @* Formulario unificado Alta / Edición *@
+                <form asp-action="@(string.IsNullOrEmpty(Model.UsuarioActual.Id) ? "Create" : "Edit")"
+                      method="post"
+                      id="usuario-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="UsuarioActual.Id" />
+
+                    <div class="emp-field">
+                        <label asp-for="UsuarioActual.NombreUsuario"></label>
+                        <input asp-for="UsuarioActual.NombreUsuario" placeholder="ej: operador.turno1" />
+                        <span asp-validation-for="UsuarioActual.NombreUsuario" class="text-danger"></span>
+                    </div>
+
+                    <div class="emp-field-row">
+                        <div class="emp-field">
+                            <label asp-for="UsuarioActual.Nombre"></label>
+                            <input asp-for="UsuarioActual.Nombre" placeholder="Nombre" />
+                            <span asp-validation-for="UsuarioActual.Nombre" class="text-danger"></span>
+                        </div>
+                        <div class="emp-field">
+                            <label asp-for="UsuarioActual.Apellido"></label>
+                            <input asp-for="UsuarioActual.Apellido" placeholder="Apellido" />
+                            <span asp-validation-for="UsuarioActual.Apellido" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="emp-field">
+                        <label asp-for="UsuarioActual.Email"></label>
+                        <input asp-for="UsuarioActual.Email" type="email" placeholder="correo@empresa.com" />
+                        <span asp-validation-for="UsuarioActual.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="emp-field">
+                        <label asp-for="UsuarioActual.Rol"></label>
+                        <select asp-for="UsuarioActual.Rol"
+                                asp-items="@(new SelectList(Model.RolesDisponibles))">
+                            <option value="">— Seleccionar rol —</option>
+                        </select>
+                        <span asp-validation-for="UsuarioActual.Rol" class="text-danger"></span>
+                    </div>
+
+                    <div class="emp-field">
+                        <label asp-for="UsuarioActual.NuevaContrasena">
+                            @(string.IsNullOrEmpty(Model.UsuarioActual.Id) ? "Contraseña" : "Nueva Contraseña (dejar vacío para no cambiar)")
+                        </label>
+                        <input asp-for="UsuarioActual.NuevaContrasena" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+                        <span asp-validation-for="UsuarioActual.NuevaContrasena" class="text-danger"></span>
+                    </div>
+
+                    <div class="emp-actions">
+                        <button type="submit" class="btn-srv btn-iniciar">
+                            <i class="bi bi-check-lg"></i> Guardar
+                        </button>
+                        <a asp-action="Index"
+                           asp-route-filtro="@Model.Filtro"
+                           class="btn-emp-sec">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </a>
+                        @{
+                            bool usuarioActivo = Model.Usuarios
+                                .FirstOrDefault(u => u.Id == Model.UsuarioActual.Id)?.Activo ?? true;
+                        }
+                        <button type="button"
+                                id="btn-desactivar-usuario"
+                                class="@(usuarioActivo ? "btn-emp-danger" : "btn-emp-reactivar")"
+                                @(string.IsNullOrEmpty(Model.UsuarioActual.Id) ? "disabled" : null)>
+                            <i class="bi @(usuarioActivo ? "bi-person-slash" : "bi-person-check")"></i>
+                            @(usuarioActivo ? "Desactivar" : "Reactivar")
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div> <!-- /emp-grid -->
+
+</div> <!-- /emp-wrap -->
+
+@section Scripts {
+    <script>
+        // Búsqueda en tiempo real con debounce (300ms) — igual que en Empleados
+        (function () {
+            let timer;
+            const input = document.getElementById('input-filtro');
+            if (!input) return;
+            input.addEventListener('input', function () {
+                clearTimeout(timer);
+                timer = setTimeout(() => document.getElementById('filtro-form').submit(), 300);
+            });
+        })();
+
+        // Botón desactivar / reactivar — usa showConfirm del sitio
+        (function () {
+            const btn  = document.getElementById('btn-desactivar-usuario');
+            const form = document.getElementById('delete-usuario-form');
+            if (!btn || !form) return;
+            btn.addEventListener('click', function () {
+                const esActivo = this.classList.contains('btn-emp-danger');
+                const titulo  = esActivo ? 'Confirmar desactivación' : 'Confirmar reactivación';
+                const mensaje = esActivo
+                    ? '¿Estás seguro que deseas desactivar este usuario?'
+                    : '¿Estás seguro que deseas reactivar este usuario?';
+                showConfirm(mensaje, titulo, () => form.submit());
+            });
+        })();
+    </script>
+}

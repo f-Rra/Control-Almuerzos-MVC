@@ -690,25 +690,29 @@ feat: configurar roles y autorización por rol
 
 ---
 
-### Commit 29 — Gestión de usuarios
+### ✅ Commit 29 — Gestión de usuarios
 
-**Descripción:** Crear `UsuarioController` (solo Admin) para gestión de usuarios del sistema: listar usuarios con sus roles, crear nuevo usuario asignando rol, editar usuario (cambiar rol, resetear contraseña), desactivar usuario. Crear vista `Views/Usuario/Index.cshtml` con tabla de usuarios y formulario de edición. Agregar enlace en el sidebar (solo visible para Admin). Agregar entrada de navegación en el layout con icono.
+**Descripción:** Crear `UsuarioController` (solo Admin) para gestión de usuarios del sistema: listar usuarios con sus roles, crear nuevo usuario asignando rol, editar usuario (cambiar rol, resetear contraseña), desactivar/reactivar usuario via `LockoutEnd`. Vista `Views/Usuario/Index.cshtml` con el mismo diseño de dos columnas que Empleados y Empresas. Badges de rol en dorado (Admin) y azul (Usuario). Enlace USUARIOS con icono `bi-shield-lock` en el sidebar del Admin.
 
 **Archivos:**
-- `Controllers/UsuarioController.cs` (crear)
-- `Views/Usuario/Index.cshtml` (crear)
-- `ViewModels/UsuarioViewModel.cs` (crear)
-- `Views/Shared/_Layout.cshtml` (agregar ítem en sidebar para Admin)
-- `wwwroot/css/site.css` (estilos de la vista)
+- ✅ `Controllers/UsuarioController.cs` (creado) — Index, Create, Edit, DeleteConfirmed (toggle), RebuildAndReturn
+- ✅ `Views/Usuario/Index.cshtml` (creado) — 2 columnas: tabla + formulario, búsqueda en tiempo real
+- ✅ `ViewModels/UsuarioViewModel.cs` (creado) — UsuarioListItem, UsuarioFormViewModel, UsuarioViewModel
+- ✅ `Views/Shared/_Layout.cshtml` — USUARIOS con bi-shield-lock en nav Admin
+- ✅ `wwwroot/css/site.css` — .usr-badge, .usr-admin, .usr-usuario, .btn-emp-reactivar, .emp-field-row
 
 **Mensaje:**
 ```
 feat: crear gestión de usuarios del sistema
 
-- CRUD de usuarios (crear, editar rol, resetear contraseña, desactivar)
-- Vista con tabla de usuarios y formulario
-- Solo accesible para rol Admin
-- Nuevo ítem en sidebar para administración de usuarios
+- UsuarioController con Index, Create, Edit, Delete (toggle activar/desactivar)
+- ViewModel con UsuarioListItem, UsuarioFormViewModel y UsuarioViewModel
+- Vista 2 columnas: tabla de usuarios + formulario lateral (mismo diseño que Empleados)
+- Badges de rol (Admin en dorado, Usuario en azul) y estado activo/inactivo
+- Reseteo de contraseña opcional en edición
+- Desactivación via LockoutEnd sin eliminar el registro
+- Enlace USUARIOS con icono bi-shield-lock en sidebar del Admin
+- Estilos: usr-badge, btn-emp-reactivar, emp-field-row
 ```
 
 ---

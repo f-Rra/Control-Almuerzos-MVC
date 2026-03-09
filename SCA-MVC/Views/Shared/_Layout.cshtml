@@ -49,6 +49,11 @@
                         <div class="ico"><img src="~/images/estadisticas.png" /></div>
                         <span class="lbl">ESTADÍSTICAS</span>
                     </a>
+                    <a asp-controller="Usuario" asp-action="Index" class="mi @(controller == "Usuario" ? "active" : "")" data-tip="Usuarios">
+                        <div class="bar"></div>
+                        <div class="ico ico-bi"><i class="bi bi-shield-lock"></i></div>
+                        <span class="lbl">USUARIOS</span>
+                    </a>
                 }
                 else
                 {
