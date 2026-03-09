@@ -1703,6 +1703,51 @@ body {
     filter: brightness(1.05);
 }
 
+.btn-email-rpt {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(33, 150, 243, 0.25);
+    background: rgba(33, 150, 243, 0.08);
+    color: #1565C0;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.25s;
+    white-space: nowrap;
+}
+
+.btn-email-rpt:hover {
+    background: rgba(33, 150, 243, 0.15);
+    transform: translateY(-2px);
+}
+
+.modal-field {
+    margin-bottom: 4px;
+}
+
+.modal-field input[type="email"] {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.8);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.modal-field input[type="email"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
 .td-fecha {
     font-weight: 600;
 }

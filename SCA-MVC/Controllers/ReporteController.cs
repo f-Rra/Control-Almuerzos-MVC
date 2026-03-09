@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SCA_MVC.Helpers;
 using SCA_MVC.Services;
 using SCA_MVC.ViewModels;
 using System;
@@ -17,12 +18,14 @@ namespace SCA_MVC.Controllers
         private readonly IReporteNegocio _reporteNegocio;
         private readonly ILugarNegocio _lugarNegocio;
         private readonly IServicioNegocio _servicioNegocio;
+        private readonly IEmailService _emailService;
 
-        public ReporteController(IReporteNegocio reporteNegocio, ILugarNegocio lugarNegocio, IServicioNegocio servicioNegocio)
+        public ReporteController(IReporteNegocio reporteNegocio, ILugarNegocio lugarNegocio, IServicioNegocio servicioNegocio, IEmailService emailService)
         {
             _reporteNegocio = reporteNegocio;
             _lugarNegocio = lugarNegocio;
             _servicioNegocio = servicioNegocio;
+            _emailService = emailService;
         }
 
         // GET: Reporte
@@ -62,8 +65,14 @@ namespace SCA_MVC.Controllers
 
         // GET: Reporte/ExportarPDF
         public async Task<IActionResult> ExportarPDF(DateTime desde, DateTime hasta, int? idLugar, string tipo = "cobertura")
-        {
-            // ── Paleta del proyecto ──────────────────────────────────
+        {            byte[] pdfBytes = await GenerarPdfBytesAsync(desde, hasta, idLugar, tipo);
+            var fileName = $"Reporte_{tipo}_{desde:yyyyMMdd}_{hasta:yyyyMMdd}.pdf";
+            return File(pdfBytes, "application/pdf", fileName);
+        }
+
+        // ── Generación de PDF (reutilizado por ExportarPDF y EnviarPorEmail) ─────────
+        private async Task<byte[]> GenerarPdfBytesAsync(DateTime desde, DateTime hasta, int? idLugar, string tipo)
+        {            // ── Paleta del proyecto ──────────────────────────────────
             var colorPrimary   = Color.FromHex("#FFC107");  // Amarillo ámbar
             var colorPrimaryDk = Color.FromHex("#E6A800");  // Ámbar oscuro para header
             var colorBgFaint   = Color.FromHex("#FFFBF0");  // Fondo cálido filas pares
@@ -404,9 +413,56 @@ namespace SCA_MVC.Controllers
                 });
             });
 
-            byte[] pdfBytes = document.GeneratePdf();
-            var fileName = $"Reporte_{tipo}_{desde:yyyyMMdd}_{hasta:yyyyMMdd}.pdf";
-            return File(pdfBytes, "application/pdf", fileName);
+            return document.GeneratePdf();
+        }
+
+        // POST: Reporte/EnviarPorEmail
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EnviarPorEmail(string email, DateTime desde, DateTime hasta, int? idLugar, string tipo = "cobertura")
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                TempData.MostrarError("Por favor ingresá un email válido.", "Error");
+                return RedirectToAction(nameof(Index), new { desde, hasta, idLugar, tipo });
+            }
+
+            try
+            {
+                byte[] pdfBytes = await GenerarPdfBytesAsync(desde, hasta, idLugar, tipo);
+
+                var tipoNombre = tipo switch
+                {
+                    "servicios" => "Lista de Servicios",
+                    "empresas"  => "Asistencias por Empresa",
+                    "dias"      => "Distribución por Día de Semana",
+                    _           => "Cobertura vs Proyección"
+                };
+
+                var fileName   = $"Reporte_{tipo}_{desde:yyyyMMdd}_{hasta:yyyyMMdd}.pdf";
+                var asunto     = $"Reporte SCA — {tipoNombre} ({desde:dd/MM/yyyy} – {hasta:dd/MM/yyyy})";
+                var cuerpoHtml = $"""
+                    <div style="font-family:Arial,sans-serif;color:#333;max-width:560px;margin:0 auto">
+                        <div style="background:#E6A800;padding:14px 20px;border-radius:10px 10px 0 0">
+                            <h2 style="margin:0;color:#fff;font-size:1.1rem">Sistema Control de Almuerzos</h2>
+                        </div>
+                        <div style="background:#fffbf0;padding:20px;border:1px solid #e0d5b0;border-top:none;border-radius:0 0 10px 10px">
+                            <p>Se adjunta el reporte <strong>{tipoNombre}</strong> del período
+                               <strong>{desde:dd/MM/yyyy}</strong> al <strong>{hasta:dd/MM/yyyy}</strong>.</p>
+                            <p style="color:#888;font-size:0.85rem">Este correo fue generado automáticamente por el SCA.</p>
+                        </div>
+                    </div>
+                    """;
+
+                await _emailService.EnviarReporteAsync(email, asunto, cuerpoHtml, pdfBytes, fileName);
+                TempData.MostrarExito($"Reporte enviado correctamente a {email}.", "¡Enviado!");
+            }
+            catch (Exception ex)
+            {
+                TempData.MostrarError($"No se pudo enviar el reporte: {ex.Message}", "Error de envío");
+            }
+
+            return RedirectToAction(nameof(Index), new { desde, hasta, idLugar, tipo });
         }
     }
 }

@@ -82,6 +82,9 @@
                    class="btn-exportar">
                     <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
                 </a>
+                <button type="button" class="btn-email-rpt" id="btn-enviar-email">
+                    <i class="bi bi-envelope"></i> Enviar por Email
+                </button>
             </div>
         </div>
 
@@ -222,3 +225,62 @@
 </div>
 
 </div> <!-- /rpt-wrap -->
+
+<!-- ═══ MODAL: Enviar por Email ═══ -->
+<div class="confirm-modal-overlay" id="email-modal-overlay" style="display:none;">
+    <div class="confirm-modal">
+        <div class="confirm-modal-icon msg-icon-info">
+            <i class="bi bi-envelope-fill"></i>
+        </div>
+        <div class="confirm-modal-title">Enviar reporte por email</div>
+        <div class="confirm-modal-message">
+            Se adjuntará el reporte PDF al correo indicado.
+        </div>
+        <form asp-action="EnviarPorEmail" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="desde"   value="@Model.FechaDesde.ToString("yyyy-MM-dd")" />
+            <input type="hidden" name="hasta"   value="@Model.FechaHasta.ToString("yyyy-MM-dd")" />
+            <input type="hidden" name="idLugar" value="@(Model.IdLugar?.ToString() ?? "")" />
+            <input type="hidden" name="tipo"    value="@Model.TipoReporte" />
+            <div class="modal-field">
+                <input type="email"
+                       name="email"
+                       id="email-input"
+                       placeholder="destinatario@ejemplo.com"
+                       required
+                       autocomplete="email" />
+            </div>
+            <div class="confirm-modal-actions" style="margin-top:20px;">
+                <button type="button" class="confirm-btn confirm-btn-secondary" id="email-modal-cancel">
+                    <i class="bi bi-x-lg"></i> Cancelar
+                </button>
+                <button type="submit" class="confirm-btn confirm-btn-primary">
+                    <i class="bi bi-send-fill"></i> Enviar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const overlay = document.getElementById('email-modal-overlay');
+            const btnOpen  = document.getElementById('btn-enviar-email');
+            const btnClose = document.getElementById('email-modal-cancel');
+
+            btnOpen?.addEventListener('click', () => {
+                overlay.style.display = 'flex';
+                document.getElementById('email-input').focus();
+            });
+
+            btnClose?.addEventListener('click', () => {
+                overlay.style.display = 'none';
+            });
+
+            overlay?.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.style.display = 'none';
+            });
+        })();
+    </script>
+}

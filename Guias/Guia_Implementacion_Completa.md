@@ -745,27 +745,31 @@ feat: agregar manejo de archivos — foto de empleado
 
 ---
 
-### Commit 31 — Envío de email (reportes por correo)
+### ✅ Commit 31 — Envío de email (reportes por correo)
 
-**Descripción:** Implementar servicio de email usando `MailKit`/`MimeKit`. Configurar SMTP en `appsettings.json` (servidor, puerto, credenciales). Crear `IEmailService` con método `EnviarReporteAsync(destinatario, asunto, cuerpoHtml, archivoPdfAdjunto)`. Agregar botón "Enviar por Email" en la vista de reportes junto al botón de exportar PDF. El reporte se genera como PDF, se adjunta al email y se envía. Implementar modal para ingresar dirección de email destino.
+**Descripción:** Implementar servicio de email usando MailKit/MimeKit. Configurar SMTP en `appsettings.json`. Crear `IEmailService` con `EnviarReporteAsync()`. Refactorizar `ExportarPDF` extrayendo la generación de PDF a `GenerarPdfBytesAsync()` para reutilización. Botón "Enviar por Email" en la vista de reportes con modal glassmorphism para ingresar el destinatario. El PDF se genera y adjunta al email en un solo flujo.
 
 **Archivos:**
-- `Services/IEmailService.cs` + `Services/EmailService.cs` (crear)
-- `SCA-MVC.csproj` (agregar MailKit)
-- `appsettings.json` (agregar sección EmailSettings)
-- `Controllers/ReporteController.cs` (agregar acción EnviarPorEmail)
-- `Views/Reporte/Index.cshtml` (agregar botón y modal de email)
-- `Program.cs` (registrar EmailService)
+- ✅ `Services/IEmailService.cs` (creado) — interfaz con `EnviarReporteAsync`
+- ✅ `Services/EmailService.cs` (creado) — MailKit SMTP + MimeKit adjunto PDF
+- ✅ `SCA-MVC.csproj` — MailKit 4.15.1 agregado
+- ✅ `appsettings.json` — sección EmailSettings (SmtpHost/Port/User/Pass/From)
+- ✅ `Program.cs` — `AddScoped<IEmailService, EmailService>()`
+- ✅ `Controllers/ReporteController.cs` — GenerarPdfBytesAsync, EnviarPorEmail, IEmailService inyectado
+- ✅ `Views/Reporte/Index.cshtml` — botón + modal de email + section Scripts
+- ✅ `wwwroot/css/site.css` — .btn-email-rpt, .modal-field
 
 **Mensaje:**
 ```
 feat: implementar envío de reportes por email
 
-- Servicio de email con MailKit/MimeKit
-- Configuración SMTP en appsettings.json
-- Generación y adjunto de PDF en email
-- Modal para ingresar destinatario
-- Botón de envío en vista de reportes
+- IEmailService + EmailService con MailKit/MimeKit (SMTP STARTTLS)
+- Configuración SMTP en appsettings.json (EmailSettings)
+- GenerarPdfBytesAsync extraído para reutilización (ExportarPDF + EnviarPorEmail)
+- Action POST EnviarPorEmail con generación y adjunto de PDF
+- Modal de email con estilo glassmorphism en vista de Reportes
+- Botón 'Enviar por Email' junto a 'Exportar PDF'
+- Estilos: btn-email-rpt, modal-field
 ```
 
 ---
