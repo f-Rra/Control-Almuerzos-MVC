@@ -45,12 +45,18 @@ namespace SCA_MVC.Controllers
                 .Where(s => s.Fecha.Date >= hace7)
                 .ToList();
 
+            // Comparativa: total por día hábil (Lun–Vie) de los últimos 7 días
+            // Los fines de semana se excluyen para que el panel ocupe menos espacio
             var diasSemana = new[] { "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom" };
             var comparativa = new List<ComparativaDia>();
 
             for (int i = 0; i < 7; i++)
             {
                 var fecha = hace7.AddDays(i);
+                // Saltar sábados (DayOfWeek.Saturday) y domingos (DayOfWeek.Sunday)
+                if (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday)
+                    continue;
+
                 var total = ultimaSemana
                     .Where(s => s.Fecha.Date == fecha.Date)
                     .Sum(s => s.TotalGeneral);

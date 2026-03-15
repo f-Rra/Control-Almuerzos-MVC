@@ -430,10 +430,12 @@ body {
 }
 
 @media (max-width: 1024px) {
+    /* ── Sidebar: modo ícono fijo (sin hover expand) ── */
     .side {
         width: 72px;
     }
 
+    /* Bloquear la expansión por hover en pantallas táctiles */
     .side:hover {
         width: 72px;
     }
@@ -446,6 +448,20 @@ body {
     .side:hover .mi .lbl {
         opacity: 0;
         max-width: 0;
+    }
+
+    .side:hover .mi {
+        gap: 0;
+        padding: 14px 10px;
+        border-radius: 18px;
+    }
+
+    .side:hover .mi .ico {
+        margin-left: 0;
+    }
+
+    .side:hover .mi .bar {
+        left: 5px;
     }
 
     .mi {
@@ -462,6 +478,7 @@ body {
         left: 5px;
     }
 
+    /* Tooltip al hacer click/tap — no depende del hover */
     .mi::after {
         content: attr(data-tip);
         position: absolute;
@@ -491,6 +508,11 @@ body {
 
     .pill {
         padding: 7px;
+    }
+
+    /* ── Content: reducir padding lateral ── */
+    .content {
+        padding: 1.5rem 1.25rem;
     }
 }
 
@@ -657,7 +679,7 @@ body {
 }
 
 .det-body {
-    padding: 16px;
+    padding: 16px 16px 28px;  /* padding-bottom generoso para que el card amarillo no quede pegado al borde inferior del panel */
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -877,6 +899,7 @@ body {
     display: flex;
     align-items: center;
     padding: 0;
+    flex-wrap: wrap;   /* evita que los controles se corten cuando el sidebar está expandido */
 }
 
 .cfg-title {
@@ -886,7 +909,7 @@ body {
     align-items: center;
     gap: 8px;
     white-space: nowrap;
-    padding: 14px 24px;
+    padding: 14px 16px;   /* reducido de 24px para ganar espacio horizontal */
     margin: 0;
 }
 
@@ -909,8 +932,8 @@ body {
 .cfg-inputs {
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding: 14px 24px;
+    gap: 10px;    /* reducido de 18px: menos espacio entre controles */
+    padding: 14px 12px;  /* reducido de 24px lateral */
 }
 
 .cfg-item {
@@ -945,8 +968,9 @@ body {
 }
 
 .cfg-item select {
-    margin-right: 6px;
-    min-width: 120px;
+    margin-right: 4px;
+    min-width: 100px;
+    max-width: 205px;   /* ancho suficiente para "Asistencias por Empresa" */
     padding-right: 28px;
 }
 
@@ -963,7 +987,7 @@ body {
 }
 
 .cfg-item input[type="date"] {
-    width: 150px;
+    width: 145px;   /* suficiente para mostrar dd/mm/aaaa completo */
 }
 
 .cfg-item select:focus,
@@ -988,10 +1012,10 @@ body {
 }
 
 .cfg-btn-wrap {
-    flex: 1;
+    flex: 1;              /* crece para llenar el espacio restante */
     display: flex;
-    justify-content: center;
-    padding: 10px 0;
+    justify-content: center;  /* centra el botón en ambos estados del sidebar */
+    padding: 10px 12px;
 }
 
 .btn-iniciar {
@@ -2544,7 +2568,7 @@ body {
    ══════════════════════════════════════════ */
 
 .adm-wrap {
-    width: 90%;
+    width: 92%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -2552,6 +2576,7 @@ body {
     flex: 1;
     min-height: 0;
     justify-content: center;
+    padding-top: 24px;  /* separa el título del navbar */
 }
 
 .adm-header {
@@ -2576,12 +2601,12 @@ body {
 
 .adm-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);  /* 4 cards en 1 fila */
+    gap: 16px;
 }
 
 .adm-card {
-    padding: 28px 24px;
+    padding: 20px 16px;  /* reducido de 28px/24px para que los 4 cards entren en una fila */
     text-align: center;
     transition: 0.3s;
     cursor: pointer;
@@ -2605,14 +2630,14 @@ body {
 }
 
 .adm-circle {
-    width: 80px;
-    height: 80px;
+    width: 64px;   /* reducido de 80px para que quepa en cards más angostos */
+    height: 64px;
     border-radius: 50%;
-    margin: 0 auto 18px;
+    margin: 0 auto 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     position: relative;
 }
 
@@ -2650,6 +2675,15 @@ body {
 
 .adm-circle.est::after {
     border-color: #4CAF50;
+}
+
+.adm-circle.usr {
+    background: rgba(33, 150, 243, 0.1);
+    color: #1565C0;
+}
+
+.adm-circle.usr::after {
+    border-color: #1565C0;
 }
 
 .adm-card-num {
@@ -3300,3 +3334,4 @@ button.logout {
     padding: 0;
     font-size: inherit;
 }
+

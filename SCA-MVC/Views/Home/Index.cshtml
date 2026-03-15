@@ -1,4 +1,4 @@
-﻿@model SCA_MVC.ViewModels.DashboardViewModel
+@model SCA_MVC.ViewModels.DashboardViewModel
 @{
     ViewData["Title"] = "Inicio";
     var sel = Model.ServicioSeleccionado;
@@ -87,7 +87,7 @@
 
         <div class="panel">
             <div class="comp-body">
-                <h3><i class="bi bi-bar-chart-line"></i> Comparativa Últimos 7 Días</h3>
+                <h3><i class="bi bi-bar-chart-line"></i> Comparativa Última Semana</h3>
                 <div class="mini-bars">
                     @foreach (var d in Model.ComparativaSemanal)
                     {

@@ -19,18 +19,16 @@ namespace SCA_MVC.Services
 
         public async Task RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar)
         {
-            var registro = new Registro
-            {
-                IdEmpleado = idEmpleado,
-                IdEmpresa = idEmpresa,
-                IdServicio = idServicio,
-                IdLugar = idLugar,
-                Fecha = DateTime.Today,
-                Hora = DateTime.Now.TimeOfDay
-            };
-
-            _context.Registros.Add(registro);
-            await _context.SaveChangesAsync();
+            // Usamos SQL directo para evitar conflicto con triggers de SQL Server.
+            // EF Core genera INSERT...OUTPUT para recuperar el PK generado; si la tabla
+            // tiene triggers activos, SQL Server lanza una excepción (OUTPUT clause con triggers).
+            // Con ExecuteSqlRawAsync el INSERT se envía directamente sin que EF Core
+            // intente verificar filas afectadas ni recuperar el ID generado.
+            await _context.Database.ExecuteSqlRawAsync(
+                @"INSERT INTO Registros (IdEmpleado, IdEmpresa, IdServicio, IdLugar, Fecha, Hora)
+                  VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
+                idEmpleado, idEmpresa, idServicio, idLugar,
+                DateTime.Today, DateTime.Now.TimeOfDay);
         }
 
         public async Task<List<Registro>> ListarPorServicioAsync(int idServicio)
