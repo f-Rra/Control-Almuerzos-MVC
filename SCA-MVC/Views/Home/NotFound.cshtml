@@ -1,14 +1,13 @@
-@model ErrorViewModel
 @{
-    ViewData["Title"] = "Error del sistema";
-    Layout = null;  // Página standalone: no depende del layout con Auth
+    ViewData["Title"] = "Página no encontrada";
+    Layout = null;  // Página standalone
 }
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1280" />
-    <title>Error — SCA</title>
+    <title>404 — Página no encontrada | SCA</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet" />
     <style>
@@ -25,7 +24,6 @@
             overflow: hidden;
         }
 
-        /* Orbes decorativos */
         body::before, body::after {
             content: '';
             position: absolute;
@@ -34,13 +32,13 @@
             pointer-events: none;
         }
         body::before {
-            width: 400px; height: 400px;
+            width: 420px; height: 420px;
             background: rgba(255, 193, 7, 0.18);
-            top: -80px; left: -80px;
+            top: -100px; left: -80px;
         }
         body::after {
             width: 300px; height: 300px;
-            background: rgba(244, 67, 54, 0.08);
+            background: rgba(255, 255, 255, 0.8);
             bottom: -60px; right: -60px;
         }
 
@@ -62,8 +60,8 @@
             width: 88px;
             height: 88px;
             border-radius: 50%;
-            background: rgba(244, 67, 54, 0.1);
-            color: #E53935;
+            background: rgba(255, 193, 7, 0.12);
+            color: #B8860B;
             font-size: 2.4rem;
             display: flex;
             align-items: center;
@@ -74,7 +72,10 @@
         .err-code {
             font-size: 5rem;
             font-weight: 900;
-            color: #E53935;
+            background: linear-gradient(135deg, #FFC107, #FFD54F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             line-height: 1;
             margin-bottom: 8px;
             letter-spacing: -2px;
@@ -92,19 +93,14 @@
             color: #888;
             font-weight: 500;
             line-height: 1.6;
-            margin-bottom: 32px;
+            margin-bottom: 36px;
         }
 
-        .err-id {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.04);
-            border-radius: 8px;
-            padding: 6px 14px;
-            font-size: 0.78rem;
-            color: #aaa;
-            font-weight: 600;
-            margin-bottom: 28px;
-            font-family: monospace;
+        .err-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .err-btn {
@@ -129,26 +125,39 @@
             transform: translateY(-2px);
             filter: brightness(1.05);
         }
+
+        .err-btn-sec {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 193, 7, 0.3);
+            color: #B8860B;
+            box-shadow: none;
+        }
+
+        .err-btn-sec:hover {
+            border-color: #FFC107;
+            background: rgba(255, 193, 7, 0.06);
+        }
     </style>
 </head>
 <body>
     <div class="err-card">
-        <div class="err-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
-        <div class="err-code">500</div>
-        <h1 class="err-title">Error inesperado</h1>
+        <div class="err-icon"><i class="bi bi-compass"></i></div>
+        <div class="err-code">404</div>
+        <h1 class="err-title">Página no encontrada</h1>
         <p class="err-desc">
-            Ocurrió un error interno en el servidor.<br />
-            El equipo técnico fue notificado automáticamente.
+            La página que buscás no existe o fue movida.<br />
+            Verificá la URL o volvé al inicio.
         </p>
 
-        @if (Model?.ShowRequestId == true)
-        {
-            <div class="err-id">ID: @Model.RequestId</div>
-        }
-
-        <a href="/" class="err-btn">
-            <i class="bi bi-house-fill"></i> Volver al inicio
-        </a>
+        <div class="err-actions">
+            <a href="/" class="err-btn">
+                <i class="bi bi-house-fill"></i> Ir al inicio
+            </a>
+            <a href="javascript:history.back()" class="err-btn err-btn-sec">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
     </div>
 </body>
 </html>

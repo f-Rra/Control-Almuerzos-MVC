@@ -1945,10 +1945,10 @@ body {
 
 /* Formulario */
 .emp-form {
-    padding: 20px 24px;
+    padding: 16px 24px 20px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;  /* gap uniforme entre todos los campos */
 }
 
 .emp-field {
