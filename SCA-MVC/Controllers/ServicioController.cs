@@ -13,6 +13,8 @@ namespace SCA_MVC.Controllers
     [Authorize]
     public class ServicioController : Controller
     {
+        #region Dependencias
+
         private readonly IServicioNegocio _servicioNegocio;
         private readonly ILugarNegocio _lugarNegocio;
         private readonly IRegistroNegocio _registroNegocio;
@@ -30,11 +32,20 @@ namespace SCA_MVC.Controllers
             _empleadoNegocio = empleadoNegocio;
         }
 
+        #endregion
+
+        // =====================================================================
+
+        #region Acciones Públicas (Vistas y Operaciones)
+
         // GET: Servicio
         public async Task<IActionResult> Index()
         {
             var viewModel = new ServicioActivoViewModel();
             viewModel.LugaresDisponibles = await _lugarNegocio.ListarAsync();
+
+            // Auto-cerrar servicios pendientes de días anteriores para evitar soft-locks
+            await _servicioNegocio.FinalizarPendientesAsync();
 
             // Intentar obtener el servicio actualmente activo
             var activo = await _servicioNegocio.ObtenerActivoGlobalAsync();
@@ -157,5 +168,7 @@ namespace SCA_MVC.Controllers
             }
             return Json(new { success = false });
         }
+
+        #endregion
     }
 }

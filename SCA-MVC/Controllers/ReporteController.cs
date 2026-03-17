@@ -15,6 +15,8 @@ namespace SCA_MVC.Controllers
     [Authorize]
     public class ReporteController : Controller
     {
+        #region Dependencias
+
         private readonly IReporteNegocio _reporteNegocio;
         private readonly ILugarNegocio _lugarNegocio;
         private readonly IServicioNegocio _servicioNegocio;
@@ -27,6 +29,12 @@ namespace SCA_MVC.Controllers
             _servicioNegocio = servicioNegocio;
             _emailService = emailService;
         }
+
+        #endregion
+
+        // =====================================================================
+
+        #region Acciones Públicas (Vistas y Exportación)
 
         // GET: Reporte
         public async Task<IActionResult> Index(DateTime? desde, DateTime? hasta, int? idLugar, string tipo = "servicios")
@@ -69,6 +77,11 @@ namespace SCA_MVC.Controllers
             var fileName = $"Reporte_{tipo}_{desde:yyyyMMdd}_{hasta:yyyyMMdd}.pdf";
             return File(pdfBytes, "application/pdf", fileName);
         }
+        #endregion
+
+        // =====================================================================
+
+        #region Generación y Envío
 
         // ── Generación de PDF (reutilizado por ExportarPDF y EnviarPorEmail) ─────────
         private async Task<byte[]> GenerarPdfBytesAsync(DateTime desde, DateTime hasta, int? idLugar, string tipo)
@@ -464,5 +477,7 @@ namespace SCA_MVC.Controllers
 
             return RedirectToAction(nameof(Index), new { desde, hasta, idLugar, tipo });
         }
+
+        #endregion
     }
 }

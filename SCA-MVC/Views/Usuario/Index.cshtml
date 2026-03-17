@@ -133,19 +133,18 @@
                 </div>
             </div>
 
-            <div class="emp-form">
+            @* Form oculto para desactivar / reactivar *@
+            <form asp-action="Delete" method="post" id="delete-usuario-form" style="display:none;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="idUsuario" value="@Model.UsuarioActual.Id" />
+            </form>
 
-                @* Form oculto para desactivar / reactivar *@
-                <form asp-action="Delete" method="post" id="delete-usuario-form">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="idUsuario" value="@Model.UsuarioActual.Id" />
-                </form>
-
-                @* Formulario unificado Alta / Edición *@
-                <form asp-action="@(string.IsNullOrEmpty(Model.UsuarioActual.Id) ? "Create" : "Edit")"
-                      method="post"
-                      id="usuario-form">
-                    @Html.AntiForgeryToken()
+            @* Formulario unificado Alta / Edición *@
+            <form asp-action="@(string.IsNullOrEmpty(Model.UsuarioActual.Id) ? "Create" : "Edit")"
+                  method="post"
+                  class="emp-form"
+                  id="usuario-form">
+                @Html.AntiForgeryToken()
                     <input type="hidden" asp-for="UsuarioActual.Id" />
 
                     <div class="emp-field">
@@ -213,7 +212,6 @@
                     </div>
                 </form>
 
-            </div>
         </div>
     </div>
 

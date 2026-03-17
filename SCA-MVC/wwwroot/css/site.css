@@ -978,11 +978,13 @@ body {
     width: 85px;
     text-align: center;
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .cfg-item input[type="number"]::-webkit-outer-spin-button,
 .cfg-item input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 

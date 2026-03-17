@@ -14,6 +14,8 @@ namespace SCA_MVC.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+        #region Dependencias
+
         private readonly ILogger<HomeController> _logger;
         private readonly IReporteNegocio _reporteNegocio;
 
@@ -22,6 +24,12 @@ namespace SCA_MVC.Controllers
             _logger         = logger;
             _reporteNegocio = reporteNegocio;
         }
+
+        #endregion
+
+        // =====================================================================
+
+        #region Acciones Públicas
 
         public async Task<IActionResult> Index()
         {
@@ -96,5 +104,7 @@ namespace SCA_MVC.Controllers
             Response.StatusCode = 404;
             return View();
         }
+
+        #endregion
     }
 }

@@ -11,8 +11,8 @@ En este commit se agregó un sistema de manejo de errores consistente con el dis
 | Archivo | Acción | Descripción |
 |---|---|---|
 | `Middleware/ExceptionMiddleware.cs` | Creado | Intercepta excepciones y errores HTTP en toda la app |
-| `Views/Shared/Error.cshtml` | Reemplazado | Vista 500 con diseño glassmorphism del sistema |
-| `Views/Home/NotFound.cshtml` | Creado | Vista 404 con diseño glassmorphism |
+| `Views/Shared/Error.cshtml` | Reemplazado | Vista 500 con diseño del sistema |
+| `Views/Home/NotFound.cshtml` | Creado | Vista 404 con diseño del sistema |
 | `Controllers/HomeController.cs` | Modificado | Nueva acción `NotFound()` + `[AllowAnonymous]` en errores |
 | `Program.cs` | Modificado | Registro de `ExceptionMiddleware` en el pipeline |
 

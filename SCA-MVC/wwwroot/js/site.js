@@ -1,12 +1,9 @@
-﻿
 // ══════════════════════════════════════════
-// MODAL DE CONFIRMACIÓN
+// NOTIFICACIONES Y MODALES GLOBALES
 // ══════════════════════════════════════════
 
-// ══════════════════════════════════════════
-// NOTIFICACIÓN DE REGISTRO DE COMENSAL
-// Diseño: glassmorphism · pill "✓ Registrado" · hora
-// ══════════════════════════════════════════
+// Notificación de Inserción Rápida (Estilo Pill Glassmorphism)
+// Usado principalmente en Registro de Comensales
 
 function showRegistro(nombre, empresa, hora, duration = 2500) {
 	// Inyectar estilos sólo la primera vez
@@ -93,10 +90,8 @@ function showRegistro(nombre, empresa, hora, duration = 2500) {
 	overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
 }
 
-// ══════════════════════════════════════════
-// MODAL DE MENSAJE (éxito, error, info, warning)
-// ══════════════════════════════════════════
-
+// Modal de Mensajes del Sistema (Éxito, Error, Info, Warning)
+// Utilizado para procesar TempData desde Action Controllers
 function showMessage(type, title, message, duration = 0) {
 	const overlay = document.createElement("div");
 	overlay.className = "confirm-modal-overlay";
@@ -143,6 +138,8 @@ function showMessage(type, title, message, duration = 0) {
 	});
 }
 
+// Modal de Confirmación de Acción (Interactivo)
+// Reemplaza los window.confirm() nativos por versiones estilizadas
 function showConfirm(message, title = "Confirmar acción", onConfirm, onCancel) {
 	const overlay = document.createElement("div");
 	overlay.className = "confirm-modal-overlay";
