@@ -37,10 +37,10 @@ Identity necesita una base de datos para almacenar su información, por eso se i
 
 | Archivo | Acción | Descripción |
 |---|---|---|
-| `SCA-MVC.csproj` | Modificado | Paquete `Identity.EntityFrameworkCore 9.0.0` agregado |
+| `SCA-MVC.csproj` | Modificar | Paquete `Identity.EntityFrameworkCore 9.0.0` agregado |
 | `Models/ApplicationUser.cs` | **Creado** | Modelo de usuario extendido con Nombre y Apellido |
-| `Data/ApplicationDbContext.cs` | Modificado | Hereda de `IdentityDbContext<ApplicationUser>` |
-| `Program.cs` | Modificado | Servicios Identity + cookie + middleware |
+| `Data/ApplicationDbContext.cs` | Modificar | Hereda de `IdentityDbContext<ApplicationUser>` |
+| `Program.cs` | Modificar | Servicios Identity + cookie + middleware |
 | `Migrations/20260304221159_AddIdentity.cs` | **Creado** | Migración generada por EF con las 7 tablas |
 
 ---
@@ -156,7 +156,7 @@ El orden importa: primero ASP.NET identifica quién es el usuario (Authenticatio
 
 ---
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 
 1. **Instalar paquete NuGet**
    ```bash

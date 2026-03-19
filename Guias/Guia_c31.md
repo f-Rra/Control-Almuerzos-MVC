@@ -74,12 +74,12 @@ Esto permite que MailKit se autentique sin requerir OAuth, usando STARTTLS en el
 |---|---|---|
 | `Services/IEmailService.cs` | **Creado** | Interfaz con `EnviarReporteAsync()` |
 | `Services/EmailService.cs` | **Creado** | Implementación con MailKit (SMTP + adjunto PDF) |
-| `SCA-MVC.csproj` | Modificado | `<PackageReference Include="MailKit" Version="4.15.1" />` |
-| `appsettings.json` | Modificado | Sección `EmailSettings` con config SMTP |
-| `Program.cs` | Modificado | `AddScoped<IEmailService, EmailService>()` |
-| `Controllers/ReporteController.cs` | Modificado | Refactor a `GenerarPdfBytesAsync`, nuevo action `EnviarPorEmail`, inyección `IEmailService` |
-| `Views/Reporte/Index.cshtml` | Modificado | Botón "Enviar por Email" + modal con input de email |
-| `wwwroot/css/site.css` | Modificado | `.btn-email-rpt`, `.modal-field` y su input |
+| `SCA-MVC.csproj` | Modificar | `<PackageReference Include="MailKit" Version="4.15.1" />` |
+| `appsettings.json` | Modificar | Sección `EmailSettings` con config SMTP |
+| `Program.cs` | Modificar | `AddScoped<IEmailService, EmailService>()` |
+| `Controllers/ReporteController.cs` | Modificar | Refactor a `GenerarPdfBytesAsync`, nuevo action `EnviarPorEmail`, inyección `IEmailService` |
+| `Views/Reporte/Index.cshtml` | Modificar | Botón "Enviar por Email" + modal con input de email |
+| `wwwroot/css/site.css` | Modificar | `.btn-email-rpt`, `.modal-field` y su input |
 
 ---
 
@@ -179,7 +179,7 @@ Dos adiciones:
 
 ---
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 
 1. `dotnet add package MailKit` → instala MailKit 4.15.1 + MimeKit 4.15.1.
 2. Crear `IEmailService.cs` y `EmailService.cs`.

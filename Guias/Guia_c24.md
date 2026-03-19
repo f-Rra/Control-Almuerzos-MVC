@@ -75,7 +75,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 `typeof(ApplicationDbContext).Assembly` le dice a EF Core: *"Busca en el mismo DLL donde vive ApplicationDbContext"*. EF encuentra automáticamente `EmpresaConfiguration`, `EmpleadoConfiguration`, etc., y las aplica sin que tengamos que registrarlas una a una. Si en el futuro agregamos una nueva entidad con su `Configuration`, simplemente existe y ya está aplicada.
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 1. Creadas las 5 clases de configuración en `Data/Configurations/`.
 2. El bloque enorme de `OnModelCreating` fue reemplazado por la llamada a `ApplyConfigurationsFromAssembly`.
 3. El proyecto compila y pasa el build de verificación.

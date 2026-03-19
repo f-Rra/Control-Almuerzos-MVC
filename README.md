@@ -1,12 +1,5 @@
 
-<div align="center">
-  <img src="./SCA-MVC/wwwroot/images/logo.png" alt="Logo SCA" width="120"/>
-  <h1>Sistema de Control de Almuerzos — MVC</h1>
-</div>
-
----
-
-Migración completa del [Sistema de Control de Almuerzos (WinForms)](https://github.com/f-Rra/Sistema-Control-Almuerzos) a **ASP.NET Core MVC (.NET 9)**, manteniendo todas las funcionalidades del sistema original y agregando nuevas capacidades propias de una aplicación web: autenticación con Identity, roles y permisos, envío de reportes por email, diseño glassmorphism responsivo y gestión de usuarios.
+Migración completa del [Sistema Control de Almuerzos](https://github.com/f-Rra/Sistema-Control-Almuerzos) a **ASP.NET Core MVC**, manteniendo todas las funcionalidades del sistema original y agregando nuevas capacidades propias de una aplicación web: autenticación con Identity, roles y permisos, envío de reportes por email, diseño responsivo y gestión de usuarios.
 
 ![.NET 9](https://img.shields.io/badge/.NET-9.0-blue)
 ![C#](https://img.shields.io/badge/C%23-13.0-green)
@@ -43,7 +36,7 @@ Migración completa del [Sistema de Control de Almuerzos (WinForms)](https://git
 
 ## Funcionalidades del Sistema
 
-### Dashboard (Página de Inicio)
+### Dashboard 
 
 **Lista de Últimos Servicios:**
 - Visualización de los servicios más recientes (últimos 30 días)
@@ -135,7 +128,7 @@ Migración completa del [Sistema de Control de Almuerzos (WinForms)](https://git
 
 ---
 
-### Panel de Administración (Solo Admin)
+### Panel de Administración
 
 Punto de acceso centralizado a todas las funciones administrativas:
 
@@ -146,7 +139,7 @@ Punto de acceso centralizado a todas las funciones administrativas:
 
 ---
 
-### Gestión de Empresas (Solo Admin)
+### Gestión de Empresas
 
 **Operaciones ABM Completas:**
 - **Alta**: Crear nuevas empresas
@@ -161,7 +154,7 @@ Punto de acceso centralizado a todas las funciones administrativas:
 
 ---
 
-### Gestión de Empleados (Solo Admin)
+### Gestión de Empleados
 
 **Operaciones ABM Completas:**
 - **Alta**: Crear empleados con credencial, nombre, apellido y empresa
@@ -188,7 +181,7 @@ Dashboard de análisis estadístico con KPIs organizados en secciones:
 
 ---
 
-### Gestión de Usuarios (Solo Admin)
+### Gestión de Usuarios
 
 - Listado de usuarios del sistema con sus roles
 - Creación de nuevos usuarios con asignación de rol (Admin / Usuario)
@@ -297,7 +290,7 @@ Control-Almuerzos-MVC/
 │   │   └── Procedimientos_Vistas_Triggers.sql
 │   │
 │   ├── wwwroot/                      # Archivos estáticos
-│   │   ├── css/site.css              # Estilos globales (glassmorphism)
+│   │   ├── css/site.css              # Estilos globales 
 │   │   ├── js/site.js                # Modales, notificaciones, confirmaciones
 │   │   ├── images/                   # Iconos de navegación y logo
 │   │   └── lib/                      # Bootstrap (distribución local)
@@ -314,57 +307,6 @@ Control-Almuerzos-MVC/
 ---
 
 ## Base de Datos
-
-### Modelo de Datos
-
-**EMPLEADOS**
-```sql
-- IdEmpleado (INT, PK, Identity)
-- Nombre (VARCHAR(50), NOT NULL)
-- Apellido (VARCHAR(50), NOT NULL)
-- IdEmpresa (INT, FK, NOT NULL)
-- IdCredencial (VARCHAR(20), UNIQUE)
-- FotoUrl (VARCHAR(200))
-- Estado (BIT, DEFAULT 1)
-```
-
-**EMPRESAS**
-```sql
-- IdEmpresa (INT, PK, Identity)
-- Nombre (VARCHAR(100), NOT NULL, UNIQUE)
-- Estado (BIT, DEFAULT 1)
-```
-
-**LUGARES**
-```sql
-- IdLugar (INT, PK, Identity)
-- Nombre (VARCHAR(50), NOT NULL)
-- Descripcion (VARCHAR(200))
-- Estado (BIT, DEFAULT 1)
-```
-
-**SERVICIOS**
-```sql
-- IdServicio (INT, PK, Identity)
-- IdLugar (INT, FK, NOT NULL)
-- Fecha (DATE, NOT NULL)
-- Proyeccion (INT)
-- DuracionMinutos (INT)
-- TotalComensales (INT, DEFAULT 0)
-- TotalInvitados (INT, DEFAULT 0)
-- Estado (VARCHAR(20), DEFAULT 'Activo')
-```
-
-**REGISTROS**
-```sql
-- IdRegistro (INT, PK, Identity)
-- IdEmpleado (INT, FK, NOT NULL)
-- IdEmpresa (INT, FK, NOT NULL)
-- IdServicio (INT, FK, NOT NULL)
-- Fecha (DATE, NOT NULL)
-- Hora (TIME, NOT NULL)
-- IdLugar (INT, FK, NOT NULL)
-```
 
 ### Configuraciones Fluent API
 
@@ -458,86 +400,6 @@ Al aplicar las migraciones, se crean automáticamente:
 - Confirmaciones glassmorphism antes de operaciones críticas
 - Feedback visual inmediato con toasts (`MensajesUI`)
 - Errores de Identity traducidos al español (`SpanishIdentityErrorDescriber`)
-
----
-
-## Requisitos Previos
-
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [SQL Server Express o Developer](https://www.microsoft.com/es-es/sql-server/sql-server-downloads)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/) (recomendado) o VS Code
-- (Opcional) Cuenta Gmail con [Contraseña de Aplicación](https://myaccount.google.com/apppasswords) para envío de emails
-
----
-
-## Instalación y Configuración
-
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/f-Rra/Control-Almuerzos-MVC.git
-cd Control-Almuerzos-MVC/SCA-MVC
-```
-
-### 2. Configurar la cadena de conexión
-
-Editar `appsettings.json` y reemplazar el `Server` con tu instancia de SQL Server:
-
-```json
-"ConnectionStrings": {
-    "DefaultConnection": "Server=TU-SERVIDOR\\SQLEXPRESS;Database=BD_Control_Almuerzos;Integrated Security=true;TrustServerCertificate=true;MultipleActiveResultSets=true;"
-}
-```
-
-### 3. Aplicar migraciones
-
-Desde la **Consola del Administrador de Paquetes** en Visual Studio:
-```
-Update-Database
-```
-
-O desde la terminal:
-```bash
-dotnet ef database update
-```
-
-> Las migraciones crean automáticamente la base de datos, las tablas, los índices, las restricciones y los datos iniciales (Seeding): 2 Lugares, 12 Empresas y 60 Empleados con credenciales RFID.
-
-### 4. (Opcional) Configurar envío de email
-
-Para habilitar el envío de reportes por correo, editar la sección `EmailSettings` en `appsettings.json`:
-
-```json
-"EmailSettings": {
-    "SmtpHost": "smtp.gmail.com",
-    "SmtpPort": "587",
-    "SmtpUser": "tu-correo@gmail.com",
-    "SmtpPass": "xxxx xxxx xxxx xxxx",
-    "FromEmail": "tu-correo@gmail.com",
-    "FromName": "Sistema Control de Almuerzos"
-}
-```
-
-### 5. Ejecutar la aplicación
-
-```bash
-dotnet run
-```
-
-O presionar `F5` en Visual Studio.
-
----
-
-## Usuario por Defecto
-
-Al iniciar la aplicación por primera vez, el seeding crea automáticamente un usuario administrador:
-
-| Campo | Valor |
-|---|---|
-| **Email** | `admin@sca.com` |
-| **Contraseña** | `Admin123` |
-| **Rol** | Admin |
-
-> ⚠️ Se recomienda cambiar la contraseña del administrador tras el primer inicio de sesión.
 
 ---
 

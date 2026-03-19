@@ -44,8 +44,8 @@ Cuando el middleware de Authorization intercepta una request sin autenticar, red
 | `Views/Account/Login.cshtml` | **Creado** | Vista de login con layout propio |
 | `Views/Account/Register.cshtml` | **Creado** | Vista de registro con layout propio |
 | `Views/Account/AccessDenied.cshtml` | **Creado** | Vista de acceso denegado |
-| `Views/Shared/_Layout.cshtml` | Modificado | Topbar con usuario real y botón logout |
-| `wwwroot/css/site.css` | Modificado | Estilos `auth-*` para las vistas de autenticación |
+| `Views/Shared/_Layout.cshtml` | Modificar | Topbar con usuario real y botón logout |
+| `wwwroot/css/site.css` | Modificar | Estilos `auth-*` para las vistas de autenticación |
 
 ---
 
@@ -127,7 +127,7 @@ else
 
 ---
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 
 1. **Crear `AccountController.cs`** con Login (GET/POST), Logout (POST), Register (GET/POST), AccessDenied (GET)
 

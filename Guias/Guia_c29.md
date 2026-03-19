@@ -61,8 +61,8 @@ Al editar un usuario, la contraseña es opcional: **si el campo queda vacío, no
 | `ViewModels/UsuarioViewModel.cs` | **Creado** | `UsuarioListItem`, `UsuarioFormViewModel`, `UsuarioViewModel` |
 | `Controllers/UsuarioController.cs` | **Creado** | Index, Create, Edit, Delete (toggle activar/desactivar) |
 | `Views/Usuario/Index.cshtml` | **Creado** | Vista 2 columnas: tabla de usuarios + formulario lateral |
-| `Views/Shared/_Layout.cshtml` | Modificado | Enlace USUARIOS en la nav del Admin |
-| `wwwroot/css/site.css` | Modificado | Badges de rol (`usr-admin`, `usr-usuario`), `.btn-emp-reactivar`, `.emp-field-row` |
+| `Views/Shared/_Layout.cshtml` | Modificar | Enlace USUARIOS en la nav del Admin |
+| `wwwroot/css/site.css` | Modificar | Badges de rol (`usr-admin`, `usr-usuario`), `.btn-emp-reactivar`, `.emp-field-row` |
 
 ---
 
@@ -112,7 +112,7 @@ Diseño idéntico al de Empleados y Empresas:
 
 ### 4. `Views/Shared/_Layout.cshtml` — sidebar
 
-Se agregó el enlace USUARIOS al final de la nav del Admin, usando el ícono `bi-shield-lock`:
+Agregar el enlace USUARIOS al final de la nav del Admin, usando el ícono `bi-shield-lock`:
 
 ```razor
 <a asp-controller="Usuario" asp-action="Index"
@@ -142,7 +142,7 @@ Se agregó el enlace USUARIOS al final de la nav del Admin, usando el ícono `bi
 
 ---
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 
 1. **Crear `ViewModels/UsuarioViewModel.cs`** — 3 clases: `UsuarioListItem`, `UsuarioFormViewModel`, `UsuarioViewModel`.
 

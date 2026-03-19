@@ -1,27 +1,27 @@
 # Guía Commit 33b — Corrección de Bugs y Limpieza de Código
 
-## ¿Qué se implementó?
+## 🎯 Propósito
 
-En esta fase final de revisión (pruebas integrales) nos enfocamos en estabilizar la aplicación, corregir errores técnicos de base de datos y perfeccionar la experiencia de usuario (UX/UI), asegurando en particular que la interfaz se visualice de manera correcta y uniforme en la tablet de uso (Samsung Galaxy A9).
+En esta fase final de revisión (pruebas integrales) el foco está en estabilizar la aplicación, corregir errores técnicos de base de datos y perfeccionar la experiencia de usuario (UX/UI), asegurando en particular que la interfaz se visualice de manera correcta y uniforme en la tablet de uso (Samsung Galaxy A9).
 
 ---
 
-## Archivos modificados y eliminados
+## 📁 Archivos a Modificar y Eliminar
 
 | Archivo | Acción | Descripción |
 |---|---|---|
-| `Services/RegistroNegocio.cs` | Modificado | Fix crítico del SQL Trigger usando `ExecuteSqlRawAsync` |
-| `wwwroot/css/site.css` | Modificado | Eliminación de media queries, viewport fijo (1280px), alineasión de gaps y bordes |
-| `Views/Shared/_Layout.cshtml` | Modificado | Etiqueta `<meta name="viewport" content="width=1280">` para escalar en tablet |
-| `Views/Admin/Index.cshtml` | Modificado | Grid de 4 columnas en 1 fila, tamaños compactos de cards |
-| `Views/Reporte/Index.cshtml` | Modificado | Anchos dinámicos de inputs, botón "Generar" centrado |
-| `Views/Empleado/Index.cshtml` | Modificado | Carga de campos inlined, ajustes de gaps, borde `<div class="config-row">` visual |
-| `Controllers/HomeController.cs` | Modificado | Días sábados y domingos removidos del gráfico semanal |
-| `Views/Shared/_EmpleadoFormFields.cshtml` | Eliminado | Archivo obsoleto; el form ahora vive dentro de su propia vista `Index.cshtml` |
+| `Services/RegistroNegocio.cs` | Modificar | Fix crítico del SQL Trigger usando `ExecuteSqlRawAsync` |
+| `wwwroot/css/site.css` | Modificar | Eliminación de media queries, viewport fijo (1280px), alineación de gaps y bordes |
+| `Views/Shared/_Layout.cshtml` | Modificar | Etiqueta `<meta name="viewport" content="width=1280">` para escalar en tablet |
+| `Views/Admin/Index.cshtml` | Modificar | Grid de 4 columnas en 1 fila, tamaños compactos de cards |
+| `Views/Reporte/Index.cshtml` | Modificar | Anchos dinámicos de inputs, botón "Generar" centrado |
+| `Views/Empleado/Index.cshtml` | Modificar | Carga de campos inlined, ajustes de gaps, borde `<div class="config-row">` visual |
+| `Controllers/HomeController.cs` | Modificar | Días sábados y domingos removidos del gráfico semanal |
+| `Views/Shared/_EmpleadoFormFields.cshtml` | Eliminar | Archivo obsoleto; el form debe vivir dentro de su propia vista `Index.cshtml` |
 
 ---
 
-## Conceptos resueltos
+## Conceptos a Resolver
 
 ### 1. Fix del `DbUpdateConcurrencyException` (SQL Triggers y Entity Framework)
 Al intentar registrar o actualizar una entidad que tenía un Trigger de auditoría/concurrencia en SQL Server, Entity Framework Core lanzaba una excepción porque esperaba que `@@ROWCOUNT` fuera 1, pero el trigger interfería con el conteo de filas afectadas o alteraba el lote transaccional.

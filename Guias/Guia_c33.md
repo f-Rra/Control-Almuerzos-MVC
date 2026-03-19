@@ -1,24 +1,24 @@
 # Guía Commit 33a — Manejo Global de Errores
 
-## ¿Qué se implementó?
+## 🎯 Propósito
 
-En este commit se agregó un sistema de manejo de errores consistente con el diseño del resto de la aplicación. Antes, cualquier error inesperado devolvía la página de error genérica de ASP.NET (texto plano o página del navegador), y los errores 404 no tenían página personalizada. Ahora todo error tiene una respuesta visual acorde al sistema.
+En este commit se va a agregar un sistema de manejo de errores consistente con el diseño del resto de la aplicación. Actualmente, cualquier error inesperado devuelve la página de error genérica de ASP.NET (texto plano o página del navegador), y los errores 404 no tienen página personalizada. El objetivo es que todo error tenga una respuesta visual acorde al sistema.
 
 ---
 
-## Archivos creados y modificados
+## 📁 Archivos a Crear y Modificar
 
 | Archivo | Acción | Descripción |
 |---|---|---|
-| `Middleware/ExceptionMiddleware.cs` | Creado | Intercepta excepciones y errores HTTP en toda la app |
-| `Views/Shared/Error.cshtml` | Reemplazado | Vista 500 con diseño del sistema |
-| `Views/Home/NotFound.cshtml` | Creado | Vista 404 con diseño del sistema |
-| `Controllers/HomeController.cs` | Modificado | Nueva acción `NotFound()` + `[AllowAnonymous]` en errores |
-| `Program.cs` | Modificado | Registro de `ExceptionMiddleware` en el pipeline |
+| `Middleware/ExceptionMiddleware.cs` | Crear | Intercepta excepciones y errores HTTP en toda la app |
+| `Views/Shared/Error.cshtml` | Reemplazar | Vista 500 con diseño del sistema |
+| `Views/Home/NotFound.cshtml` | Crear | Vista 404 con diseño del sistema |
+| `Controllers/HomeController.cs` | Modificar | Nueva acción `NotFound()` + `[AllowAnonymous]` en errores |
+| `Program.cs` | Modificar | Registro de `ExceptionMiddleware` en el pipeline |
 
 ---
 
-## Conceptos implementados
+## Conceptos a Implementar
 
 ### 1. Middleware personalizado
 

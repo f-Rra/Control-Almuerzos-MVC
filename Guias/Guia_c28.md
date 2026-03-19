@@ -79,17 +79,17 @@ Identity inyecta el rol como un **claim de tipo `ClaimTypes.Role`** en la cookie
 
 | Archivo | Acción | Descripción |
 |---|---|---|
-| `Program.cs` | Modificado | Seeding idempotente de roles y usuario admin al arranque |
-| `Controllers/HomeController.cs` | Modificado | `[Authorize]` — todos los usuarios autenticados |
-| `Controllers/ServicioController.cs` | Modificado | `[Authorize]` — todos los usuarios autenticados |
-| `Controllers/RegistroController.cs` | Modificado | `[Authorize]` — todos los usuarios autenticados |
-| `Controllers/ReporteController.cs` | Modificado | `[Authorize]` — todos los usuarios autenticados |
-| `Controllers/EstadisticaController.cs` | Modificado | `[Authorize]` — todos los usuarios autenticados |
-| `Controllers/EmpresaController.cs` | Modificado | `[Authorize(Roles = "Admin")]` — solo administradores |
-| `Controllers/EmpleadoController.cs` | Modificado | `[Authorize(Roles = "Admin")]` — solo administradores |
-| `Controllers/AdminController.cs` | Modificado | `[Authorize(Roles = "Admin")]` — solo administradores |
-| `Views/Shared/_Layout.cshtml` | Modificado | Enlace ADMINISTRACIÓN visible solo para el rol Admin |
-| `wwwroot/css/site.css` | Modificado | Clase `.side-separator` para divisor visual en sidebar |
+| `Program.cs` | Modificar | Seeding idempotente de roles y usuario admin al arranque |
+| `Controllers/HomeController.cs` | Modificar | `[Authorize]` — todos los usuarios autenticados |
+| `Controllers/ServicioController.cs` | Modificar | `[Authorize]` — todos los usuarios autenticados |
+| `Controllers/RegistroController.cs` | Modificar | `[Authorize]` — todos los usuarios autenticados |
+| `Controllers/ReporteController.cs` | Modificar | `[Authorize]` — todos los usuarios autenticados |
+| `Controllers/EstadisticaController.cs` | Modificar | `[Authorize]` — todos los usuarios autenticados |
+| `Controllers/EmpresaController.cs` | Modificar | `[Authorize(Roles = "Admin")]` — solo administradores |
+| `Controllers/EmpleadoController.cs` | Modificar | `[Authorize(Roles = "Admin")]` — solo administradores |
+| `Controllers/AdminController.cs` | Modificar | `[Authorize(Roles = "Admin")]` — solo administradores |
+| `Views/Shared/_Layout.cshtml` | Modificar | Enlace ADMINISTRACIÓN visible solo para el rol Admin |
+| `wwwroot/css/site.css` | Modificar | Clase `.side-separator` para divisor visual en sidebar |
 
 ---
 
@@ -229,7 +229,7 @@ El separador divide visualmente la sección operacional (Home, Servicios, etc.) 
 
 ---
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 
 1. **Agregar seeding en `Program.cs`** — bloque `using (var scope = ...)` entre `app.Build()` y `app.Run()`, que crea los roles `Admin` y `Usuario` y el usuario `admin@sca.com` si no existen.
 

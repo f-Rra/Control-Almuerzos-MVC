@@ -34,7 +34,7 @@ Asegura que ciertas columnas siempre tengan un valor inicial si no se especifica
 Agrega reglas de validación físicas directamente en SQL Server.
 *   Agregamos un check que verifica que la `Fecha` de un servicio tenga lógica (no mayor al año 2030, útil para evitar errores de tipeo absurdos).
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 1.  **Revisión de `ApplicationDbContext.cs`**: Se verificó que el interior del método `OnModelCreating` cumpla estrictamente con el esquema original de SQL de la Unidad 2.
 2.  **Documentación en línea**: Se añadieron comentarios paso a paso (ya estaban pre-insertados, pero el commit actúa para fijar este hito de revisión y didáctica) detallando el "por qué" de cada línea de configuración.
 3.  **Alineación**: Se confirmaron los tipos de datos en la base y los requerimientos opcionales (por ejemplo, el `int? IdEmpleado` para soportar invitados).
@@ -67,7 +67,7 @@ El flujo de trabajo es el siguiente:
 1. `dotnet ef migrations add <NombreMigracion>`: Analiza el `DbContext`, lo compara con el estado anterior y genera un archivo `.cs` con las instrucciones C# de qué comandos SQL disparar (ej: crear tabla, alterar columna).
 2. `dotnet ef database update`: Toma los archivos de migración no aplicados y los inyecta en SQL Server ejecutando el código SQL correspondiente en la base instalada.
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 1.  **Ejecución de Comando de Migración**: Ejecutamos el comando de consola `dotnet ef migrations add AjustesModelo` que escaneó nuestras tablas y nuestro Fluent API.
 2.  **Verificación**: EF Core creó una nueva migración con los pequeños ajustes y metadatos internos que puedan estar pendientes.
 3.  **Actualización**: Se aplicó la migración mediante `dotnet ef database update`.

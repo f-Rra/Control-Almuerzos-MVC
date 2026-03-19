@@ -195,7 +195,7 @@ Si `TotalPaginas <= 1`, la partial no renderiza nada (no hay nada que paginar). 
 
 ---
 
-## 🛠️ Pasos Realizados
+## 🛠️ Pasos a Seguir
 
 1. **Creadas 5 vistas parciales** en `Views/Shared/`, cada una con su propio `@model` de tupla y comentario de uso en el encabezado.
 2. **`Estadistica/Index.cshtml`**: 13 bloques `<div class="est-kpi">` reemplazados por `<partial name="_KpiCard">` — la vista pasó de ~190 líneas de HTML repetitivo a usar una abstracción coherente.
