@@ -800,89 +800,26 @@ feat: integrar IA para análisis de datos
 
 ---
 
-### ✅ Commit 33a — Middleware Global y Layout Tablet
+### Commit 33 — Refinamientos finales y documentación
 
-**Descripción:** Agregar manejo global de excepciones con middleware personalizado (`ExceptionMiddleware`). Agregar páginas de error personalizadas (404 Not Found, 500 Error genérico) integradas con el diseño Glassmorphism estandarizado. Ajustar el Viewport global del layout (`_Layout.cshtml`) a `width=1280` para forzar la renderización de la app como Desktop en tablets (específicamente optimizado para iteraciones de campo).
-
-**Archivos:**
-- ✅ `Middleware/ExceptionMiddleware.cs` (creado)
-- ✅ `Views/Shared/Error.cshtml` (reformado)
-- ✅ `Views/Shared/NotFound.cshtml` (creado)
-- ✅ `Controllers/HomeController.cs` (acciones AllowAnonymous para errores)
-- ✅ `Views/Shared/_Layout.cshtml` (ajuste meta viewport)
-- ✅ `Program.cs` (registro del pipeline Middleware)
-
-**Mensaje:**
-```
-feat: implementar ExceptionMiddleware global y compatibilidad tablet
-
-- ExceptionMiddleware capturando errores no controlados y 404/403
-- Páginas Error y NotFound estilizadas en Glassmorphism (AllowAnonymous)
-- Forzado de viewport=1280px para visualización Desktop en tablets
-```
-
----
-
-### ✅ Commit 33b — Hotfixes Lógicos y Refinamiento Visual
-
-**Descripción:** Auditoría del sistema tras todas las adaptaciones. Resolución de bugs críticos: Soft-lock del cierre de servicios, invocando siempre `FinalizarPendientesAsync()` en tiempo real al acceder al Dashboard de Servicios. Refinamiento en vistas CRUD: limpieza de partial views huérfanas (`_EmpleadoFormFields`), unificación del flexbox pattern (`.emp-form`) garantizando gaps y alineaciones consistentes entre pantallas de Empresas, Empleados y Gestor de Usuarios. Adición de regiones en controladores para orden código.
+**Descripción:** Realizar pruebas integrales de toda la funcionalidad. Corregir bugs encontrados. Agregar manejo global de excepciones con middleware personalizado. Agregar página de error personalizada (404, 500). Actualizar `README.md` del proyecto con: descripción, tecnologías, instrucciones de instalación, configuración, estructura del proyecto y capturas de pantalla. Limpiar código no utilizado.
 
 **Archivos:**
-- ✅ `Controllers/ServicioController.cs` (fix soft-lock + regiones)
-- ✅ `Controllers/AdminController.cs`, `EstadisticaController.cs`, `ReporteController.cs` (regiones documentales)
-- ✅ `Views/Empleado/_EmpleadoFormFields.cshtml` (eliminado)
-- ✅ `Views/Empleado/Index.cshtml` (inlined form)
-- ✅ `Views/Usuario/Index.cshtml` (reestructuración DOM del form)
-- ✅ `wwwroot/css/site.css` (gaps corregidos, fix appearance linters)
-- ✅ `wwwroot/js/site.js` (refactor de modales)
-
-**Mensaje:**
-```
-fix: resolver soft-lock de servicios y unificar DOM ABM
-
-- Llamada preventiva a FinalizarPendientesAsync() al abrir Gestión de Servicios
-- Formularios ABM (Empresas, Empleados, Usuarios) inlinerizados en layout CSS unificado .emp-form
-- Eliminación de partial views obsoletas
-- Organización de dependencias y lógicas de Controllers en Regiones (#region)
-- Corrección linter -moz-appearance en toolkits
-```
-
----
-
-### Commit 33c — Documentación Exhaustiva y Entrega Final
-
-**Descripción:** Actualización integral del `README.md` del proyecto. Inclusión de las tecnologías utilizadas, instrucciones de replicación / base de datos, detalles del usuario Admin por default (debido al Seeding), estructura de carpetas, y un resumen de las funcionalidades habilitadas.
-
-**Archivos:**
+- `Middleware/ExceptionMiddleware.cs` (crear)
+- `Views/Shared/Error.cshtml` (mejorar)
+- `Views/Shared/NotFound.cshtml` (crear)
+- `Program.cs` (agregar middleware de excepciones)
 - `README.md` (actualizar documentación completa)
-- `Guias/Guia_c33c.md` (guía del commit)
+- Varios archivos (corrección de bugs menores)
 
 **Mensaje:**
 ```
-docs: actualizar documentación principal del repositorio
+feat: aplicar refinamientos finales y documentación
 
-- README exhaustivo incorporando stack tecnológico
-- Detalle de seeding, usuarios predefinidos y despliegue local
-- Esquema de arquitectura base Documentado
-```
-
----
-
-### Commit 34 (Proyectado) — Refactorización Arquitectónica CSS a SASS
-
-**Descripción:** Dado que `site.css` superó las 3.3k líneas debido al crecimiento orgánico de funcionalidades, este commit plantea una reestructuración escalable del diseño separando los módulos con sintaxis `.scss` (ej. `_forms.scss`, `_dashboard.scss`, `_modals.scss`) y delegando la compilación a Gulp, Webpack o herramientas nativas de VS. Recomendación arquitectónica sin romper la funcionalidad actual.
-
-**Archivos:**
-- `wwwroot/css/site.css` (migrar a directorio sass/scss)
-- `compiler.json / gulpfile.js` (herramienta build)
-
-**Mensaje:**
-```
-refactor: arquitecturar subsistema visual con SASS/SCSS
-
-- Extracción de módulos de UI en partials .scss (_dashboard, _forms)
-- Configuración de compilador para wwwroot/css/site.bundle.css
-- Mantenibilidad y reusabilidad de variables nativa
+- Middleware global de manejo de excepciones
+- Páginas de error personalizadas (404/500)
+- README completo con instrucciones y capturas
+- Corrección de bugs y limpieza de código
 ```
 
 ---

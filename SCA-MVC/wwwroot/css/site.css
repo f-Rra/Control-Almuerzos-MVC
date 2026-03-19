@@ -679,7 +679,7 @@ body {
 }
 
 .det-body {
-    padding: 16px 16px 28px;  /* padding-bottom generoso para que el card amarillo no quede pegado al borde inferior del panel */
+    padding: 16px 16px 20px;  /* padding-bottom extra para que el card amarillo no se pegue al borde */
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -909,7 +909,7 @@ body {
     align-items: center;
     gap: 8px;
     white-space: nowrap;
-    padding: 14px 16px;   /* reducido de 24px para ganar espacio horizontal */
+    padding: 14px 24px;
     margin: 0;
 }
 
@@ -932,8 +932,8 @@ body {
 .cfg-inputs {
     display: flex;
     align-items: center;
-    gap: 10px;    /* reducido de 18px: menos espacio entre controles */
-    padding: 14px 12px;  /* reducido de 24px lateral */
+    gap: 18px;
+    padding: 14px 24px;
 }
 
 .cfg-item {
@@ -968,9 +968,8 @@ body {
 }
 
 .cfg-item select {
-    margin-right: 4px;
-    min-width: 100px;
-    max-width: 205px;   /* ancho suficiente para "Asistencias por Empresa" */
+    margin-right: 6px;
+    min-width: 120px;
     padding-right: 28px;
 }
 
@@ -978,18 +977,16 @@ body {
     width: 85px;
     text-align: center;
     -moz-appearance: textfield;
-    appearance: textfield;
 }
 
 .cfg-item input[type="number"]::-webkit-outer-spin-button,
 .cfg-item input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    appearance: none;
     margin: 0;
 }
 
 .cfg-item input[type="date"] {
-    width: 145px;   /* suficiente para mostrar dd/mm/aaaa completo */
+    width: 150px;
 }
 
 .cfg-item select:focus,
@@ -1014,10 +1011,10 @@ body {
 }
 
 .cfg-btn-wrap {
-    flex: 1;              /* crece para llenar el espacio restante */
+    flex: 1;
     display: flex;
-    justify-content: center;  /* centra el botón en ambos estados del sidebar */
-    padding: 10px 12px;
+    justify-content: center;
+    padding: 10px 0;
 }
 
 .btn-iniciar {
@@ -1947,10 +1944,10 @@ body {
 
 /* Formulario */
 .emp-form {
-    padding: 16px 24px 20px;
+    padding: 20px 24px;
     display: flex;
     flex-direction: column;
-    gap: 20px;  /* gap uniforme entre todos los campos */
+    gap: 18px;
 }
 
 .emp-field {
@@ -2570,7 +2567,7 @@ body {
    ══════════════════════════════════════════ */
 
 .adm-wrap {
-    width: 92%;
+    width: 90%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -2578,7 +2575,6 @@ body {
     flex: 1;
     min-height: 0;
     justify-content: center;
-    padding-top: 24px;  /* separa el título del navbar */
 }
 
 .adm-header {
@@ -2603,12 +2599,12 @@ body {
 
 .adm-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);  /* 4 cards en 1 fila */
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
 .adm-card {
-    padding: 20px 16px;  /* reducido de 28px/24px para que los 4 cards entren en una fila */
+    padding: 28px 24px;
     text-align: center;
     transition: 0.3s;
     cursor: pointer;
@@ -2632,14 +2628,14 @@ body {
 }
 
 .adm-circle {
-    width: 64px;   /* reducido de 80px para que quepa en cards más angostos */
-    height: 64px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    margin: 0 auto 14px;
+    margin: 0 auto 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     position: relative;
 }
 
@@ -3336,4 +3332,4 @@ button.logout {
     padding: 0;
     font-size: inherit;
 }
-
+

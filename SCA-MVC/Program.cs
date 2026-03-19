@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
 using SCA_MVC.Helpers;
-using SCA_MVC.Middleware;
 using SCA_MVC.Models;
 using SCA_MVC.Services;
 
@@ -104,14 +103,11 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// ── Pipeline de solicitudes HTTP ────────────────────────────────────────────
-// ExceptionMiddleware: captura excepciones no controladas y errores HTTP (404/403)
-// Se registra primero para envolver todo el pipeline
-app.UseMiddleware<ExceptionMiddleware>();
-
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    // En producción también usamos nuestro middleware; UseHsts agrega cabeceras de seguridad
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
