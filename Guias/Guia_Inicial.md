@@ -45,16 +45,6 @@
 - `Views/Servicio/Index.cshtml` (crear)
 - `wwwroot/css/site.css` (agregar estilos de la vista de servicios)
 
-**Mensaje:**
-```
-feat: diseño de vista de servicios
-
-- Panel de configuración (lugar, fecha, proyección, invitados, iniciar/finalizar)
-- Panel de estado del servicio activo (cronómetro, cobertura, registrados/faltan)
-- Campo de registro por credencial RFID
-- Listado de comensales registrados en el servicio
-- Vista adaptativa según estado del servicio (activo/inactivo)
-```
 
 ---
 
@@ -66,15 +56,6 @@ feat: diseño de vista de servicios
 - `Views/Registro/Index.cshtml` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
 
-**Mensaje:**
-```
-feat: diseño de vista de registro manual
-
-- Filtros por empresa y búsqueda por nombre
-- Tabla de empleados sin almorzar con selección múltiple
-- Botón de registro masivo
-- Resumen de registrados vs pendientes
-```
 
 ---
 
@@ -86,15 +67,6 @@ feat: diseño de vista de registro manual
 - `Views/Reporte/Index.cshtml` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
 
-**Mensaje:**
-```
-feat: diseño de vista de reportes
-
-- Panel de filtros (fechas, lugar, tipo de reporte)
-- Tabla de resultados con datos de ejemplo
-- Botón de exportación a PDF
-- Soporte visual para 4 tipos de reporte
-```
 
 ---
 
@@ -107,15 +79,6 @@ feat: diseño de vista de reportes
 - `Views/Empresa/Index.cshtml` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
 
-**Mensaje:**
-```
-feat: diseño de vista CRUD de empresas
-
-- Tabla de empresas con búsqueda y conteo
-- Formulario de alta/edición con validación visual
-- Panel de estadísticas por empresa
-- Botones de acción (guardar, cancelar, eliminar)
-```
 
 ---
 
@@ -127,15 +90,6 @@ feat: diseño de vista CRUD de empresas
 - `Views/Empleado/Index.cshtml` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
 
-**Mensaje:**
-```
-feat: diseño de vista CRUD de empleados
-
-- Tabla de empleados con filtros por nombre y empresa
-- Formulario con verificación de credencial RFID
-- Combo de empresas y selector de estado
-- Botones de acción (nuevo, guardar, eliminar, cancelar)
-```
 
 ---
 
@@ -147,15 +101,6 @@ feat: diseño de vista CRUD de empleados
 - `Views/Estadistica/Index.cshtml` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
 
-**Mensaje:**
-```
-feat: diseño de vista de estadísticas y KPIs
-
-- Cards de KPIs por sección (empleados, empresas, servicios, asistencias)
-- Tendencias y métricas mensuales
-- Top 5 empresas con barras de progreso
-- Indicadores de cobertura y duración promedio
-```
 
 ---
 
@@ -168,15 +113,6 @@ feat: diseño de vista de estadísticas y KPIs
 - `Controllers/AdminController.cs` (crear)
 - `wwwroot/css/site.css` (agregar estilos)
 
-**Mensaje:**
-```
-feat: diseño de vista de inicio del administrador
-
-- Hub de acceso rápido a Empresas, Empleados y Estadísticas
-- Grid de cards con íconos, conteos e indicadores
-- Controlador AdminController con acción Index
-- Estilos adm-* integrados en site.css
-```
 
 ---
 
@@ -189,14 +125,6 @@ feat: diseño de vista de inicio del administrador
 - `Views/Home/Privacy.cshtml` (eliminar)
 - `Views/Shared/_Layout.cshtml.css` (limpiar)
 
-**Mensaje:**
-```
-feat: completar limpieza de navegación base y vistas scaffold
-
-- Sidebar con navegación activa alineada al dominio (Estadísticas)
-- Eliminada acción y vista Privacy del Home scaffold
-- Limpieza de estilos scaffold no utilizados en _Layout.cshtml.css
-```
 
 ---
 
@@ -235,15 +163,6 @@ Todos los controladores CRUD de esta unidad (y las siguientes) deben respetar la
 - `Data/Mappers/RegistroMapper.cs` (crear)
 - `Program.cs` (registrar AccesoDatos en DI)
 
-**Mensaje:**
-```
-feat: crear capa de acceso a datos con ADO.NET
-
-- Clase AccesoDatos con SqlConnection/SqlCommand/SqlDataReader
-- NegocioException con traducción de errores SQL a español
-- Mappers estáticos para cada entidad del dominio
-- Registro en contenedor de inyección de dependencias
-```
 
 ---
 
@@ -255,14 +174,6 @@ feat: crear capa de acceso a datos con ADO.NET
 - `SQL/Procedimientos_Vistas_Triggers.sql` (crear — copiar/adaptar del proyecto original)
 
 
-**Mensaje:**
-```
-feat: crear stored procedures, vistas y triggers en SQL Server
-
-- 33 stored procedures para todas las operaciones CRUD y reportes
-- 2 vistas (EmpleadosSinAlmorzar, EmpresasConEmpleados)
-- Trigger de validación de registro único
-```
 
 ---
 
@@ -278,15 +189,6 @@ feat: crear stored procedures, vistas y triggers en SQL Server
 - `Services/ILugarNegocio.cs` + `Services/LugarNegocio.cs` (crear)
 - `Program.cs` (registrar servicios en DI)
 
-**Mensaje:**
-```
-feat: crear capa de servicios de negocio con ADO.NET
-
-- Servicios para Empresa, Empleado, Servicio, Registro y Lugar
-- Interfaces para inyección de dependencias
-- Llamadas a stored procedures via AccesoDatos
-- Registro de servicios en el contenedor de DI
-```
 
 ---
 
@@ -302,10 +204,6 @@ feat: crear capa de servicios de negocio con ADO.NET
 - `ViewModels/EmpresaViewModel.cs` (crear)
 - `wwwroot/js/site.js` (agregar JS para búsqueda y panel lateral AJAX)
 
-**Mensaje:**
-```
-feat: implementar CRUD funcional de empresas - Controlador con acciones Index, Create, Edit, DeleteConfirmed, Detalle - Convenciones de patrón: [ActionName], EmpresaExiste(), // GET: comments - Vista conectada a datos reales con Razor - Búsqueda en tiempo real y panel de estadísticas - Validaciones server-side - ViewModels para la vista
-```
 
 ---
 
@@ -319,10 +217,6 @@ feat: implementar CRUD funcional de empresas - Controlador con acciones Index, C
 - `ViewModels/EmpleadoViewModel.cs` (crear)
 - `wwwroot/js/site.js` (agregar JS para filtros y verificación AJAX)
 
-**Mensaje:**
-```
-feat: implementar CRUD funcional de empleados - Controlador con acciones Index, Create, Edit, DeleteConfirmed, VerificarCredencial - Vista conectada a datos reales con Razor - Búsqueda en tiempo real y filtro por empresa - Validación de credencial RFID única - ViewModels y vista parcial de formulario
-```
 
 ---
 
@@ -336,16 +230,6 @@ feat: implementar CRUD funcional de empleados - Controlador con acciones Index, 
 - `ViewModels/ServicioActivoViewModel.cs` (crear)
 - `wwwroot/js/site.js` (cronómetro JS, AJAX de registro, toast)
 
-**Mensaje:**
-```
-feat: implementar servicio activo y registro por credencial RFID
-
-- Iniciar/finalizar servicio con validaciones
-- Registro de comensales por credencial con AJAX
-- Cronómetro JavaScript en tiempo real
-- Barra de progreso y notificaciones toast
-- Listado dinámico de comensales registrados
-```
 
 ---
 
@@ -358,12 +242,6 @@ feat: implementar servicio activo y registro por credencial RFID
 - `Views/Registro/Index.cshtml` (conectar con datos reales)
 - `wwwroot/js/site.js` (agregar JS para filtros y registro masivo AJAX)
 
-**Mensaje:**
-```
-feat: implementar registro manual de empleados
-- Registro masivo vía AJAX
-- Actualización dinámica del listado y conteos
-```
 
 ---
 
@@ -380,15 +258,6 @@ feat: implementar registro manual de empleados
 - `SCA-MVC.csproj` (agregar QuestPDF)
 - `wwwroot/js/site.js` (agregar JS para cambio de tipo de reporte)
 
-**Mensaje:**
-```
-feat: implementar reportes con filtros y exportación PDF
-
-- 4 tipos de reporte (servicios, empresas, cobertura, distribución)
-- Filtros por fecha, lugar y tipo de reporte
-- Generación de PDF con QuestPDF (header, tabla formateada)
-- Modelos de datos para reportes
-```
 
 ---
 
@@ -407,15 +276,6 @@ feat: implementar reportes con filtros y exportación PDF
 - `ViewModels/EstadisticasViewModel.cs` (crear)
 - `wwwroot/js/site.js` (agregar JS para selección de servicio en Index)
 
-**Mensaje:**
-```
-feat: conectar estadísticas y dashboard con datos reales
-
-- KPIs de empleados, empresas, servicios y asistencias
-- Top 5 empresas con barras de progreso
-- Dashboard Index conectado a datos del servidor
-- Selección dinámica de servicio en listado
-```
 
 ---
 
@@ -426,16 +286,6 @@ feat: conectar estadísticas y dashboard con datos reales
 **Archivos:**
 - `Data/ApplicationDbContext.cs` (implementar método `SeedData` y llamar desde `OnModelCreating`)
 
-**Mensaje:**
-```
-feat: implementar seed de datos iniciales con ModelBuilder
-
-- Carga inicial de Lugares (Comedor, Quincho)
-- 6 empresas del complejo (Roemmers, Gema, etc.)
-- 16 empleados con credenciales RFxxxx y nombres realistas
-- Muestra de servicios y registros para febrero 2026
-- Ajuste de CK_Servicio_Fecha para permitir datos de demo
-```
 
 ---
 
@@ -452,15 +302,6 @@ feat: implementar seed de datos iniciales con ModelBuilder
 - `Views/Empleado/Index.cshtml` (agregar validaciones client-side)
 - `wwwroot/js/site.js` (lógica de toast notifications)
 
-**Mensaje:**
-```
-feat: agregar validaciones completas y sistema de mensajes
-
-- Validaciones client-side con jQuery Validation
-- Constantes de mensajes en español
-- Helper de TempData para notificaciones
-- Toast notifications globales en layout
-```
 
 ---
 
@@ -491,16 +332,6 @@ feat: agregar validaciones completas y sistema de mensajes
 - `Data/Mappers/` (**eliminar carpeta completa**)
 - `Program.cs` (reemplazar registro de `AccesoDatos` por `ApplicationDbContext`)
 
-**Mensaje:**
-```
-refactor: migrar de ADO.NET a Entity Framework Core
-
-- Reemplazo de stored procedures por consultas LINQ con Include/Where
-- Eliminación de AccesoDatos, NegocioException y Mappers
-- Servicios refactorizados con ApplicationDbContext
-- Mismas interfaces y controladores, nueva implementación interna
-- Patrón convergente con ejemplos maxi-movie / galeria-arte
-```
 
 ---
 
@@ -511,34 +342,6 @@ refactor: migrar de ADO.NET a Entity Framework Core
 **Archivos:**
 - `Data/ApplicationDbContext.cs` (agregar comentarios explicativos de Fluent API)
 
-**Mensaje:**
-```
-docs: documentar Fluent API en ApplicationDbContext
-
-- Comentarios explicativos en cada configuración
-- Detalle de relaciones, índices y restricciones
-- Referencia didáctica del modelado de clases con EF Core
-```
-
----
-
-### Commit 22 — Nueva migración con ajustes de modelado
-
-**Descripción:** Realizar ajustes finos al modelo si se detectaron diferencias con el esquema original (por ejemplo, tipos de datos `Date` vs `DateTime`, longitudes de campos). Generar una nueva migración que aplique estos cambios. Documentar el proceso de crear y aplicar migraciones (`Add-Migration`, `Update-Database`).
-
-**Archivos:**
-- `Models/` (ajustes menores si son necesarios)
-- `Data/ApplicationDbContext.cs` (ajustes de Fluent API si son necesarios)
-- `Migrations/[timestamp]_AjustesModelo.cs` (nueva migración)
-
-**Mensaje:**
-```
-feat: aplicar ajustes de modelado y nueva migración
-
-- Revisión de tipos de datos contra esquema original
-- Migración con correcciones de modelado
-- Verificación de coherencia BD ↔ Modelos
-```
 
 ---
 
@@ -554,15 +357,6 @@ feat: aplicar ajustes de modelado y nueva migración
 - `Data/ApplicationDbContext.cs` (agregar HasData en OnModelCreating)
 - `Migrations/[timestamp]_SeedDatos.cs` (nueva migración con seed)
 
-**Mensaje:**
-```
-feat: agregar seeding de datos iniciales con EF Core HasData
-
-- 2 lugares (Comedor, Quincho)
-- 12 empresas del complejo industrial
-- 60 empleados con credenciales RFID
-- Migración generada con datos semilla
-```
 
 ---
 
@@ -578,14 +372,6 @@ feat: agregar seeding de datos iniciales con EF Core HasData
 - `Data/Configurations/RegistroConfiguration.cs` (crear)
 - `Data/ApplicationDbContext.cs` (simplificar OnModelCreating)
 
-**Mensaje:**
-```
-refactor: separar configuraciones Fluent API por entidad
-
-- IEntityTypeConfiguration<T> para cada modelo
-- ApplyConfigurationsFromAssembly en OnModelCreating
-- Mejor organización y mantenibilidad del contexto
-```
 
 ---
 
@@ -604,16 +390,6 @@ refactor: separar configuraciones Fluent API por entidad
 - `Views/Reporte/Index.cshtml` (usar partials)
 - `Views/Empleado/Index.cshtml` (usar partials)
 
-**Mensaje:**
-```
-feat: crear vistas parciales reutilizables
-
-- _ServicioCard para cards de servicio
-- _EmpleadoRow para filas de empleado
-- _KpiCard para indicadores estadísticos
-- _FiltroFechas y _Paginacion como componentes comunes
-- Vistas principales refactorizadas con partials
-```
 
 ---
 
@@ -632,15 +408,6 @@ feat: crear vistas parciales reutilizables
 - `SCA-MVC.csproj` (agregar paquete Identity)
 - `Migrations/[timestamp]_AddIdentity.cs` (nueva migración)
 
-**Mensaje:**
-```
-feat: instalar y configurar ASP.NET Identity
-
-- Modelo ApplicationUser con propiedades extendidas
-- DbContext hereda de IdentityDbContext
-- Configuración de Identity (contraseña, lockout, cookie)
-- Migración para tablas de Identity
-```
 
 ---
 
@@ -656,15 +423,6 @@ feat: instalar y configurar ASP.NET Identity
 - `Views/Shared/_Layout.cshtml` (actualizar topbar con usuario real)
 - `wwwroot/css/site.css` (estilos de login/register)
 
-**Mensaje:**
-```
-feat: crear vistas de autenticación (Login, Logout, Registro)
-
-- AccountController con autenticación completa
-- Vistas de Login y Registro con estilo glassmorphism
-- Topbar actualizada con nombre de usuario real
-- Vista de acceso denegado
-```
 
 ---
 
@@ -677,16 +435,6 @@ feat: crear vistas de autenticación (Login, Logout, Registro)
 - `Controllers/*.cs` (agregar atributos [Authorize] con roles)
 - `Views/Shared/_Layout.cshtml` (mostrar/ocultar ítems por rol)
 
-**Mensaje:**
-```
-feat: configurar roles y autorización por rol
-
-- Roles Admin y Usuario con seeding automático
-- Usuario admin creado al primer arranque
-- [Authorize] en todos los controladores
-- Restricción de módulos por rol
-- Sidebar adaptativo según permisos del usuario
-```
 
 ---
 
@@ -701,47 +449,10 @@ feat: configurar roles y autorización por rol
 - ✅ `Views/Shared/_Layout.cshtml` — USUARIOS con bi-shield-lock en nav Admin
 - ✅ `wwwroot/css/site.css` — .usr-badge, .usr-admin, .usr-usuario, .btn-emp-reactivar, .emp-field-row
 
-**Mensaje:**
-```
-feat: crear gestión de usuarios del sistema
-
-- UsuarioController con Index, Create, Edit, Delete (toggle activar/desactivar)
-- ViewModel con UsuarioListItem, UsuarioFormViewModel y UsuarioViewModel
-- Vista 2 columnas: tabla de usuarios + formulario lateral (mismo diseño que Empleados)
-- Badges de rol (Admin en dorado, Usuario en azul) y estado activo/inactivo
-- Reseteo de contraseña opcional en edición
-- Desactivación via LockoutEnd sin eliminar el registro
-- Enlace USUARIOS con icono bi-shield-lock en sidebar del Admin
-- Estilos: usr-badge, btn-emp-reactivar, emp-field-row
-```
 
 ---
 
 ## UNIDAD 6 — Avanzado: Archivos, Email e IA
-
----
-
-### Commit 30 — Manejo de archivos (foto de empleado)
-
-**Descripción:** Agregar campo `FotoUrl` al modelo `Empleado`. Implementar subida de foto en el formulario de empleados (input file con preview, validación de tipo y tamaño). Guardar fotos en `wwwroot/uploads/empleados/`. Mostrar foto en la tabla de empleados, en el detalle del servicio y en las notificaciones de registro. Implementar servicio `IFileService` para subida, eliminación y validación de archivos. Generar migración para el nuevo campo.
-
-**Archivos:**
-- `Models/Empleado.cs` (agregar FotoUrl)
-- `Services/IFileService.cs` + `Services/FileService.cs` (crear)
-- `Controllers/EmpleadoController.cs` (actualizar Create/Edit para manejar archivo)
-- `Views/Empleado/Index.cshtml` (agregar input file con preview)
-- `Migrations/[timestamp]_AddFotoEmpleado.cs` (nueva migración)
-- `Program.cs` (registrar FileService)
-
-**Mensaje:**
-```
-feat: agregar manejo de archivos — foto de empleado
-
-- Campo FotoUrl en modelo Empleado
-- Servicio de archivos (subida, validación, eliminación)
-- Preview de imagen en formulario
-- Foto visible en tabla y detalle de servicio
-```
 
 ---
 
@@ -759,68 +470,45 @@ feat: agregar manejo de archivos — foto de empleado
 - ✅ `Views/Reporte/Index.cshtml` — botón + modal de email + section Scripts
 - ✅ `wwwroot/css/site.css` — .btn-email-rpt, .modal-field
 
-**Mensaje:**
-```
-feat: implementar envío de reportes por email
-
-- IEmailService + EmailService con MailKit/MimeKit (SMTP STARTTLS)
-- Configuración SMTP en appsettings.json (EmailSettings)
-- GenerarPdfBytesAsync extraído para reutilización (ExportarPDF + EnviarPorEmail)
-- Action POST EnviarPorEmail con generación y adjunto de PDF
-- Modal de email con estilo glassmorphism en vista de Reportes
-- Botón 'Enviar por Email' junto a 'Exportar PDF'
-- Estilos: btn-email-rpt, modal-field
-```
 
 ---
 
-### Commit 32 — Integración de LLM/IA (análisis inteligente)
+### Commit 32 — Responsividad para Tablet Samsung Galaxy A9
 
-**Descripción:** Integrar un servicio de IA (OpenAI API o similar) para análisis inteligente de datos. Crear `IIAService` con método `AnalizarDatosAsync(contexto)` que envía estadísticas del sistema a un LLM y recibe un análisis en texto. Agregar sección "Análisis IA" en la vista de Estadísticas con un botón "Generar Análisis" que solicita al LLM interpretar las tendencias, sugerir mejoras y predecir demanda. Configurar API key en `appsettings.json` (o user secrets). Mostrar respuesta en un panel con formato Markdown.
+**Descripción:** Corregir problemas de responsividad detectados al usar la aplicación en una tablet táctil. Ajustar el meta viewport, bloquear el expand por hover del sidebar y reorganizar los layouts de grillas. Solucionar error `OUTPUT clause` del SQL Server al guardar registros con triggers.
 
 **Archivos:**
-- `Services/IIAService.cs` + `Services/IAService.cs` (crear)
-- `SCA-MVC.csproj` (agregar paquete HTTP client o SDK de OpenAI)
-- `appsettings.json` (agregar sección IASettings con API key placeholder)
-- `Controllers/EstadisticaController.cs` (agregar acción AnalizarConIA)
-- `Views/Estadistica/Index.cshtml` (agregar sección de análisis IA)
-- `wwwroot/js/site.js` (AJAX para solicitar análisis)
-- `Program.cs` (registrar IAService)
+- `Views/Shared/_Layout.cshtml` (viewport meta)
+- `wwwroot/css/site.css` (media queries)
+- `Data/Configurations/RegistroConfiguration.cs` (HasTrigger)
 
-**Mensaje:**
-```
-feat: integrar IA para análisis de datos
-
-- Servicio de IA con conexión a LLM (OpenAI API)
-- Análisis automático de tendencias y estadísticas
-- Sección de análisis inteligente en vista de Estadísticas
-- Configuración de API key en appsettings
-- Respuesta formateada en Markdown
-```
 
 ---
 
-### Commit 33 — Refinamientos finales y documentación
+### Commit 33 — Manejo Global de Errores
 
-**Descripción:** Realizar pruebas integrales de toda la funcionalidad. Corregir bugs encontrados. Agregar manejo global de excepciones con middleware personalizado. Agregar página de error personalizada (404, 500). Actualizar `README.md` del proyecto con: descripción, tecnologías, instrucciones de instalación, configuración, estructura del proyecto y capturas de pantalla. Limpiar código no utilizado.
+**Descripción:** Implementar un middleware de excepciones global (`ExceptionMiddleware`) para atrapar errores no controlados y redireccionar a páginas de error estilo glassmorphism. Crear vistas exclusivas `Error.cshtml` y `NotFound.cshtml` para manejar códigos 500 y 404 independientes del Layout principal.
 
 **Archivos:**
 - `Middleware/ExceptionMiddleware.cs` (crear)
-- `Views/Shared/Error.cshtml` (mejorar)
-- `Views/Shared/NotFound.cshtml` (crear)
-- `Program.cs` (agregar middleware de excepciones)
-- `README.md` (actualizar documentación completa)
-- Varios archivos (corrección de bugs menores)
+- `Controllers/HomeController.cs` (NotFound)
+- `Views/Shared/Error.cshtml` (rediseño)
+- `Views/Home/NotFound.cshtml` (creado)
 
-**Mensaje:**
-```
-feat: aplicar refinamientos finales y documentación
 
-- Middleware global de manejo de excepciones
-- Páginas de error personalizadas (404/500)
-- README completo con instrucciones y capturas
-- Corrección de bugs y limpieza de código
-```
+---
+
+### Commit 34 — Corrección de Bugs y Limpieza de Código
+
+**Descripción:** Estabilizar la aplicación. Reemplazar media queries por un viewport fijo de 1280px para tablet y forzar zoom del navegador nativo. Alinear cards del Admin en 4 columnas. Unificar los layouts `Index` de ABM. Eliminar código html/css redundante. 
+
+**Archivos:**
+- `Services/RegistroNegocio.cs` (ExecuteSqlRawAsync)
+- `wwwroot/css/site.css` (limpieza media queries)
+- `Views/Shared/_Layout.cshtml` (viewport 1280px)
+- `Views/Admin/Index.cshtml` (arreglar grid 4 col)
+- `Views/.../Index.cshtml` (alineación gaps)
+
 
 ---
 
@@ -830,10 +518,10 @@ feat: aplicar refinamientos finales y documentación
 |--------|---------|---------------|
 | **Fase 0** | 1–8 | Diseños de vistas cshtml (estáticas) |
 | **Unidad 2** | 9–19 | CRUD con ADO.NET, Stored Procedures, Validaciones |
-| **Unidad 3** | 20–22 | Migración a Entity Framework, Modelado, Migraciones |
+| **Unidad 3** | 20–21 | Migración a Entity Framework, Modelado, Migraciones |
 | **Unidad 4** | 23–25 | Seeding, Fluent API avanzado, Vistas parciales |
 | **Unidad 5** | 26–29 | Identity, Login, Roles, Gestión de usuarios |
-| **Unidad 6** | 30–33 | Archivos, Email, IA, Documentación final |
+| **Unidad 6** | 31–34 | Envío Email, Responsive Tablet, Errores y Limpieza |
 
 ---
 
@@ -848,10 +536,10 @@ feat: aplicar refinamientos finales y documentación
 | CRUD con MVC, ADO y SQL | 9–18 |
 | Controladores y Vistas Razor | 8, 12–17 |
 | Validaciones | 13, 14, 19 |
-| Entity Framework | 20–22 |
+| Entity Framework | 20–21 |
 | Modelado de clases | 21 |
 | Configuración de contexto | 20, 21 |
-| Migraciones | 22, 23 |
+| Migraciones | 21, 23 |
 | Desarrollo con EF | 20–25 |
 | Fluent API | 21, 24 |
 | Seeding | 23 |
@@ -861,6 +549,7 @@ feat: aplicar refinamientos finales y documentación
 | Roles y permisos | 28 |
 | Gestión de usuarios | 29 |
 | Desarrollo con EF e Identity | 26–29 |
-| Manejo de archivos | 30 |
 | Envíos de email | 31 |
-| Integración de LLM IA | 32 |
+| Layout Responsive Móvil/Tablet | 32 |
+| Manejo Global de Excepciones | 33 |
+

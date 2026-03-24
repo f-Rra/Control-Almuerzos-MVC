@@ -403,39 +403,23 @@ Al aplicar las migraciones, se crean automáticamente:
 
 ---
 
-## Documentación
+## Metodología de Desarrollo Asistido por IA 
 
-### Documentos Disponibles
+Este proyecto fue desarrollado bajo un paradigma moderno de **Ingeniería de Software Asistida por Agentes**. Toda la arquitectura base, la lógica de negocio original y la toma de decisiones críticas fueron dirigidas y supervisadas por mí (el autor), mientras que la escritura de código, refactorización y documentación fue delegada a distintas inteligencias artificiales.
 
-| Documento | Descripción | Ubicación |
-|---|---|---|
-| **README.md** | Documentación técnica completa (este archivo) | Raíz del proyecto |
-| **Guias/** | Documentación de implementación por commit | `Guias/` |
-| **Guia_Implementacion_Completa.md** | Hoja de ruta completa de todos los commits | `Guias/` |
-| **Procedimientos_Vistas_Triggers.sql** | Script SQL original (referencia) | `SCA-MVC/SQL/` |
+### Ecosistema de Herramientas Utilizadas
 
----
+- **Claude Code:** Utilizado para la refactorización profunda, migración de capas (ADO.NET a Entity Framework) y estructuración de la lógica MVC.
+- **Antigravity (Google DeepMind):** Empleado como agente autónomo para la creación interactiva de componentes UI, resolución de bugs de responsividad y generación de documentación dinámica.
+- **GitHub Copilot:** Asistencia en tiempo real para el autocompletado de sintaxis C#, consultas LINQ y validaciones de seguridad.
 
-## Herramientas de Documentación y Asistencia
+### Control de Calidad y Código Limpio
 
-Las siguientes herramientas fueron utilizadas para la elaboración de documentación técnica, guías de usuario y asistencia en la estructuración del código:
+El uso de herramientas generativas no solo redujo drásticamente los tiempos de desarrollo, sino que también permitió mantener estándares de código limpio mucho más altos de lo habitual. Mediante ciclos de revisión constante, piezas complejas fueron fragmentadas en componentes MVC puros y reutilizables de forma segura.
 
-- **GitHub Copilot** (Claude Sonnet 4.5)
-  - Generación de documentación técnica (README.md)
-  - Asistencia en refactorización de código
-  - Sugerencias de mejores prácticas
-  - Revisión de consultas LINQ y configuraciones EF
-  - Generación de guías de implementación por commit
+### Evolución y Velocidad del Proyecto
 
-### Nota sobre el uso de IA
-
-El uso de herramientas de IA generativa fue exclusivamente para:
-- **Documentación**: Redacción clara y profesional de guías
-- **Refactorización**: Mejora de estructura y legibilidad del código existente
-- **Consultoría**: Validación de soluciones técnicas y mejores prácticas
-- **Patrones de diseño**: Sugerencias para organización de código (Services, Helpers, Configurations)
-
-**Toda la lógica de negocio, arquitectura del sistema, diseño de base de datos y funcionalidades fueron desarrolladas por el autor del proyecto.**
+A lo largo de la construcción de las vistas estáticas iniciales hasta la refactorización profunda de ADO.NET a Entity Framework Core, la sinergia entre el criterio técnico humano y la velocidad de iteración algorítmica demostró ser la principal ventaja de este modelo de desarrollo, logrando un código final altamente cohesionado y con baja tasa de defectos.
 
 ---
 
