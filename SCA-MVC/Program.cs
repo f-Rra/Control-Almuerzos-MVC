@@ -84,8 +84,9 @@ using (var scope = app.Services.CreateScope())
     }
 
     // Crear usuario administrador por defecto si no existe
-    const string adminEmail    = "admin@sca.com";
-    const string adminPassword = "Admin123";
+    var adminConfig    = app.Configuration.GetSection("DefaultAdmin");
+    var adminEmail     = adminConfig["Email"]    ?? "admin@sca.com";
+    var adminPassword  = adminConfig["Password"] ?? "Admin123";
 
     if (await userManager.FindByEmailAsync(adminEmail) is null)
     {

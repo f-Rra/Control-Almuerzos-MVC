@@ -124,6 +124,7 @@ namespace SCA_MVC.Controllers
 
         // POST: Servicio/Registrar (AJAX)
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Registrar(string credencial, int idServicio, int idLugar)
         {
             if (string.IsNullOrEmpty(credencial))

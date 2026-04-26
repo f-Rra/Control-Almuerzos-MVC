@@ -89,48 +89,20 @@ namespace SCA_MVC.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        // GET: Account/Register
+        // GET: Account/Register — deshabilitado: usuarios creados exclusivamente por Admin
         [AllowAnonymous]
         public IActionResult Register()
         {
-            if (_signInManager.IsSignedIn(User))
-                return RedirectToAction("Index", "Home");
-
-            return View();
+            return RedirectToAction(nameof(Login));
         }
 
-        // POST: Account/Register
+        // POST: Account/Register — deshabilitado
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public IActionResult Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var user = new ApplicationUser
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                Nombre = model.Nombre,
-                Apellido = model.Apellido,
-                NombreUsuario = model.NombreUsuario
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                var nombre = user.NombreUsuario.Length > 0 ? user.NombreUsuario : user.Email ?? "usuario";
-                TempData.MostrarExito($"Bienvenido, {nombre}. Tu cuenta ha sido creada exitosamente.", "¡Registro exitoso!");
-                return RedirectToAction("Index", "Home");
-            }
-
-            foreach (var error in result.Errors)
-                ModelState.AddModelError(string.Empty, error.Description);
-
-            return View(model);
+            return RedirectToAction(nameof(Login));
         }
 
         // GET: Account/AccessDenied
