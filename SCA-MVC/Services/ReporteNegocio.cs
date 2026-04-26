@@ -16,7 +16,7 @@ namespace SCA_MVC.Services
 
         public async Task<List<ServicioReporte>> ObtenerListaServiciosAsync(DateTime desde, DateTime hasta, int? idLugar)
         {
-            var query = _db.Servicios.Include(s => s.Lugar)
+            var query = _db.Servicios.AsNoTracking().Include(s => s.Lugar)
                 .Where(s => s.Fecha.Date >= desde.Date && s.Fecha.Date <= hasta.Date);
 
             if (idLugar.HasValue && idLugar.Value > 0)
@@ -38,7 +38,7 @@ namespace SCA_MVC.Services
 
         public async Task<List<AsistenciaPorEmpresa>> ObtenerAsistenciasPorEmpresaAsync(DateTime desde, DateTime hasta, int? idLugar)
         {
-            var query = _db.Registros.Include(r => r.Empresa)
+            var query = _db.Registros.AsNoTracking().Include(r => r.Empresa)
                 .Where(r => r.Fecha >= desde.Date && r.Fecha <= hasta.Date);
 
             if (idLugar.HasValue && idLugar.Value > 0)
@@ -63,21 +63,22 @@ namespace SCA_MVC.Services
 
         public async Task<List<AsistenciaPorDia>> ObtenerDistribucionPorDiaAsync(DateTime desde, DateTime hasta, int? idLugar)
         {
-            var query = _db.Registros
+            var query = _db.Registros.AsNoTracking()
                 .Where(r => r.Fecha >= desde.Date && r.Fecha <= hasta.Date);
 
             if (idLugar.HasValue && idLugar.Value > 0)
                 query = query.Where(r => r.IdLugar == idLugar.Value);
 
-            var list = await query.ToListAsync();
+            var raw = await query
+                .GroupBy(r => r.Fecha.DayOfWeek)
+                .Select(g => new { DiaSemana = g.Key, TotalAsistencias = g.Count() })
+                .ToListAsync();
 
-            var dias = list.GroupBy(r => r.Fecha.DayOfWeek)
-                .Select(g => new
-                {
-                    DiaSemana = TraducirDia(g.Key),
-                    TotalAsistencias = g.Count()
-                })
-                .ToList();
+            var dias = raw.Select(g => new
+            {
+                DiaSemana = TraducirDia(g.DiaSemana),
+                g.TotalAsistencias
+            }).ToList();
 
             var ordenDias = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
 
@@ -107,7 +108,7 @@ namespace SCA_MVC.Services
 
         public async Task<List<CoberturaReporte>> ObtenerCoberturaVsProyeccionAsync(DateTime desde, DateTime hasta, int? idLugar)
         {
-            var query = _db.Servicios.Include(s => s.Lugar)
+            var query = _db.Servicios.AsNoTracking().Include(s => s.Lugar)
                 .Where(s => s.Fecha >= desde.Date && s.Fecha <= hasta.Date);
 
             if (idLugar.HasValue && idLugar.Value > 0)
@@ -133,7 +134,7 @@ namespace SCA_MVC.Services
 
         public async Task<int> ObtenerTotalAsistenciasRangoAsync(DateTime desde, DateTime hasta, int? idLugar)
         {
-            var query = _db.Registros
+            var query = _db.Registros.AsNoTracking()
                 .Where(r => r.Fecha >= desde.Date && r.Fecha <= hasta.Date);
 
             if (idLugar.HasValue && idLugar.Value > 0)

@@ -17,44 +17,39 @@ namespace SCA_MVC.Services
         {
             var vm = new EstadisticasViewModel();
 
-            var empleados = await _db.Empleados.ToListAsync();
-            vm.TotalEmpleados = empleados.Count;
-            vm.EmpleadosActivos = empleados.Count(e => e.Estado);
-            vm.EmpleadosInactivos = empleados.Count(e => !e.Estado);
+            vm.TotalEmpleados   = await _db.Empleados.CountAsync();
+            vm.EmpleadosActivos  = await _db.Empleados.CountAsync(e => e.Estado);
+            vm.EmpleadosInactivos = vm.TotalEmpleados - vm.EmpleadosActivos;
 
-            var empresas = await _db.Empresas.Include(e => e.Empleados).ToListAsync();
-            vm.TotalEmpresasActivas = empresas.Count(e => e.Estado);
-            vm.EmpresasConEmpleados = empresas.Count(e => e.Estado && e.Empleados.Any(emp => emp.Estado));
-            vm.PromedioEmpleados = vm.EmpresasConEmpleados > 0 
-                ? Math.Round((decimal)vm.EmpleadosActivos / vm.EmpresasConEmpleados, 1) 
+            vm.TotalEmpresasActivas  = await _db.Empresas.CountAsync(e => e.Estado);
+            vm.EmpresasConEmpleados  = await _db.Empresas.CountAsync(e => e.Estado && e.Empleados.Any(emp => emp.Estado));
+            vm.PromedioEmpleados = vm.EmpresasConEmpleados > 0
+                ? Math.Round((decimal)vm.EmpleadosActivos / vm.EmpresasConEmpleados, 1)
                 : 0;
 
-            var servicios = await _db.Servicios.ToListAsync();
-            vm.ServiciosEsteMes = servicios.Count(s => s.Fecha.Month == DateTime.Today.Month && s.Fecha.Year == DateTime.Today.Year);
-            vm.ServiciosEsteAnio = servicios.Count(s => s.Fecha.Year == DateTime.Today.Year);
-            
-            var diasTranscurridos = Math.Max(1, DateTime.Today.Day);
+            var hoy = DateTime.Today;
+            var inicioMes = new DateTime(hoy.Year, hoy.Month, 1);
+            vm.ServiciosEsteMes  = await _db.Servicios.CountAsync(s => s.Fecha >= inicioMes && s.Fecha <= hoy);
+            vm.ServiciosEsteAnio = await _db.Servicios.CountAsync(s => s.Fecha.Year == hoy.Year);
+
+            var diasTranscurridos = Math.Max(1, hoy.Day);
             vm.PromedioPorDia = (int)Math.Round((double)vm.ServiciosEsteMes / diasTranscurridos);
 
             // Top 5 Empresas
-            var inicioMes = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            var finMes = DateTime.Today;
-
             var asistenciasMes = await _db.Registros
-                .Where(r => r.Fecha >= inicioMes && r.Fecha <= finMes)
-                .Include(r => r.Empresa)
-                .GroupBy(r => r.Empresa)
-                .Select(g => new { Empresa = g.Key, Conteos = g.Count() })
+                .Where(r => r.Fecha >= inicioMes && r.Fecha <= hoy)
+                .GroupBy(r => new { r.IdEmpresa, NombreEmpresa = r.Empresa!.Nombre })
+                .Select(g => new { g.Key.NombreEmpresa, Conteos = g.Count() })
                 .OrderByDescending(x => x.Conteos)
                 .Take(5)
                 .ToListAsync();
 
-            var totalAsistencias = await _db.Registros.CountAsync(r => r.Fecha >= inicioMes && r.Fecha <= finMes);
+            var totalAsistencias = await _db.Registros.CountAsync(r => r.Fecha >= inicioMes && r.Fecha <= hoy);
 
             vm.TopEmpresas = asistenciasMes.Select((x, i) => new TopEmpresaItem
             {
                 Ranking = i + 1,
-                NombreEmpresa = x.Empresa?.Nombre ?? "-",
+                NombreEmpresa = x.NombreEmpresa ?? "-",
                 TotalAsistencias = x.Conteos,
                 Porcentaje = totalAsistencias > 0 ? Math.Round((decimal)x.Conteos / totalAsistencias * 100, 2) : 0
             }).ToList();

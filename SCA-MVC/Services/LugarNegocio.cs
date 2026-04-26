@@ -17,12 +17,12 @@ namespace SCA_MVC.Services
 
         public Task<List<Lugar>> ListarAsync()
         {
-            return _context.Lugares.ToListAsync();
+            return _context.Lugares.AsNoTracking().ToListAsync();
         }
 
         public Task<Lugar?> BuscarPorNombreAsync(string nombre)
         {
-            return _context.Lugares.FirstOrDefaultAsync(l => l.Nombre == nombre);
+            return _context.Lugares.AsNoTracking().FirstOrDefaultAsync(l => l.Nombre == nombre);
         }
     }
 }

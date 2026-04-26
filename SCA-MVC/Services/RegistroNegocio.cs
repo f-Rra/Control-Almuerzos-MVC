@@ -34,6 +34,7 @@ namespace SCA_MVC.Services
         public async Task<List<Registro>> ListarPorServicioAsync(int idServicio)
         {
             var registros = await _context.Registros
+                .AsNoTracking()
                 .Include(r => r.Empleado)
                 .ThenInclude(e => e.Empresa)
                 .Where(r => r.IdServicio == idServicio)
@@ -61,6 +62,7 @@ namespace SCA_MVC.Services
         public async Task<List<Registro>> PorEmpresaYFechaAsync(int idEmpresa, DateTime fechaInicio, DateTime fechaFin)
         {
             var registros = await _context.Registros
+                .AsNoTracking()
                 .Include(r => r.Empleado)
                 .Include(r => r.Empresa)
                 .Where(r => r.IdEmpresa == idEmpresa && r.Fecha >= fechaInicio.Date && r.Fecha <= fechaFin.Date)

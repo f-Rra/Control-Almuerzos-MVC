@@ -18,12 +18,13 @@ namespace SCA_MVC.Services
 
         public Task<List<Empresa>> ListarAsync()
         {
-            return _context.Empresas.ToListAsync();
+            return _context.Empresas.AsNoTracking().ToListAsync();
         }
 
         public async Task<List<Empresa>> ListarConEmpleadosAsync()
         {
             var empresas = await _context.Empresas
+                .AsNoTracking()
                 .Include(e => e.Empleados.Where(emp => emp.Estado))
                 .ToListAsync();
                 
@@ -36,7 +37,7 @@ namespace SCA_MVC.Services
 
         public Task<Empresa?> BuscarPorIdAsync(int idEmpresa)
         {
-            return _context.Empresas.FirstOrDefaultAsync(e => e.IdEmpresa == idEmpresa);
+            return _context.Empresas.AsNoTracking().FirstOrDefaultAsync(e => e.IdEmpresa == idEmpresa);
         }
 
         public async Task<int> AgregarAsync(Empresa empresa)
@@ -69,7 +70,7 @@ namespace SCA_MVC.Services
 
         public async Task<List<Empresa>> FiltrarAsync(string? filtro)
         {
-            var query = _context.Empresas.AsQueryable();
+            var query = _context.Empresas.AsNoTracking().AsQueryable();
             if (!string.IsNullOrWhiteSpace(filtro))
             {
                 query = query.Where(e => e.Nombre.Contains(filtro));

@@ -19,24 +19,24 @@ namespace SCA_MVC.Services
 
         public Task<List<Servicio>> ListarTodosAsync()
         {
-            return _context.Servicios.Include(s => s.Lugar).ToListAsync();
+            return _context.Servicios.AsNoTracking().Include(s => s.Lugar).ToListAsync();
         }
 
         public Task<Servicio?> ObtenerActivoAsync(int idLugar)
         {
-            return _context.Servicios.Include(s => s.Lugar)
+            return _context.Servicios.AsNoTracking().Include(s => s.Lugar)
                 .FirstOrDefaultAsync(s => s.IdLugar == idLugar && s.DuracionMinutos == null);
         }
 
         public Task<Servicio?> ObtenerActivoGlobalAsync()
         {
-            return _context.Servicios.Include(s => s.Lugar)
+            return _context.Servicios.AsNoTracking().Include(s => s.Lugar)
                 .FirstOrDefaultAsync(s => s.DuracionMinutos == null);
         }
 
         public Task<Servicio?> ObtenerUltimoAsync()
         {
-            return _context.Servicios.Include(s => s.Lugar)
+            return _context.Servicios.AsNoTracking().Include(s => s.Lugar)
                 .OrderByDescending(s => s.IdServicio)
                 .FirstOrDefaultAsync();
         }
@@ -71,7 +71,7 @@ namespace SCA_MVC.Services
 
         public Task<List<Servicio>> ListarPorFechaAsync(DateTime fechaDesde, DateTime fechaHasta, int? idLugar = null)
         {
-            var query = _context.Servicios.Include(s => s.Lugar)
+            var query = _context.Servicios.AsNoTracking().Include(s => s.Lugar)
                 .Where(s => s.Fecha >= fechaDesde.Date && s.Fecha <= fechaHasta.Date);
 
             if (idLugar.HasValue)

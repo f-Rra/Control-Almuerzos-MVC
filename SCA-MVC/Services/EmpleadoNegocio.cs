@@ -18,18 +18,18 @@ namespace SCA_MVC.Services
 
         public Task<List<Empleado>> ListarAsync()
         {
-            return _context.Empleados.Include(e => e.Empresa).ToListAsync();
+            return _context.Empleados.AsNoTracking().Include(e => e.Empresa).ToListAsync();
         }
 
         public Task<Empleado?> BuscarPorCredencialAsync(string idCredencial)
         {
-            return _context.Empleados.Include(e => e.Empresa)
+            return _context.Empleados.AsNoTracking().Include(e => e.Empresa)
                 .FirstOrDefaultAsync(e => e.IdCredencial == idCredencial);
         }
 
         public Task<Empleado?> BuscarPorIdAsync(int idEmpleado)
         {
-            return _context.Empleados.Include(e => e.Empresa)
+            return _context.Empleados.AsNoTracking().Include(e => e.Empresa)
                 .FirstOrDefaultAsync(e => e.IdEmpleado == idEmpleado);
         }
 
@@ -71,7 +71,7 @@ namespace SCA_MVC.Services
 
         public Task<List<Empleado>> FiltrarEmpleadosAsync(string? filtro, int? idEmpresa)
         {
-            var query = _context.Empleados.Include(e => e.Empresa).AsQueryable();
+            var query = _context.Empleados.AsNoTracking().Include(e => e.Empresa).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filtro))
             {
@@ -95,6 +95,7 @@ namespace SCA_MVC.Services
                 .Select(r => r.IdEmpleado);
 
             return await _context.Empleados
+                .AsNoTracking()
                 .Include(e => e.Empresa)
                 .Where(e => e.Estado && !registrados.Contains(e.IdEmpleado))
                 .ToListAsync();
@@ -107,6 +108,7 @@ namespace SCA_MVC.Services
                 .Select(r => r.IdEmpleado);
 
             var query = _context.Empleados
+                .AsNoTracking()
                 .Include(e => e.Empresa)
                 .Where(e => e.Estado && !registrados.Contains(e.IdEmpleado));
 
