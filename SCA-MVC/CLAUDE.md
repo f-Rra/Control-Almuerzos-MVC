@@ -69,3 +69,80 @@ Hay **dos mecanismos** de seed que no deben confundirse:
 ### Configuración sensible
 
 `appsettings.json` contiene las credenciales SMTP (`EmailSettings`) y la cadena de conexión. Para desarrollo local, la conexión usa Windows Auth (`Integrated Security=true`). La cadena con SQL Auth (`DefaultConnection_SQLAuth`) está incluida como referencia pero no se usa por defecto.
+
+## Principios de comportamiento (Karpathy)
+
+Guías para reducir errores comunes en codificación con IA. Derivadas de las observaciones de Andrej Karpathy sobre fallas típicas de LLMs en tareas de código.
+
+**Tradeoff:** estas guías priorizan cautela sobre velocidad. Para tareas triviales, usar criterio.
+
+### 1. Pensar antes de codificar
+
+No asumir. No ocultar confusión. Exponer los tradeoffs.
+
+Antes de implementar:
+- Enunciar supuestos explícitamente. Si hay incertidumbre, preguntar.
+- Si existen múltiples interpretaciones, presentarlas — no elegir en silencio.
+- Si existe un enfoque más simple, decirlo. Hacer pushback cuando corresponde.
+- Si algo no está claro, detenerse. Nombrar qué confunde. Preguntar.
+
+### 2. Simplicidad primero
+
+Mínimo código que resuelve el problema. Nada especulativo.
+
+- Sin features más allá de lo pedido.
+- Sin abstracciones para código de uso único.
+- Sin "flexibilidad" o "configurabilidad" que no fue solicitada.
+- Sin manejo de errores para escenarios imposibles.
+- Si se escriben 200 líneas y podrían ser 50, reescribir.
+
+### 3. Cambios quirúrgicos
+
+Tocar solo lo necesario. Limpiar solo el propio desorden.
+
+Al editar código existente:
+- No "mejorar" código adyacente, comentarios ni formato.
+- No refactorizar cosas que no están rotas.
+- Respetar el estilo existente, aunque se haría diferente.
+- Si se detecta código muerto no relacionado, mencionarlo — no eliminarlo.
+
+Al crear cambios que dejan huérfanos:
+- Eliminar imports/variables/funciones que LOS PROPIOS cambios dejaron sin uso.
+- No eliminar código muerto preexistente salvo que se pida explícitamente.
+
+### 4. Ejecución orientada a metas
+
+Definir criterios de éxito. Iterar hasta verificar.
+
+Transformar tareas en metas verificables:
+- "Agregar validación" → "escribir tests para inputs inválidos, luego hacerlos pasar"
+- "Corregir el bug" → "escribir un test que lo reproduzca, luego hacerlo pasar"
+
+Para tareas de múltiples pasos, enunciar un plan breve:
+```
+1. [Paso] → verificar: [check]
+2. [Paso] → verificar: [check]
+3. [Paso] → verificar: [check]
+```
+
+## Plugins y skills instalados
+
+### Plugin: claude-code-setup (Anthropic Verified)
+
+Analiza el proyecto y recomienda automaciones de Claude Code adaptadas al stack: MCPs, skills, hooks, subagents y slash commands. Opera en modo solo-lectura.
+
+Para ejecutarlo: escribir "recommend automations for this project" o "what hooks should I use?" en el chat. Instalación global: `/plugin install claude-code-setup`.
+
+### Skills de proyecto (`.claude/commands/`)
+
+| Comando | Origen | Propósito |
+|---------|--------|-----------|
+| `/frontend-design` | Propio | Auditoría y mejora de vistas Razor con Bootstrap 5 |
+| `/db-review` | Propio | Análisis de queries EF Core, relaciones e índices |
+| `/report-generator` | Propio | Guía para reportes PDF con QuestPDF |
+| `/seed-data` | Propio | Generación y actualización de datos de prueba |
+| `/migrate` | dotnet-claude-kit | Workflow seguro para migraciones EF Core |
+| `/verify` | dotnet-claude-kit | Pipeline de 7 fases antes de hacer PR |
+| `/security-scan` | dotnet-claude-kit | Audit OWASP completo en 6 dimensiones |
+| `/build-fix` | dotnet-claude-kit | Loop autónomo para resolver errores de compilación |
+| `/ef-core` | dotnet-claude-kit | Referencia de patrones modernos de EF Core |
