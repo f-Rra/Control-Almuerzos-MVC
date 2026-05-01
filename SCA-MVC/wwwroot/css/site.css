@@ -92,6 +92,27 @@ body {
     z-index: 1000;
 }
 
+.topbar-datetime {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #888;
+    margin-right: auto;
+    padding-left: 4px;
+}
+
+.topbar-datetime i {
+    font-size: 0.78rem;
+    color: var(--primary);
+}
+
+.topbar-sep {
+    color: #ccc;
+    margin: 0 2px;
+}
+
 .user-area {
     display: flex;
     align-items: center;
@@ -2581,6 +2602,7 @@ body {
 
 .adm-header {
     text-align: center;
+    padding-top: 2rem;
 }
 
 .adm-header h1 {

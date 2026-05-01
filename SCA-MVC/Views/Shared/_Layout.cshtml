@@ -90,6 +90,13 @@
 
     <div class="right-panel">
         <nav class="topbar">
+            <div class="topbar-datetime">
+                <i class="bi bi-calendar3"></i>
+                <span id="topbar-fecha"></span>
+                <span class="topbar-sep">·</span>
+                <i class="bi bi-clock"></i>
+                <span id="topbar-hora"></span>
+            </div>
             <div class="user-area">
                 @if (User.Identity?.IsAuthenticated == true)
                 {
@@ -120,7 +127,7 @@
         </main>
 
         <footer class="foot">
-            <p>&lt;/&gt; SISTEMA CONTROL DE ALMUERZOS &mdash; 2026</p>
+            <p>Sistema Control de Almuerzos &mdash; v1.0 &mdash; 2026</p>
         </footer>
     </div>
 
@@ -132,6 +139,21 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+            const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+            function actualizar() {
+                const now = new Date();
+                const fecha = `${dias[now.getDay()]} ${now.getDate()} de ${meses[now.getMonth()]}`;
+                const hora = now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                document.getElementById('topbar-fecha').textContent = fecha;
+                document.getElementById('topbar-hora').textContent = hora;
+            }
+            actualizar();
+            setInterval(actualizar, 1000);
+        })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
