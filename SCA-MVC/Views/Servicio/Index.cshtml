@@ -222,11 +222,11 @@
                 // Notificación modal centrada — mismo estilo que el resto de la app
                 showRegistro(data.nombre, data.empresa, data.hora);
 
-                // Actualizar tabla (prepend)
+                // Actualizar tabla (prepend) con flash de nueva fila
                 const tbody = document.querySelector('#tabla-registros tbody');
                 const count = parseInt(document.getElementById('count-registrados').textContent) + 1;
                 const newRow = `
-                    <tr>
+                    <tr class="reg-row-nueva">
                         <td class="td-num">${count}</td>
                         <td><div class="td-emp-cell"><div class="td-emp-ico"><i class="bi bi-person-fill"></i></div><span class="td-empleado">${data.nombre}</span></div></td>
                         <td class="td-empresa">${data.empresa}</td>
@@ -234,11 +234,11 @@
                     </tr>`;
                 tbody.insertAdjacentHTML('afterbegin', newRow);
 
-                // Actualizar contadores
-                document.getElementById('count-registrados').textContent = count;
+                // Actualizar contadores con animación
                 const proyeccion = @(Model.ServicioActivo?.Proyeccion ?? 1);
                 const faltan = Math.max(0, proyeccion - count);
-                document.getElementById('count-faltan').textContent = faltan;
+                animarContador(document.getElementById('count-registrados'), count);
+                animarContador(document.getElementById('count-faltan'), faltan);
                 const pct = Math.min(100, Math.round((count / proyeccion) * 100));
                 document.getElementById('progreso-barra').style.width = pct + '%';
                 document.getElementById('progreso-texto').textContent = pct + '%';

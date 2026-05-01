@@ -206,6 +206,28 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ══════════════════════════════════════════
+// ANIMACIONES DE CONTADORES
+// ══════════════════════════════════════════
+
+function animarContador(el, nuevoValor) {
+    const actual = parseInt(el.textContent) || 0;
+    if (actual === nuevoValor) return;
+    const pasos = 10;
+    const ms    = 300;
+    let paso    = 0;
+    const iv = setInterval(() => {
+        paso++;
+        el.textContent = Math.round(actual + (nuevoValor - actual) * (paso / pasos));
+        if (paso >= pasos) {
+            clearInterval(iv);
+            el.textContent = nuevoValor;
+            el.classList.add('num-pop');
+            el.addEventListener('animationend', () => el.classList.remove('num-pop'), { once: true });
+        }
+    }, ms / pasos);
+}
+
+// ══════════════════════════════════════════
 // EMPRESAS — CONFIRMACIÓN DE ELIMINACIÓN
 // ══════════════════════════════════════════
 
