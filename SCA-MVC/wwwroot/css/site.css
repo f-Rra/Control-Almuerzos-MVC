@@ -3357,6 +3357,61 @@ button.logout {
     font-size: inherit;
 }
 
+/* ── Estado idle del servicio (sin servicio activo) ── */
+.srv-idle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 14px;
+    padding: 48px 32px;
+    text-align: center;
+}
+
+.srv-idle-ico {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.12), rgba(255, 213, 79, 0.08));
+    border: 2px dashed rgba(255, 193, 7, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.srv-idle h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.srv-idle p {
+    font-size: 0.88rem;
+    color: #999;
+    max-width: 340px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.srv-idle-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background: rgba(255, 193, 7, 0.08);
+    border: 1px solid rgba(255, 193, 7, 0.22);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #B8860B;
+    margin-top: 4px;
+}
+
 /* ── Icono de servicio en panel de detalle (más grande que en la lista) ── */
 .svc-icon.svc-icon-lg {
     width: 56px;
