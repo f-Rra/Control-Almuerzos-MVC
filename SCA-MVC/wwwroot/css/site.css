@@ -3,6 +3,8 @@
     --primary-glow: rgba(255, 193, 7, 0.4);
     --bg-base: #FDF6E3;
     --glass-border: rgba(0, 0, 0, 0.05);
+    --green: #4CAF50;
+    --red: #F44336;
     --nav-h: 80px;
     --side-w: 90px;
     --side-expanded: 320px;
@@ -3332,4 +3334,44 @@ button.logout {
     padding: 0;
     font-size: inherit;
 }
+
+/* ── Icono de servicio en panel de detalle (más grande que en la lista) ── */
+.svc-icon.svc-icon-lg {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    font-size: 1.5rem;
+}
+
+/* ── Estado vacío reutilizable ── */
+.empty-state {
+    padding: 24px;
+    color: #999;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* ── Estado vacío dentro de celda de tabla ── */
+.td-empty {
+    text-align: center;
+    padding: 2rem !important;
+    opacity: 0.6;
+}
+
+.td-empty i {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* ── Anchos de columna de tabla reutilizables ── */
+.th-num  { width: 40px; }
+.th-hora { width: 90px; }
+.th-cred { width: 110px; }
+.th-est  { width: 100px; }
 

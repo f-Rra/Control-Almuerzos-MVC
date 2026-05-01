@@ -18,8 +18,8 @@
             }
             @if (!Model.UltimosServicios.Any())
             {
-                <div style="padding:24px; color:#999; text-align:center">
-                    <i class="bi bi-inbox" style="font-size:2rem"></i>
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
                     <p>No hay servicios en los últimos 30 días.</p>
                 </div>
             }
@@ -35,7 +35,7 @@
                 var cob = sel.Proyeccion > 0 ? (int)((double)sel.TotalComensales / sel.Proyeccion * 100) : 0;
                 <div class="det-body" id="det-body">
                     <div class="det-hero">
-                        <div class="svc-icon @(isComedor ? "comedor" : "quincho")" id="det-icon-wrap" style="width:56px;height:56px;border-radius:16px;font-size:1.5rem">
+                        <div class="svc-icon svc-icon-lg @(isComedor ? "comedor" : "quincho")" id="det-icon-wrap">
                             <i class="bi @(isComedor ? "bi-building" : "bi-tree")" id="det-icon"></i>
                         </div>
                         <div class="det-hero-info">
@@ -78,8 +78,8 @@
             }
             else
             {
-                <div style="padding:24px; color:#999; text-align:center">
-                    <i class="bi bi-inbox" style="font-size:2rem"></i>
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
                     <p>Sin datos disponibles.</p>
                 </div>
             }
@@ -134,8 +134,7 @@
             // Actualizar icono y clase del héroe
             const wrap = document.getElementById('det-icon-wrap');
             const icon = document.getElementById('det-icon');
-            wrap.className = 'svc-icon ' + (isComedor ? 'comedor' : 'quincho');
-            wrap.style.cssText = 'width:56px;height:56px;border-radius:16px;font-size:1.5rem';
+            wrap.className = 'svc-icon svc-icon-lg ' + (isComedor ? 'comedor' : 'quincho');
             icon.className = 'bi ' + (isComedor ? 'bi-building' : 'bi-tree');
         });
     });
