@@ -6,6 +6,23 @@
     if (maxRef == 0) maxRef = 1;
 }
 
+<div class="dash-hoy @(Model.HayServicioHoy ? (Model.ServicioActivo ? "hoy-activo" : "hoy-finalizado") : "hoy-vacio")">
+    @if (Model.HayServicioHoy)
+    {
+        <i class="bi @(Model.ServicioActivo ? "bi-lightning-charge-fill" : "bi-check-circle-fill")"></i>
+        <span>
+            Hoy · <strong>@Model.LugarHoy</strong> ·
+            <strong>@Model.RegistradosHoy</strong> registrados
+            @(Model.ServicioActivo ? "· En curso" : "· Finalizado")
+        </span>
+    }
+    else
+    {
+        <i class="bi bi-moon-stars"></i>
+        <span>Hoy · Sin servicio activo</span>
+    }
+</div>
+
 <div class="layout">
     <div class="panel list-panel">
         <div class="ph"><h2><i class="bi bi-clock-history"></i> Últimos Servicios</h2></div>

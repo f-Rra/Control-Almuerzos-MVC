@@ -3357,6 +3357,42 @@ button.logout {
     font-size: inherit;
 }
 
+/* ── Banner de estado del día en el dashboard ── */
+.dash-hoy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border: 1px solid;
+    flex-shrink: 0;
+}
+
+.dash-hoy.hoy-activo {
+    background: rgba(76, 175, 80, 0.08);
+    border-color: rgba(76, 175, 80, 0.25);
+    color: #2E7D32;
+}
+
+.dash-hoy.hoy-finalizado {
+    background: rgba(255, 193, 7, 0.08);
+    border-color: rgba(255, 193, 7, 0.25);
+    color: #B8860B;
+}
+
+.dash-hoy.hoy-vacio {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #999;
+}
+
+.dash-hoy i {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
 /* ── Estado idle del servicio (sin servicio activo) ── */
 .srv-idle {
     display: flex;

@@ -18,11 +18,19 @@ namespace SCA_MVC.Controllers
 
         private readonly ILogger<HomeController> _logger;
         private readonly IReporteNegocio _reporteNegocio;
+        private readonly IServicioNegocio _servicioNegocio;
+        private readonly IRegistroNegocio _registroNegocio;
 
-        public HomeController(ILogger<HomeController> logger, IReporteNegocio reporteNegocio)
+        public HomeController(
+            ILogger<HomeController> logger,
+            IReporteNegocio reporteNegocio,
+            IServicioNegocio servicioNegocio,
+            IRegistroNegocio registroNegocio)
         {
-            _logger         = logger;
-            _reporteNegocio = reporteNegocio;
+            _logger          = logger;
+            _reporteNegocio  = reporteNegocio;
+            _servicioNegocio = servicioNegocio;
+            _registroNegocio = registroNegocio;
         }
 
         #endregion
@@ -80,11 +88,19 @@ namespace SCA_MVC.Controllers
             if (maxRef == 0) maxRef = 1;
             foreach (var c in comparativa) c.MaxRef = maxRef;
 
+            var servicioActivo = await _servicioNegocio.ObtenerActivoGlobalAsync();
+            bool hayHoy = servicioActivo != null && servicioActivo.Fecha.Date == DateTime.Today;
+            int registradosHoy = hayHoy ? await _registroNegocio.ContarAsync(servicioActivo!.IdServicio) : 0;
+
             var model = new DashboardViewModel
             {
                 UltimosServicios     = ultimos,
                 ServicioSeleccionado = seleccionado,
-                ComparativaSemanal   = comparativa
+                ComparativaSemanal   = comparativa,
+                HayServicioHoy       = hayHoy,
+                ServicioActivo       = hayHoy,
+                RegistradosHoy       = registradosHoy,
+                LugarHoy             = servicioActivo?.Lugar?.Nombre ?? ""
             };
 
             return View(model);
