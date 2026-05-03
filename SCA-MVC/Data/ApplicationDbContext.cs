@@ -41,110 +41,216 @@ namespace SCA_MVC.Data
 
             // 2. Empresas
             modelBuilder.Entity<Empresa>().HasData(
-                new Empresa { IdEmpresa = 1, Nombre = "Roemmers", Estado = true },
-                new Empresa { IdEmpresa = 2, Nombre = "Gema", Estado = true },
+                new Empresa { IdEmpresa = 1, Nombre = "Roemmers",  Estado = true },
+                new Empresa { IdEmpresa = 2, Nombre = "Gema",      Estado = true },
                 new Empresa { IdEmpresa = 3, Nombre = "Siegfried", Estado = true },
-                new Empresa { IdEmpresa = 4, Nombre = "Gramon", Estado = true },
-                new Empresa { IdEmpresa = 5, Nombre = "Simmer", Estado = true },
-                new Empresa { IdEmpresa = 6, Nombre = "Ethical", Estado = true }
+                new Empresa { IdEmpresa = 4, Nombre = "Gramon",    Estado = true },
+                new Empresa { IdEmpresa = 5, Nombre = "Simmer",    Estado = true },
+                new Empresa { IdEmpresa = 6, Nombre = "Ethical",   Estado = true }
             );
 
-            // 3. Empleados (10 por empresa = 60 empleados)
+            // 3. Empleados
+            // IDs 1–60: seed original (mantenidos para no romper migraciones existentes)
+            // IDs 61–504: empleados adicionales para alcanzar escala real (~500)
             var empList = new List<Empleado>();
-            string[] nombres = { "Juan", "María", "Carlos", "Ana", "Luis", "Sofía", "Diego", "Valentina", "Andrés", "Camila" };
-            string[] apellidos = { "Perez", "García", "López", "Martínez", "Rodríguez", "Fernández", "González", "Silva", "Morales", "Vargas" };
-            string[] nombres2 = { "Roberto", "Patricia", "Miguel", "Isabella", "Francisco", "Daniela", "Alejandro", "Gabriela", "Ricardo", "Natalia" };
-            string[] apellidos2 = { "Herrera", "Castro", "Torres", "Reyes", "Jiménez", "Moreno", "Ruiz", "Díaz", "Flores", "Cruz" };
 
+            string[] nombresOrig  = { "Juan", "María", "Carlos", "Ana", "Luis", "Sofía", "Diego", "Valentina", "Andrés", "Camila" };
+            string[] apellidosOrig = { "Perez", "García", "López", "Martínez", "Rodríguez", "Fernández", "González", "Silva", "Morales", "Vargas" };
+            string[] nombresOrig2  = { "Roberto", "Patricia", "Miguel", "Isabella", "Francisco", "Daniela", "Alejandro", "Gabriela", "Ricardo", "Natalia" };
+            string[] apellidosOrig2 = { "Herrera", "Castro", "Torres", "Reyes", "Jiménez", "Moreno", "Ruiz", "Díaz", "Flores", "Cruz" };
+
+            // Seed original (IDs 1–60, 10 por empresa)
             int idEmp = 1;
-            for (int i = 1; i <= 6; i++) // 6 empresas
+            for (int i = 1; i <= 6; i++)
             {
-                for (int j = 0; j < 10; j++) // 10 empleados por empresa
+                for (int j = 0; j < 10; j++)
                 {
-                    empList.Add(new Empleado 
-                    { 
-                        IdEmpleado = idEmp, 
-                        IdEmpresa = i, 
-                        IdCredencial = $"RF{idEmp:D3}", 
-                        Nombre = i % 2 == 0 ? nombres2[j] : nombres[j], 
-                        Apellido = i % 2 == 0 ? apellidos2[j] : apellidos[j], 
-                        Estado = true 
+                    empList.Add(new Empleado
+                    {
+                        IdEmpleado   = idEmp,
+                        IdEmpresa    = i,
+                        IdCredencial = $"RF{idEmp:D3}",
+                        Nombre       = i % 2 == 0 ? nombresOrig2[j]  : nombresOrig[j],
+                        Apellido     = i % 2 == 0 ? apellidosOrig2[j] : apellidosOrig[j],
+                        Estado       = true
+                    });
+                    idEmp++;
+                }
+            }
+
+            // Empleados adicionales (IDs 61–504, 74 más por empresa)
+            string[] nombresExt = {
+                "Martín", "Paula", "Sergio", "Florencia", "Fernando", "Agustina",
+                "Gustavo", "Romina", "Pablo", "Claudia", "Hernán", "Valeria",
+                "Federico", "Carolina", "Leonardo", "Marcela", "Santiago", "Vanesa",
+                "Maximiliano", "Silvina", "Nicolás", "Lucía", "Matías", "Verónica",
+                "Sebastián", "Cecilia", "Ariel", "Mónica", "Emilio", "Graciela"
+            };
+            string[] apellidosExt = {
+                "Ramos", "Romero", "Acosta", "Molina", "Gutiérrez", "Navarro",
+                "Sánchez", "Medina", "Suárez", "Ortega", "Vega", "Campos",
+                "Castillo", "Ríos", "Núñez", "Aguirre", "Mendoza", "Ibáñez",
+                "Paredes", "Rojas", "Ávila", "Carrillo", "Fuentes", "Ponce",
+                "Salinas", "Espinoza", "Contreras", "Barrera", "Leal", "Moya"
+            };
+
+            for (int i = 1; i <= 6; i++)
+            {
+                for (int j = 0; j < 74; j++)
+                {
+                    empList.Add(new Empleado
+                    {
+                        IdEmpleado   = idEmp,
+                        IdEmpresa    = i,
+                        IdCredencial = $"RF{idEmp:D3}",
+                        Nombre       = nombresExt[(j + i * 7)   % nombresExt.Length],
+                        Apellido     = apellidosExt[(j + i * 11) % apellidosExt.Length],
+                        Estado       = true
                     });
                     idEmp++;
                 }
             }
             modelBuilder.Entity<Empleado>().HasData(empList);
 
-            // 4. Servicios y Registros (Demo Febrero 2026)
+            // 4. Servicios y Registros
+            // Bloque A (IDs 1–32): servicios de febrero 2026 — idéntico al seed original
+            // Bloque B (IDs 33+): enero, marzo y abril 2026 — datos adicionales
+            var rng = new Random(42);
+
+            // ── Bloque A: febrero 2026 (idéntico al InitialCreate) ──
             int sId = 1;
             int rId = 1;
-            // Incluimos Lunes a Viernes de varias semanas para que los reportes sean completos
-            var diasDemo = new[] { 2, 3, 4, 5, 6, 10, 11, 12, 13, 19, 20, 23, 24, 25, 26, 27 };
+            var diasFeb = new[] { 2, 3, 4, 5, 6, 10, 11, 12, 13, 19, 20, 23, 24, 25, 26, 27 };
 
-            var rng = new Random(42); // Seed fija para consistencia en cada generación
-
-            foreach (var dia in diasDemo)
+            foreach (var dia in diasFeb)
             {
                 var fecha = new DateTime(2026, 2, dia);
-                
-                // --- COMEDOR ---
-                int proyComedor = 45 + rng.Next(20); // Variación entre 45 y 65
-                int comensalesComedor = 0;
-                int invitadosComedor = rng.Next(1, 5);
-                int currentSIdComedor = sId++;
 
-                // Registros Comedor (variado por empresa)
+                int proyC = 45 + rng.Next(20);
+                int comC  = 0;
+                int invC  = rng.Next(1, 5);
+                int sIdC  = sId++;
+
                 for (int eId = 1; eId <= 6; eId++)
                 {
-                    int cantPorEmpresa = 2 + rng.Next(4); // 2 a 5 registros por empresa
-                    for (int k = 0; k < cantPorEmpresa; k++)
+                    int cant = 2 + rng.Next(4);
+                    for (int k = 0; k < cant; k++)
                     {
                         int empIdx = ((eId - 1) * 10) + ((dia + k + eId) % 10);
-                        modelBuilder.Entity<Registro>().HasData(new Registro 
-                        { 
-                            IdRegistro = rId++, IdEmpleado = empList[empIdx].IdEmpleado, 
-                            IdEmpresa = eId, IdServicio = currentSIdComedor, IdLugar = 1, 
-                            Fecha = fecha, Hora = new TimeSpan(12, 10 + rng.Next(40), 0) 
+                        modelBuilder.Entity<Registro>().HasData(new Registro
+                        {
+                            IdRegistro = rId++, IdEmpleado = empList[empIdx].IdEmpleado,
+                            IdEmpresa  = eId,   IdServicio  = sIdC, IdLugar = 1,
+                            Fecha      = fecha, Hora        = new TimeSpan(12, 10 + rng.Next(40), 0)
                         });
-                        comensalesComedor++;
+                        comC++;
                     }
                 }
-
-                modelBuilder.Entity<Servicio>().HasData(new Servicio 
-                { 
-                    IdServicio = currentSIdComedor, IdLugar = 1, Fecha = fecha, 
-                    Proyeccion = proyComedor, DuracionMinutos = 60, 
-                    TotalComensales = comensalesComedor, TotalInvitados = invitadosComedor 
+                modelBuilder.Entity<Servicio>().HasData(new Servicio
+                {
+                    IdServicio = sIdC, IdLugar = 1, Fecha = fecha,
+                    Proyeccion = proyC, DuracionMinutos = 60, TotalComensales = comC, TotalInvitados = invC
                 });
 
-                // --- QUINCHO ---
-                int proyQuincho = 25 + rng.Next(15); // Variación entre 25 y 40
-                int comensalesQuincho = 0;
-                int invitadosQuincho = rng.Next(0, 3);
-                int currentSIdQuincho = sId++;
+                int proyQ = 25 + rng.Next(15);
+                int comQ  = 0;
+                int invQ  = rng.Next(0, 3);
+                int sIdQ  = sId++;
 
-                // Registros Quincho (variado por empresa)
                 for (int eId = 1; eId <= 6; eId++)
                 {
-                    int cantPorEmpresa = 1 + rng.Next(3); // 1 a 3 registros por empresa
-                    for (int k = 0; k < cantPorEmpresa; k++)
+                    int cant = 1 + rng.Next(3);
+                    for (int k = 0; k < cant; k++)
                     {
                         int empIdx = ((eId - 1) * 10) + 5 + ((dia + k + eId) % 5);
-                        modelBuilder.Entity<Registro>().HasData(new Registro 
-                        { 
-                            IdRegistro = rId++, IdEmpleado = empList[empIdx].IdEmpleado, 
-                            IdEmpresa = eId, IdServicio = currentSIdQuincho, IdLugar = 2, 
-                            Fecha = fecha, Hora = new TimeSpan(13, 15 + rng.Next(30), 0) 
+                        modelBuilder.Entity<Registro>().HasData(new Registro
+                        {
+                            IdRegistro = rId++, IdEmpleado = empList[empIdx].IdEmpleado,
+                            IdEmpresa  = eId,   IdServicio  = sIdQ, IdLugar = 2,
+                            Fecha      = fecha, Hora        = new TimeSpan(13, 15 + rng.Next(30), 0)
                         });
-                        comensalesQuincho++;
+                        comQ++;
                     }
                 }
+                modelBuilder.Entity<Servicio>().HasData(new Servicio
+                {
+                    IdServicio = sIdQ, IdLugar = 2, Fecha = fecha,
+                    Proyeccion = proyQ, DuracionMinutos = 45, TotalComensales = comQ, TotalInvitados = invQ
+                });
+            }
 
-                modelBuilder.Entity<Servicio>().HasData(new Servicio 
-                { 
-                    IdServicio = currentSIdQuincho, IdLugar = 2, Fecha = fecha, 
-                    Proyeccion = proyQuincho, DuracionMinutos = 45, 
-                    TotalComensales = comensalesQuincho, TotalInvitados = invitadosQuincho 
+            // ── Bloque B: enero, marzo y abril 2026 (datos adicionales) ──
+            // sId ahora vale 33 (los 32 primeros los usó el bloque A)
+            const int empPorEmpresa = 84; // total con los 74 nuevos
+            var diasExtra = new List<DateTime>();
+            foreach (var (anio, mes) in new[] { (2026, 1), (2026, 3), (2026, 4) })
+            {
+                var c = new DateTime(anio, mes, mes == 1 ? 2 : 1);
+                var f = new DateTime(anio, mes, DateTime.DaysInMonth(anio, mes));
+                while (c <= f)
+                {
+                    if (c.DayOfWeek != DayOfWeek.Saturday && c.DayOfWeek != DayOfWeek.Sunday)
+                        diasExtra.Add(c);
+                    c = c.AddDays(1);
+                }
+            }
+
+            foreach (var fecha in diasExtra)
+            {
+                int diaIdx = (int)(fecha - new DateTime(2026, 1, 1)).TotalDays;
+
+                int proyC = 280 + rng.Next(60);
+                int comC  = 0;
+                int invC  = rng.Next(1, 8);
+                int sIdC  = sId++;
+
+                for (int eId = 1; eId <= 6; eId++)
+                {
+                    int cant = 6 + rng.Next(8);
+                    for (int k = 0; k < cant; k++)
+                    {
+                        int empIdx = ((eId - 1) * empPorEmpresa) + ((diaIdx * 7 + k * 3 + eId * 13) % empPorEmpresa);
+                        modelBuilder.Entity<Registro>().HasData(new Registro
+                        {
+                            IdRegistro = rId++, IdEmpleado = empList[empIdx].IdEmpleado,
+                            IdEmpresa  = eId,   IdServicio  = sIdC, IdLugar = 1,
+                            Fecha      = fecha, Hora        = new TimeSpan(12, 5 + rng.Next(55), 0)
+                        });
+                        comC++;
+                    }
+                }
+                modelBuilder.Entity<Servicio>().HasData(new Servicio
+                {
+                    IdServicio = sIdC, IdLugar = 1, Fecha = fecha,
+                    Proyeccion = proyC, DuracionMinutos = 55 + rng.Next(20),
+                    TotalComensales = comC, TotalInvitados = invC
+                });
+
+                int proyQ = 160 + rng.Next(40);
+                int comQ  = 0;
+                int invQ  = rng.Next(0, 5);
+                int sIdQ  = sId++;
+
+                for (int eId = 1; eId <= 6; eId++)
+                {
+                    int cant = 4 + rng.Next(5);
+                    for (int k = 0; k < cant; k++)
+                    {
+                        int empIdx = ((eId - 1) * empPorEmpresa) + ((diaIdx * 5 + k * 7 + eId * 17 + 42) % empPorEmpresa);
+                        modelBuilder.Entity<Registro>().HasData(new Registro
+                        {
+                            IdRegistro = rId++, IdEmpleado = empList[empIdx].IdEmpleado,
+                            IdEmpresa  = eId,   IdServicio  = sIdQ, IdLugar = 2,
+                            Fecha      = fecha, Hora        = new TimeSpan(13, 10 + rng.Next(40), 0)
+                        });
+                        comQ++;
+                    }
+                }
+                modelBuilder.Entity<Servicio>().HasData(new Servicio
+                {
+                    IdServicio = sIdQ, IdLugar = 2, Fecha = fecha,
+                    Proyeccion = proyQ, DuracionMinutos = 40 + rng.Next(20),
+                    TotalComensales = comQ, TotalInvitados = invQ
                 });
             }
         }
