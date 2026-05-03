@@ -18,7 +18,7 @@
                         <select name="idLugar" disabled="@hayServicio">
                             @foreach (var lugar in Model.LugaresDisponibles)
                             {
-                                <option value="@lugar.IdLugar" selected="@(hayServicio && Model.ServicioActivo.IdLugar == lugar.IdLugar)">
+                                <option value="@lugar.IdLugar" selected="@(hayServicio && Model.ServicioActivo!.IdLugar == lugar.IdLugar)">
                                     @lugar.Nombre
                                 </option>
                             }
@@ -26,15 +26,15 @@
                     </div>
                     <div class="cfg-item">
                         <label>Fecha</label>
-                        <input type="date" value="@(hayServicio ? Model.ServicioActivo.Fecha.ToString("yyyy-MM-dd") : DateTime.Today.ToString("yyyy-MM-dd"))" readonly />
+                        <input type="date" value="@(hayServicio ? Model.ServicioActivo!.Fecha.ToString("yyyy-MM-dd") : DateTime.Today.ToString("yyyy-MM-dd"))" readonly />
                     </div>
                     <div class="cfg-item">
                         <label>Proyección</label>
-                        <input type="number" name="proyeccion" value="@(hayServicio ? Model.ServicioActivo.Proyeccion : 0)" min="0" readonly="@hayServicio" />
+                        <input type="number" name="proyeccion" value="@(hayServicio ? Model.ServicioActivo!.Proyeccion : 0)" min="0" readonly="@hayServicio" />
                     </div>
                     <div class="cfg-item">
                         <label>Invitados</label>
-                        <input type="number" name="invitados" id="input-invitados-ui" value="@(hayServicio ? Model.ServicioActivo.TotalInvitados : 0)" min="0" />
+                        <input type="number" name="invitados" id="input-invitados-ui" value="@(hayServicio ? Model.ServicioActivo!.TotalInvitados : 0)" min="0" />
                     </div>
                 </div>
                 <div class="cfg-sep"></div>
@@ -145,7 +145,7 @@
         </div>
 
         <form asp-action="Finalizar" method="post" id="form-finalizar" style="display:none">
-            <input type="hidden" name="idServicio" value="@Model.ServicioActivo.IdServicio" />
+            <input type="hidden" name="idServicio" value="@Model.ServicioActivo!.IdServicio" />
             <input type="hidden" name="invitados" id="input-invitados" value="0" />
             <input type="hidden" name="duracionMinutos" id="input-duracion" value="0" />
         </form>

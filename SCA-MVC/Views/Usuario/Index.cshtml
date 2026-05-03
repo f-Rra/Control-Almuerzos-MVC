@@ -146,6 +146,10 @@
                   id="usuario-form">
                 @Html.AntiForgeryToken()
                     <input type="hidden" asp-for="UsuarioActual.Id" />
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Any()))
+                    {
+                        <div asp-validation-summary="ModelOnly" class="auth-error"></div>
+                    }
 
                     <div class="emp-field">
                         <label asp-for="UsuarioActual.NombreUsuario"></label>
@@ -185,8 +189,9 @@
                         <label asp-for="UsuarioActual.NuevaContrasena">
                             @(string.IsNullOrEmpty(Model.UsuarioActual.Id) ? "Contraseña" : "Nueva Contraseña (dejar vacío para no cambiar)")
                         </label>
-                        <input asp-for="UsuarioActual.NuevaContrasena" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+                        <input asp-for="UsuarioActual.NuevaContrasena" type="password" placeholder="ej: operador1" autocomplete="new-password" />
                         <span asp-validation-for="UsuarioActual.NuevaContrasena" class="text-danger"></span>
+                        <small class="form-hint">Mínimo 6 caracteres, incluir al menos un número y una minúscula.</small>
                     </div>
 
                     <div class="emp-actions">

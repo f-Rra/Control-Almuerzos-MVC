@@ -103,10 +103,18 @@ namespace SCA_MVC.Controllers
         // POST: Usuario/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(Prefix = "UsuarioActual")] UsuarioFormViewModel model)
+        public async Task<IActionResult> Create(UsuarioViewModel vm)
         {
+            var model = vm.UsuarioActual;
+
             if (string.IsNullOrWhiteSpace(model.NuevaContrasena))
-                ModelState.AddModelError(nameof(model.NuevaContrasena), "La contraseña es obligatoria al crear un usuario.");
+                ModelState.AddModelError("UsuarioActual.NuevaContrasena", "La contraseña es obligatoria al crear un usuario.");
+
+            // Ignorar propiedades del ViewModel que no vienen del formulario
+            ModelState.Remove(nameof(vm.Usuarios));
+            ModelState.Remove(nameof(vm.RolesDisponibles));
+            ModelState.Remove(nameof(vm.Filtro));
+            ModelState.Remove(nameof(vm.UsuarioSeleccionadoId));
 
             if (!ModelState.IsValid)
                 return await RebuildAndReturn(model, null);
@@ -121,43 +129,41 @@ namespace SCA_MVC.Controllers
                 EmailConfirmed = true
             };
 
-            try
+            var resultado = await _userManager.CreateAsync(user, model.NuevaContrasena!);
+
+            if (!resultado.Succeeded)
             {
-                var resultado = await _userManager.CreateAsync(user, model.NuevaContrasena!);
+                foreach (var error in resultado.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
 
-                if (!resultado.Succeeded)
-                {
-                    foreach (var error in resultado.Errors)
-                        ModelState.AddModelError(string.Empty, error.Description);
-
-                    return await RebuildAndReturn(model, null);
-                }
-
-                if (!string.IsNullOrEmpty(model.Rol))
-                    await _userManager.AddToRoleAsync(user, model.Rol);
-
-                TempData.MostrarExito($"Usuario '{model.NombreUsuario}' creado correctamente.", "¡Creado!");
-                return RedirectToAction(nameof(Index), new { idUsuario = user.Id });
+                return await RebuildAndReturn(model, null);
             }
-            catch
-            {
-                TempData.MostrarError("Ocurrió un error al crear el usuario.", "Error");
-                return RedirectToAction(nameof(Index));
-            }
+
+            if (!string.IsNullOrEmpty(model.Rol))
+                await _userManager.AddToRoleAsync(user, model.Rol);
+
+            TempData.MostrarExito($"Usuario '{model.NombreUsuario}' creado correctamente.", "¡Creado!");
+            return RedirectToAction(nameof(Index), new { idUsuario = user.Id });
         }
 
         // POST: Usuario/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind(Prefix = "UsuarioActual")] UsuarioFormViewModel model)
+        public async Task<IActionResult> Edit(UsuarioViewModel vm)
         {
+            var model = vm.UsuarioActual;
+
             // La contraseña es opcional en edición — se elimina del estado de modelo
-            ModelState.Remove(nameof(model.NuevaContrasena));
+            ModelState.Remove("UsuarioActual.NuevaContrasena");
+            ModelState.Remove(nameof(vm.Usuarios));
+            ModelState.Remove(nameof(vm.RolesDisponibles));
+            ModelState.Remove(nameof(vm.Filtro));
+            ModelState.Remove(nameof(vm.UsuarioSeleccionadoId));
 
             if (!ModelState.IsValid)
                 return await RebuildAndReturn(model, model.Id);
 
-            var user = await _userManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(model.Id ?? "");
             if (user == null)
             {
                 TempData.MostrarError("Usuario no encontrado.", "Error");

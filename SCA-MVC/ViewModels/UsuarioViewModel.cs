@@ -20,8 +20,8 @@ namespace SCA_MVC.ViewModels
     /// </summary>
     public class UsuarioFormViewModel
     {
-        // Vacío en modo alta; contiene el Id de Identity en modo edición
-        public string Id { get; set; } = string.Empty;
+        // Null en modo alta; contiene el Id de Identity en modo edición
+        public string? Id { get; set; }
 
         [Required(ErrorMessage = "El nombre de usuario es obligatorio.")]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Debe tener entre 3 y 30 caracteres.")]

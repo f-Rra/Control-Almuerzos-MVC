@@ -36,7 +36,7 @@ namespace SCA_MVC.Services
             var registros = await _context.Registros
                 .AsNoTracking()
                 .Include(r => r.Empleado)
-                .ThenInclude(e => e.Empresa)
+                .ThenInclude(e => e!.Empresa)
                 .Where(r => r.IdServicio == idServicio)
                 .ToListAsync();
                 

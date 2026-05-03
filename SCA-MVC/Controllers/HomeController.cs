@@ -115,7 +115,7 @@ namespace SCA_MVC.Controllers
 
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult NotFound()
+        public new IActionResult NotFound()
         {
             Response.StatusCode = 404;
             return View();

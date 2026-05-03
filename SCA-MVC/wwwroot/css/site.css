@@ -257,7 +257,7 @@ body {
 /* Íconos Bootstrap Icons dentro del nav lateral */
 .mi .ico.ico-bi {
     font-size: 1.45rem;
-    color: #555;
+    color: inherit;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3480,6 +3480,14 @@ button.logout {
     font-size: 1.5rem;
     display: block;
     margin-bottom: 6px;
+}
+
+/* ── Hint de ayuda debajo de inputs ── */
+.form-hint {
+    font-size: 0.75rem;
+    color: #aaa;
+    font-weight: 500;
+    margin-top: 2px;
 }
 
 /* ── Anchos de columna de tabla reutilizables ── */

@@ -114,7 +114,7 @@ namespace SCA_MVC.Services
             if (idLugar.HasValue && idLugar.Value > 0)
                 query = query.Where(s => s.IdLugar == idLugar.Value);
 
-            var agrupado = await query.GroupBy(s => new { FechaDate = s.Fecha.Date, NombreLugar = s.Lugar.Nombre }).Select(g => new {
+            var agrupado = await query.GroupBy(s => new { FechaDate = s.Fecha.Date, NombreLugar = s.Lugar!.Nombre }).Select(g => new {
                 Fecha = g.Key.FechaDate,
                 Lugar = g.Key.NombreLugar,
                 Proyeccion = g.Sum(x => x.Proyeccion ?? 0),
