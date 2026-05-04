@@ -113,17 +113,13 @@ namespace SCA_MVC.Controllers
                 // Persistir y recuperar el ID autogenerado para redirigir al panel de la nueva empresa
                 var idCreado = await _empresaNegocio.AgregarAsync(nuevaEmpresa);
 
-                TempData["ToastType"] = "success";
-                TempData["ToastTitle"] = "Empresa creada";
-                TempData["ToastMessage"] = $"La empresa '{nuevaEmpresa.Nombre}' se creó correctamente.";
+                TempData.MostrarExito($"La empresa '{nuevaEmpresa.Nombre}' se creó correctamente.", "Empresa creada");
 
                 return RedirectToAction(nameof(Index), new { idEmpresa = idCreado });
             }
             catch (Exception ex)
             {
-                TempData["ToastType"] = "error";
-                TempData["ToastTitle"] = "Error";
-                TempData["ToastMessage"] = $"Error al crear la empresa: {ex.Message}";
+                TempData.MostrarError($"Error al crear la empresa: {ex.Message}");
                 return await RecargarConErrores(vm);
             }
         }
@@ -161,17 +157,13 @@ namespace SCA_MVC.Controllers
                     Estado = vm.EmpresaActual.Estado
                 });
 
-                TempData["ToastType"] = "success";
-                TempData["ToastTitle"] = "Empresa actualizada";
-                TempData["ToastMessage"] = $"La empresa '{vm.EmpresaActual.Nombre}' se actualizó correctamente.";
+                TempData.MostrarExito($"La empresa '{vm.EmpresaActual.Nombre}' se actualizó correctamente.", "Empresa actualizada");
 
                 return RedirectToAction(nameof(Index), new { idEmpresa = vm.EmpresaActual.IdEmpresa });
             }
             catch (Exception ex)
             {
-                TempData["ToastType"] = "error";
-                TempData["ToastTitle"] = "Error";
-                TempData["ToastMessage"] = $"Error al actualizar la empresa: {ex.Message}";
+                TempData.MostrarError($"Error al actualizar la empresa: {ex.Message}");
                 return await RecargarConErrores(vm);
             }
         }
@@ -193,23 +185,17 @@ namespace SCA_MVC.Controllers
                     // Guardia: si ya está desactivada, evitar operación redundante
                     if (empresa != null && !empresa.Estado)
                     {
-                        TempData["ToastType"] = "warning";
-                        TempData["ToastTitle"] = "Empresa desactivada";
-                        TempData["ToastMessage"] = $"La empresa '{empresa.Nombre}' ya se encuentra desactivada.";
+                        TempData.MostrarAdvertencia($"La empresa '{empresa.Nombre}' ya se encuentra desactivada.", "Sin cambios");
                         return RedirectToAction(nameof(Index), new { idEmpresa });
                     }
 
                     await _empresaNegocio.EliminarAsync(idEmpresa);
 
-                    TempData["ToastType"] = "success";
-                    TempData["ToastTitle"] = "Empresa desactivada";
-                    TempData["ToastMessage"] = $"La empresa '{empresa?.Nombre}' fue desactivada correctamente.";
+                    TempData.MostrarExito($"La empresa '{empresa?.Nombre}' fue desactivada correctamente.", "Empresa desactivada");
                 }
                 catch (Exception ex)
                 {
-                    TempData["ToastType"] = "error";
-                    TempData["ToastTitle"] = "Error";
-                    TempData["ToastMessage"] = $"Error al eliminar la empresa: {ex.Message}";
+                    TempData.MostrarError($"Error al eliminar la empresa: {ex.Message}");
                 }
             }
 
@@ -223,7 +209,7 @@ namespace SCA_MVC.Controllers
         // Se consume desde site.js para actualizar el panel lateral sin recargar la página.
         public async Task<IActionResult> Detalle(int idEmpresa)
         {
-            if (!EmpresaExiste(idEmpresa))
+            if (!await EmpresaExisteAsync(idEmpresa))
             {
                 return NotFound();
             }
@@ -251,9 +237,9 @@ namespace SCA_MVC.Controllers
 
         // Verifica si existe una empresa con el ID dado (equivalente al XExists de los ejemplos EF).
         // Usado como guardia antes de operar sobre un registro.
-        private bool EmpresaExiste(int idEmpresa)
+        private async Task<bool> EmpresaExisteAsync(int idEmpresa)
         {
-            return _empresaNegocio.BuscarPorIdAsync(idEmpresa).Result != null;
+            return await _empresaNegocio.BuscarPorIdAsync(idEmpresa) != null;
         }
 
         // Calcula las estadísticas de panel lateral para una empresa:

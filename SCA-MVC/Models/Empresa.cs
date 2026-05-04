@@ -15,7 +15,6 @@ namespace SCA_MVC.Models
         [Display(Name = "Estado")]
         public bool Estado { get; set; }
 
-        // Propiedad calculada (no mapeada a BD)
         public int CantidadEmpleados { get; set; }
 
         // Propiedades de navegación
