@@ -96,14 +96,6 @@ namespace SCA_MVC.Controllers
             return RedirectToAction(nameof(Login));
         }
 
-        // POST: Account/Register — deshabilitado
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel model)
-        {
-            return RedirectToAction(nameof(Login));
-        }
 
         // GET: Account/AccessDenied
         [AllowAnonymous]

@@ -17,11 +17,6 @@ namespace SCA_MVC.Services
             _context = context;
         }
 
-        public Task<List<Servicio>> ListarTodosAsync()
-        {
-            return _context.Servicios.AsNoTracking().Include(s => s.Lugar).ToListAsync();
-        }
-
         public Task<Servicio?> ObtenerActivoAsync(int idLugar)
         {
             return _context.Servicios.AsNoTracking().Include(s => s.Lugar)
@@ -32,13 +27,6 @@ namespace SCA_MVC.Services
         {
             return _context.Servicios.AsNoTracking().Include(s => s.Lugar)
                 .FirstOrDefaultAsync(s => s.DuracionMinutos == null);
-        }
-
-        public Task<Servicio?> ObtenerUltimoAsync()
-        {
-            return _context.Servicios.AsNoTracking().Include(s => s.Lugar)
-                .OrderByDescending(s => s.IdServicio)
-                .FirstOrDefaultAsync();
         }
 
         public async Task<int> CrearServicioAsync(int idLugar, int? proyeccion, int invitados = 0)
@@ -67,19 +55,6 @@ namespace SCA_MVC.Services
                 servicio.DuracionMinutos = duracionMinutos;
                 await _context.SaveChangesAsync();
             }
-        }
-
-        public Task<List<Servicio>> ListarPorFechaAsync(DateTime fechaDesde, DateTime fechaHasta, int? idLugar = null)
-        {
-            var query = _context.Servicios.AsNoTracking().Include(s => s.Lugar)
-                .Where(s => s.Fecha >= fechaDesde.Date && s.Fecha <= fechaHasta.Date);
-
-            if (idLugar.HasValue)
-            {
-                query = query.Where(s => s.IdLugar == idLugar.Value);
-            }
-
-            return query.ToListAsync();
         }
 
         public async Task<int> FinalizarPendientesAsync()
