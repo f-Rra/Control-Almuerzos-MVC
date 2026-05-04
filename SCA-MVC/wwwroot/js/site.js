@@ -14,30 +14,30 @@ function showRegistro(nombre, empresa, hora, duration = 2500) {
 			.reg-overlay {
 				position: fixed; inset: 0; z-index: 9999;
 				display: flex; align-items: center; justify-content: center;
-				background: rgba(253,246,227,0.45);
+				background: rgba(0,0,0,0.18);
 				backdrop-filter: blur(8px);
 				-webkit-backdrop-filter: blur(8px);
 				animation: regFadeIn .22s ease;
 			}
 			.reg-card {
-				background: rgba(255,255,255,0.62);
+				background: rgba(255,255,255,0.92);
 				backdrop-filter: blur(22px);
 				-webkit-backdrop-filter: blur(22px);
-				border: 1.5px solid rgba(255,193,7,0.45);
+				border: 1.5px solid rgba(var(--primary-rgb),0.45);
 				border-radius: 24px;
 				padding: 30px 32px 26px;
 				text-align: center;
 				min-width: 260px;
 				max-width: 320px;
-				box-shadow: 0 8px 40px rgba(255,193,7,0.18), 0 2px 12px rgba(0,0,0,0.07);
+				box-shadow: 0 8px 40px rgba(var(--primary-rgb),0.18), 0 2px 12px rgba(0,0,0,0.07);
 				display: flex; flex-direction: column; align-items: center; gap: 6px;
 				animation: regSlideUp .25s cubic-bezier(.34,1.56,.64,1);
 			}
 			.reg-ico {
 				width: 58px; height: 58px; border-radius: 50%;
-				border: 2.5px solid #FFC107;
+				border: 2.5px solid var(--primary);
 				display: flex; align-items: center; justify-content: center;
-				font-size: 1.5rem; color: #FFC107;
+				font-size: 1.5rem; color: var(--primary);
 				margin-bottom: 6px;
 			}
 			.reg-tag {
@@ -58,7 +58,7 @@ function showRegistro(nombre, empresa, hora, duration = 2500) {
 			.reg-hora {
 				margin-top: 6px;
 				font-size: .82rem; font-weight: 600;
-				color: #e6a800;
+				color: var(--value-color);
 			}
 			.reg-hora i { margin-right: 3px; }
 			@keyframes regFadeIn  { from { opacity: 0; } to { opacity: 1; } }
