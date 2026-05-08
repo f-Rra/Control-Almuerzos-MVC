@@ -37,7 +37,7 @@ namespace SCA_MVC.Services
                 Proyeccion = proyeccion,
                 TotalInvitados = invitados,
                 Fecha = DateTime.Today,
-                HoraInicio = DateTime.Now
+                HoraInicio = DateTime.UtcNow
             };
 
             _context.Servicios.Add(servicio);

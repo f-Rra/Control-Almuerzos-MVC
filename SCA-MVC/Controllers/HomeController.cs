@@ -51,6 +51,7 @@ namespace SCA_MVC.Controllers
             var ultimos = todos
                 .OrderByDescending(s => s.Fecha)
                 .ThenByDescending(s => s.IdServicio)
+                .Take(7)
                 .ToList();
 
             var seleccionado = ultimos.FirstOrDefault();

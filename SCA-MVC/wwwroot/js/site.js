@@ -43,21 +43,21 @@ function showRegistro(nombre, empresa, hora, duration = 2500) {
 			.reg-tag {
 				background: rgba(76,175,80,0.13);
 				color: #3d8b40;
-				font-size: .72rem; font-weight: 700;
+				font-size: .72rem; font-weight: 400;
 				padding: 3px 12px; border-radius: 999px;
 				text-transform: uppercase; letter-spacing: .08em;
 				margin-bottom: 4px;
 			}
 			.reg-name {
 				font-family: 'Outfit', sans-serif;
-				font-weight: 700; font-size: 1.1rem; color: #1A1A1A;
+				font-weight: 400; font-size: 1.1rem; color: #1A1A1A;
 			}
 			.reg-empresa {
 				color: #888; font-size: .88rem;
 			}
 			.reg-hora {
 				margin-top: 6px;
-				font-size: .82rem; font-weight: 600;
+				font-size: .82rem; font-weight: 400;
 				color: var(--value-color);
 			}
 			.reg-hora i { margin-right: 3px; }

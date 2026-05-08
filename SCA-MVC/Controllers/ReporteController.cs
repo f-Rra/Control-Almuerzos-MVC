@@ -12,7 +12,7 @@ using QuestPDF.Infrastructure;
 
 namespace SCA_MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class ReporteController : Controller
     {
         private readonly IReporteNegocio _reporteNegocio;

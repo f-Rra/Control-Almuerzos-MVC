@@ -57,8 +57,8 @@
         <div class="st-card">
             <i class="bi bi-power ico-lg" style="color:@(hayServicio ? "var(--green)" : "#ddd")"></i>
             <div class="st-label">Estado</div>
-            <div class="st-value @(hayServicio ? "activo" : "")">
-                <span class="st-dot @(hayServicio ? "on" : "")"></span> @(hayServicio ? "ACTIVO" : "INACTIVO")
+            <div class="st-value @(hayServicio ? "activo" : "inactivo")">
+                <span class="st-dot @(hayServicio ? "on" : "off")"></span> @(hayServicio ? "ACTIVO" : "INACTIVO")
             </div>
         </div>
         <div class="st-card">
@@ -171,7 +171,7 @@
         // ─── Persistencia del Cronómetro ───
         if (document.getElementById('crono-activo')) {
             // Obtenemos la hora de inicio real desde el servidor
-            const horaInicioServer = new Date('@(Model.ServicioActivo?.HoraInicio?.ToString("yyyy-MM-ddTHH:mm:ss") ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"))');
+            const horaInicioServer = new Date('@(Model.ServicioActivo?.HoraInicio?.ToString("yyyy-MM-ddTHH:mm:ss") ?? DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss"))Z');
             
             setInterval(() => {
                 const ahora = new Date();

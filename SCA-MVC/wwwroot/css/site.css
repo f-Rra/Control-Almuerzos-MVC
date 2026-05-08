@@ -17,8 +17,8 @@
     --icon-active:   #a07800;
     --orb1-bg:       rgba(255, 193, 7, 0.15);
     --orb2-bg:       rgba(255, 255, 255, 0.7);
-    --green:         var(--green);
-    --red:           var(--red);
+    --green:         #4CAF50;
+    --red:           #F44336;
     --nav-h:         80px;
     --side-w:        90px;
     --side-expanded: 320px;
@@ -129,7 +129,7 @@ body {
     align-items: center;
     gap: 6px;
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #888;
     margin-right: auto;
     padding-left: 4px;
@@ -184,7 +184,7 @@ body {
 }
 
 .uname {
-    font-weight: 700;
+    font-weight: 400;
     font-size: 0.88rem;
 }
 
@@ -304,7 +304,7 @@ body {
 
 .usr-badge {
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 400;
     padding: 3px 10px;
     border-radius: 20px;
     letter-spacing: 0.04em;
@@ -332,7 +332,7 @@ body {
     padding: 8px 18px;
     border-radius: 10px;
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     border: 1.5px solid #2e7d32;
     background: rgba(46, 125, 50, 0.08);
@@ -427,7 +427,7 @@ body {
 
 .mi .lbl {
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     opacity: 0;
@@ -441,7 +441,7 @@ body {
 }
 
 .side:hover .mi.active .lbl {
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .content {
@@ -545,7 +545,7 @@ body {
         padding: 6px 14px;
         border-radius: 8px;
         font-size: 0.72rem;
-        font-weight: 700;
+        font-weight: 400;
         white-space: nowrap;
         opacity: 0;
         pointer-events: none;
@@ -585,17 +585,25 @@ body {
     min-height: 0;
 }
 
+.list-panel .panel {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 .card-list {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    overflow-y: auto;
-    padding: 16px;
+    gap: 6px;
+    overflow-y: hidden;
+    padding: 10px 16px;
 }
 
 .svc-card {
-    padding: 14px 18px;
+    flex: 1;
+    padding: 0 18px;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(12px);
@@ -648,13 +656,13 @@ body {
 
 .svc-name {
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .svc-date {
     font-size: 0.88rem;
     color: #999;
-    font-weight: 600;
+    font-weight: 400;
     flex-shrink: 0;
 }
 
@@ -669,7 +677,7 @@ body {
 }
 
 .svc-n span {
-    font-weight: 700;
+    font-weight: 400;
     color: #1A1A1A;
 }
 
@@ -682,7 +690,7 @@ body {
 .svc-total .t-label {
     font-size: 0.72rem;
     color: #999;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
 }
 
@@ -719,7 +727,7 @@ body {
 
 .ph h2 {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 400;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -761,7 +769,7 @@ body {
 
 .det-hero-info h3 {
     font-size: 1.15rem;
-    font-weight: 700;
+    font-weight: 400;
     margin: 0 0 2px;
 }
 
@@ -810,17 +818,14 @@ body {
 .dg-item .dg-l {
     font-size: 0.72rem;
     color: #999;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
 
 .dg-item .dg-v {
     font-size: 1.05rem;
-    font-weight: 700;
-}
-
-.dg-item .dg-v.gold {
+    font-weight: 400;
     color: var(--value-color);
 }
 
@@ -837,7 +842,7 @@ body {
 .det-total .dg-l {
     color: rgba(0, 0, 0, 0.5);
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
 }
 
@@ -858,7 +863,7 @@ body {
     display: flex;
     justify-content: space-between;
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     margin-bottom: 6px;
 }
@@ -882,7 +887,7 @@ body {
 
 .comp-body h3 {
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 400;
     margin-bottom: 12px;
     display: flex;
     align-items: center;
@@ -907,7 +912,7 @@ body {
 
 .mb-label {
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 400;
     width: 30px;
     color: #999;
 }
@@ -931,7 +936,7 @@ body {
 
 .mb-val {
     font-size: 0.85rem;
-    font-weight: 700;
+    font-weight: 400;
     width: 30px;
     text-align: right;
 }
@@ -954,12 +959,19 @@ body {
     display: flex;
     align-items: center;
     padding: 0;
-    flex-wrap: wrap;   /* evita que los controles se corten cuando el sidebar está expandido */
+    border-bottom: 1px solid var(--glass-border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.config-row::-webkit-scrollbar {
+    display: none;
 }
 
 .cfg-title {
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 400;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -987,8 +999,8 @@ body {
 .cfg-inputs {
     display: flex;
     align-items: center;
-    gap: 18px;
-    padding: 14px 24px;
+    gap: 12px;
+    padding: 12px 16px;
 }
 
 .cfg-item {
@@ -999,7 +1011,7 @@ body {
 
 .cfg-item label {
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     white-space: nowrap;
@@ -1016,16 +1028,21 @@ body {
     background: rgba(255, 255, 255, 0.7);
     font-family: inherit;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     transition: 0.2s;
     width: auto;
 }
 
 .cfg-item select {
-    margin-right: 6px;
-    min-width: 120px;
-    padding-right: 28px;
+    min-width: 80px;
+    max-width: 160px;
+    padding: 10px 12px;
+}
+
+.cfg-item input[type="date"] {
+    width: 130px;
+    padding: 10px 12px;
 }
 
 .cfg-item input[type="number"] {
@@ -1040,10 +1057,6 @@ body {
     margin: 0;
 }
 
-.cfg-item input[type="date"] {
-    width: 150px;
-}
-
 .cfg-item select:focus,
 .cfg-item input:focus {
     border-color: var(--primary);
@@ -1056,7 +1069,7 @@ body {
     border: none;
     font-family: inherit;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1115,13 +1128,13 @@ body {
 
 .st-card .ico-lg {
     font-size: 1.2rem;
-    opacity: 0.2;
+    opacity: 0.5;
     margin-bottom: 1px;
 }
 
 .st-label {
     font-size: 0.65rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -1129,7 +1142,7 @@ body {
 
 .st-value {
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .st-value.activo {
@@ -1209,7 +1222,7 @@ body {
 
 .prog-pct {
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 400;
     color: var(--value-color);
 }
 
@@ -1243,7 +1256,7 @@ body {
     background: #fff;
     font-family: inherit;
     font-size: 1.05rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     transition: 0.2s;
 }
@@ -1264,7 +1277,7 @@ body {
     background: linear-gradient(135deg, var(--primary), var(--primary-alt));
     font-family: inherit;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1317,7 +1330,7 @@ body {
     padding: 10px 16px;
     text-align: left;
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -1345,7 +1358,7 @@ body {
 }
 
 .td-num {
-    font-weight: 700;
+    font-weight: 400;
     color: var(--value-color);
     font-size: 0.85rem;
 }
@@ -1369,7 +1382,7 @@ body {
 }
 
 .td-empleado {
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .td-empresa {
@@ -1377,7 +1390,7 @@ body {
 }
 
 .td-hora {
-    font-weight: 600;
+    font-weight: 400;
     color: var(--value-color);
     font-variant-numeric: tabular-nums;
 }
@@ -1452,7 +1465,7 @@ body {
 
 .sm-info .sm-label {
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -1498,7 +1511,7 @@ body {
 
 .prog-mini-pct {
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 400;
     color: var(--value-color);
 }
 
@@ -1526,7 +1539,7 @@ body {
 
 .rm-panel-head h3 {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 400;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1557,7 +1570,7 @@ body {
 
 .rm-filter label {
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -1570,7 +1583,7 @@ body {
     background: rgba(255, 255, 255, 0.7);
     font-family: inherit;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     transition: 0.2s;
     min-width: 150px;
@@ -1602,7 +1615,7 @@ body {
     background: rgba(255, 255, 255, 0.7);
     font-family: inherit;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     transition: 0.2s;
     min-width: 220px;
@@ -1623,12 +1636,12 @@ body {
 .rm-sel-count {
     font-size: 0.85rem;
     color: #999;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .rm-sel-count span {
     color: var(--primary);
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .btn-agregar {
@@ -1638,7 +1651,7 @@ body {
     background: linear-gradient(135deg, var(--primary), var(--primary-alt));
     font-family: inherit;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1728,7 +1741,7 @@ body {
 
 .rpt-ph h2 {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 400;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1748,7 +1761,7 @@ body {
 .rpt-ph-count {
     font-size: 0.82rem;
     color: #999;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .rpt-ph-count strong {
@@ -1763,7 +1776,7 @@ body {
     color: #1A1A1A;
     font-family: inherit;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1787,7 +1800,7 @@ body {
     color: #1565C0;
     font-family: inherit;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1825,7 +1838,7 @@ body {
 }
 
 .td-fecha {
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .td-muted {
@@ -1833,7 +1846,7 @@ body {
 }
 
 .td-total {
-    font-weight: 700;
+    font-weight: 400;
     color: var(--value-color);
 }
 
@@ -1887,6 +1900,15 @@ body {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    min-height: 0;
+}
+
+.emp-detail-col .panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .emp-ph {
@@ -1899,7 +1921,7 @@ body {
 
 .emp-ph h2 {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 400;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1922,7 +1944,7 @@ body {
 .emp-ph-count {
     font-size: 0.82rem;
     color: #999;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .emp-ph-count strong {
@@ -1948,7 +1970,7 @@ body {
     background: linear-gradient(135deg, var(--primary), var(--primary-alt));
     font-family: inherit;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1975,7 +1997,7 @@ body {
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
@@ -1991,10 +2013,24 @@ body {
 }
 
 .emp-form {
-    padding: 20px 24px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
+    flex: 1;
+    justify-content: space-between;
+}
+
+#delete-empleado-form {
+    display: none;
+}
+
+.emp-form > form:last-child {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
 }
 
 .emp-field {
@@ -2005,7 +2041,7 @@ body {
 
 .emp-field>label {
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -2020,7 +2056,7 @@ body {
     background: rgba(255, 255, 255, 0.7);
     font-family: inherit;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     transition: 0.2s;
 }
@@ -2040,7 +2076,7 @@ body {
     background: rgba(255, 255, 255, 0.7);
     font-family: inherit;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     transition: 0.2s;
     cursor: pointer;
@@ -2061,7 +2097,7 @@ body {
     align-items: center;
     gap: 8px;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
 }
 
@@ -2115,7 +2151,7 @@ body {
     border: 1.5px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.6);
     font-family: inherit;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -2138,7 +2174,7 @@ body {
     border: 1.5px solid rgba(244, 67, 54, 0.2);
     background: rgba(244, 67, 54, 0.06);
     font-family: inherit;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -2215,7 +2251,7 @@ body {
 
 .emp-stat-label {
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -2249,7 +2285,7 @@ body {
     background: rgba(var(--primary-rgb), 0.08);
     font-family: inherit;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -2272,7 +2308,7 @@ body {
     background: rgba(255, 255, 255, 0.7);
     font-family: inherit;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     transition: 0.2s;
 }
@@ -2284,7 +2320,7 @@ body {
 
 .td-cred {
     font-family: 'Outfit', monospace;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--value-color);
     letter-spacing: 0.5px;
 }
@@ -2335,8 +2371,8 @@ body {
 
 .est-card-title {
     font-size: 1rem;
-    font-weight: 700;
-    color: #333;
+    font-weight: 400;
+    color: #1A1A1A;
 }
 
 .est-card-badge {
@@ -2344,7 +2380,7 @@ body {
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     background: rgba(var(--primary-rgb), 0.12);
@@ -2490,7 +2526,7 @@ body {
 
 .est-kpi-label {
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -2547,7 +2583,7 @@ body {
     background: rgba(var(--primary-rgb), 0.12);
     color: var(--value-color);
     font-size: 0.8rem;
-    font-weight: 700;
+    font-weight: 400;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2570,8 +2606,8 @@ body {
 
 .est-top-name {
     font-size: 0.88rem;
-    font-weight: 600;
-    color: #333;
+    font-weight: 400;
+    color: #1A1A1A;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2579,7 +2615,7 @@ body {
 
 .est-top-pct {
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 400;
     color: var(--value-color);
     flex-shrink: 0;
 }
@@ -2611,17 +2647,17 @@ body {
     gap: 20px;
     flex: 1;
     min-height: 0;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .adm-header {
     text-align: center;
-    padding-top: 2rem;
+    padding: 0.75rem 0;
 }
 
 .adm-header h1 {
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .adm-header h1 i {
@@ -2638,14 +2674,23 @@ body {
 .adm-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-rows: 1fr 1fr;
+    gap: 2.5rem;
+    flex: 1;
+    min-height: 0;
 }
 
 .adm-card {
-    padding: 28px 24px;
+    padding: 18px 24px;
     text-align: center;
     transition: 0.3s;
     cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .adm-card:hover {
@@ -2655,7 +2700,7 @@ body {
 
 .adm-card h3 {
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 400;
     margin-bottom: 4px;
 }
 
@@ -2726,14 +2771,15 @@ body {
     font-size: 1.6rem;
     font-weight: 900;
     color: var(--value-color);
-    margin-bottom: 14px;
+    margin-bottom: 4px;
     line-height: 1.3;
 }
 
 .adm-card-num small {
+    display: block;
     font-size: 0.65rem;
     color: #999;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
@@ -2745,7 +2791,7 @@ body {
     background: rgba(255, 255, 255, 0.6);
     font-family: inherit;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -2883,7 +2929,7 @@ body {
 
 .sca-toast-title {
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: 400;
     color: #1A1A1A;
     margin-bottom: 4px;
 }
@@ -2999,7 +3045,7 @@ body {
 
 .confirm-modal-title {
     font-size: 1.3rem;
-    font-weight: 700;
+    font-weight: 400;
     color: #1A1A1A;
     text-align: center;
     margin-bottom: 12px;
@@ -3025,7 +3071,7 @@ body {
     border: none;
     font-family: inherit;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -3132,7 +3178,7 @@ body {
 
 .auth-logo h1 {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 400;
     color: #1A1A1A;
     margin: 0;
     line-height: 1.2;
@@ -3174,7 +3220,7 @@ body {
 
 .auth-field label {
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #555;
     display: flex;
     align-items: center;
@@ -3259,7 +3305,7 @@ body {
     color: #1A1A1A;
     font-family: 'Outfit', sans-serif;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 400;
     border: none;
     cursor: pointer;
     display: flex;
@@ -3317,7 +3363,7 @@ body {
 
 .auth-footer a {
     color: var(--value-color);
-    font-weight: 700;
+    font-weight: 400;
     text-decoration: none;
 }
 
@@ -3377,7 +3423,7 @@ button.logout {
     padding: 10px 18px;
     border-radius: 14px;
     font-size: 0.88rem;
-    font-weight: 600;
+    font-weight: 400;
     border: 1px solid;
     flex-shrink: 0;
 }
@@ -3433,8 +3479,8 @@ button.logout {
 
 .srv-idle h3 {
     font-size: 1.2rem;
-    font-weight: 700;
-    color: #333;
+    font-weight: 400;
+    color: #1A1A1A;
     margin: 0;
 }
 
@@ -3455,7 +3501,7 @@ button.logout {
     background: rgba(var(--primary-rgb), 0.08);
     border: 1px solid rgba(var(--primary-rgb), 0.22);
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--value-color);
     margin-top: 4px;
 }
@@ -3608,7 +3654,7 @@ button.logout {
 }
 /* INACTIVO → azul en Marino (igual que los demás valores) */
 [data-theme="marino"] .st-value.inactivo {
-    color: var(--primary);
+    color: var(--value-color);
 }
 /* Números del panel de detalle → color primario en Marino */
 [data-theme="marino"] .dg-item .dg-v {
@@ -3635,7 +3681,10 @@ button.logout {
 
 /* ── Theme toggle ─────────────────────────────────────────────────────────── */
 .side-footer {
-    padding: 10px 10px 18px;
+    height: 40px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
 }
 
@@ -3645,8 +3694,12 @@ button.logout {
     gap: 0;
     padding: 12px 0 12px 21px;
     width: 100%;
-    background: none;
+    background: transparent !important;
+    -webkit-appearance: none;
+    appearance: none;
     border: none;
+    box-shadow: none;
+    outline: none;
     border-radius: 18px;
     cursor: pointer;
     color: #888;
@@ -3661,14 +3714,21 @@ button.logout {
 }
 
 .theme-btn:hover {
-    background: rgba(0, 0, 0, 0.04);
     color: var(--primary);
+}
+
+.theme-btn:focus,
+.theme-btn:active,
+.theme-btn:focus-visible {
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .theme-btn .lbl {
     font-family: 'Outfit', sans-serif;
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: 0.06em;
     opacity: 0;
     max-width: 0;
