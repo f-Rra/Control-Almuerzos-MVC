@@ -34,44 +34,21 @@ namespace SCA_MVC.Controllers
         // Vista principal del módulo. Muestra la tabla de empleados con filtros
         // (búsqueda por nombre/credencial y filtro por empresa) y el panel lateral
         // de alta/edición del empleado seleccionado.
-        public async Task<IActionResult> Index(string? filtro, int? empresaFiltroId, int? idEmpleado, bool nuevo = false)
+        public async Task<IActionResult> Index(string? filtro, int? empresaFiltroId, int? idEmpleado, bool nuevo = false, int pagina = 1)
         {
-            // Cargar las empresas activas para poblar el combo del formulario y el filtro
+            pagina = Math.Max(1, pagina);
+
             var empresas = await _empresaNegocio.ListarConEmpleadosAsync();
 
-            // Obtener TODOS los empleados (incluyendo inactivos) y filtrar en memoria
-            // para no depender de que el SP de filtro excluya inactivos
-            var todosEmpleados = await _empleadoNegocio.ListarAsync();
+            var (empleados, total) = await _empleadoNegocio.FiltrarPaginadoAsync(
+                filtro, empresaFiltroId, pagina, EmpleadoViewModel.PageSize);
 
-            // Aplicar filtro de texto (nombre, apellido o credencial)
-            IEnumerable<Empleado> empleadosFiltrados = todosEmpleados;
-            if (!string.IsNullOrWhiteSpace(filtro))
-            {
-                empleadosFiltrados = empleadosFiltrados.Where(e =>
-                    e.Nombre.Contains(filtro, StringComparison.OrdinalIgnoreCase) ||
-                    e.Apellido.Contains(filtro, StringComparison.OrdinalIgnoreCase) ||
-                    e.IdCredencial.Contains(filtro, StringComparison.OrdinalIgnoreCase));
-            }
-
-            // Aplicar filtro de empresa
-            if (empresaFiltroId.HasValue && empresaFiltroId.Value > 0)
-                empleadosFiltrados = empleadosFiltrados.Where(e => e.IdEmpresa == empresaFiltroId.Value);
-
-            var empleados = empleadosFiltrados.ToList();
-
-            // Join en memoria: poblar la propiedad de navegación Empresa de cada empleado
-            // (ADO.NET no hace joins automáticos; el SP devuelve solo el IdEmpresa)
-            foreach (var emp in empleados)
-                emp.Empresa = empresas.FirstOrDefault(e => e.IdEmpresa == emp.IdEmpresa);
-
-            // Determinar el empleado a mostrar en el panel lateral
             int? seleccionadoId = nuevo ? null : (idEmpleado ?? empleados.FirstOrDefault()?.IdEmpleado);
 
             var empleadoActual = seleccionadoId.HasValue
                 ? await _empleadoNegocio.BuscarPorIdAsync(seleccionadoId.Value)
                 : null;
 
-            // Si no hay selección (lista vacía o modo "nuevo"), usar un modelo vacío con Estado=true por defecto
             empleadoActual ??= new Empleado { Estado = true };
 
             var vm = new EmpleadoViewModel
@@ -81,7 +58,9 @@ namespace SCA_MVC.Controllers
                 Filtro = filtro,
                 EmpresaFiltroId = empresaFiltroId,
                 EmpleadoSeleccionadoId = seleccionadoId,
-                Empresas = empresas
+                Empresas = empresas,
+                PaginaActual = pagina,
+                TotalRegistros = total
             };
 
             return View(vm);

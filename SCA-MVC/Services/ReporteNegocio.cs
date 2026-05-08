@@ -69,10 +69,11 @@ namespace SCA_MVC.Services
             if (idLugar.HasValue && idLugar.Value > 0)
                 query = query.Where(r => r.IdLugar == idLugar.Value);
 
-            var raw = await query
-                .GroupBy(r => r.Fecha.DayOfWeek)
+            var registros = await query.Select(r => r.Fecha.DayOfWeek).ToListAsync();
+            var raw = registros
+                .GroupBy(r => r)
                 .Select(g => new { DiaSemana = g.Key, TotalAsistencias = g.Count() })
-                .ToListAsync();
+                .ToList();
 
             var dias = raw.Select(g => new
             {

@@ -74,18 +74,37 @@ namespace SCA_MVC.Services
             var query = _context.Empleados.AsNoTracking().Include(e => e.Empresa).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filtro))
-            {
-                query = query.Where(e => e.Nombre.Contains(filtro) || 
-                                         e.Apellido.Contains(filtro) || 
+                query = query.Where(e => e.Nombre.Contains(filtro) ||
+                                         e.Apellido.Contains(filtro) ||
                                          e.IdCredencial.Contains(filtro));
-            }
 
             if (idEmpresa.HasValue && idEmpresa.Value > 0)
-            {
                 query = query.Where(e => e.IdEmpresa == idEmpresa.Value);
-            }
 
             return query.ToListAsync();
+        }
+
+        public async Task<(List<Empleado> Items, int Total)> FiltrarPaginadoAsync(
+            string? filtro, int? idEmpresa, int pagina, int pageSize)
+        {
+            var query = _context.Empleados.AsNoTracking().Include(e => e.Empresa).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+                query = query.Where(e => e.Nombre.Contains(filtro) ||
+                                         e.Apellido.Contains(filtro) ||
+                                         e.IdCredencial.Contains(filtro));
+
+            if (idEmpresa.HasValue && idEmpresa.Value > 0)
+                query = query.Where(e => e.IdEmpresa == idEmpresa.Value);
+
+            var total = await query.CountAsync();
+            var items = await query
+                .OrderBy(e => e.Apellido).ThenBy(e => e.Nombre)
+                .Skip((pagina - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, total);
         }
 
         public async Task<List<Empleado>> EmpleadosSinAlmorzarAsync(int idServicio)

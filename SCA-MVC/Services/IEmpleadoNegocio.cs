@@ -12,6 +12,7 @@ namespace SCA_MVC.Services
         Task EliminarAsync(int idEmpleado);
         Task<bool> ExisteCredencialAsync(string idCredencial);
         Task<List<Empleado>> FiltrarEmpleadosAsync(string? filtro, int? idEmpresa);
+        Task<(List<Empleado> Items, int Total)> FiltrarPaginadoAsync(string? filtro, int? idEmpresa, int pagina, int pageSize);
         Task<List<Empleado>> EmpleadosSinAlmorzarAsync(int idServicio);
         Task<List<Empleado>> FiltrarSinAlmorzarAsync(int idServicio, int? idEmpresa, string? nombre);
     }
