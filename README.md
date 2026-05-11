@@ -1,6 +1,6 @@
 # Sistema Control de Almuerzos — MVC
 
-Rediseño web del [Sistema Control de Almuerzos](https://github.com/f-Rra/Sistema-Control-Almuerzos) original (WinForms, C#) sobre **ASP.NET Core MVC**: autenticación con Identity, roles y permisos, registro de comensales por credencial RFID, reportes PDF, envío por email y gestión completa de empleados y usuarios.
+Rediseño web del [Sistema Control de Almuerzos](https://github.com/f-Rra/Sistema-Control-Almuerzos) original (WinForms, C#) sobre **ASP.NET Core MVC**: autenticación con Identity, roles y permisos, registro de comensales por credencial RFID, reportes PDF, envío por email y gestión completa de empleados y usuarios. Desplegado en **Azure App Service** con **Azure SQL Database**.
 
 ![.NET 9](https://img.shields.io/badge/.NET-9.0-blue)
 ![C#](https://img.shields.io/badge/C%23-13.0-green)
@@ -8,7 +8,8 @@ Rediseño web del [Sistema Control de Almuerzos](https://github.com/f-Rra/Sistem
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-2019+-red)
 ![ASP.NET MVC](https://img.shields.io/badge/UI-ASP.NET%20MVC-lightblue)
 ![Identity](https://img.shields.io/badge/Auth-Identity-orange)
-![Status](https://img.shields.io/badge/Status-Demo%20Ready-yellow)
+![Azure](https://img.shields.io/badge/Deploy-Azure-0078D4)
+![Status](https://img.shields.io/badge/Status-Live-brightgreen)
 
 ---
 
@@ -17,7 +18,7 @@ Rediseño web del [Sistema Control de Almuerzos](https://github.com/f-Rra/Sistem
 ### Dashboard
 
 **Lista de Últimos Servicios:**
-- Visualización de los servicios más recientes (últimos 30 días)
+- Visualización de los 7 servicios más recientes
 - Ordenados cronológicamente (más recientes primero)
 - Información resumida: fecha, lugar, proyección, duración
 
@@ -126,6 +127,7 @@ Punto de acceso centralizado con métricas reales del sistema (empresas, emplead
 - Baja lógica: Desactivar empleados manteniendo historial
 - Modificación: Actualizar información y reasignar empresa
 - Verificación AJAX de unicidad de credencial
+- **Paginación**: listado de 10 registros por página con filtros por nombre y empresa aplicados en base de datos
 
 ---
 
@@ -147,6 +149,14 @@ Dashboard de análisis con KPIs organizados en secciones:
 - Creación de nuevos usuarios con asignación de rol (Admin / Usuario)
 - Edición de usuario (cambiar rol, resetear contraseña)
 - Activación/desactivación vía `LockoutEnd` (sin eliminar el registro)
+
+### Sistema de Temas
+
+Toggle visual entre dos temas de color accesible desde el sidebar:
+- **Solar**: paleta dorada, fondo crema
+- **Marino**: paleta azul, rojo como acento, fondo claro
+
+La preferencia persiste en `localStorage` y se aplica sin recargar la página.
 
 ---
 
@@ -233,7 +243,7 @@ Control-Almuerzos-MVC/
 │   ├── appsettings.json
 │   └── SCA-MVC.csproj
 │
-├── Guias/                            # 51 guías documentando el proceso commit a commit
+├── Guias/                            # 54 guías documentando el proceso commit a commit
 └── README.md
 ```
 
@@ -261,7 +271,17 @@ Al aplicar las migraciones, se crean automáticamente:
 
 ---
 
-## Cómo correr el proyecto
+## Demo en línea
+
+El sistema está desplegado en Azure y disponible en:
+
+**[https://sca-mvc-app-hndpbbgshwfnbehy.brazilsouth-01.azurewebsites.net](https://sca-mvc-app-hndpbbgshwfnbehy.brazilsouth-01.azurewebsites.net)**
+
+> El plan gratuito de Azure puede tardar unos segundos en responder la primera solicitud si la app estuvo inactiva.
+
+---
+
+## Cómo correr el proyecto localmente
 
 ### Prerequisitos
 
@@ -297,9 +317,8 @@ dotnet run
 | Rol | Usuario | Contraseña |
 |---|---|---|
 | Admin | admin | Admin123! |
-| Usuario | usuario | User123! |
 
-> La contraseña del admin se configura en `appsettings.json` bajo `SeedAdmin:Password`.
+> La contraseña del admin se configura en `appsettings.json` bajo `SeedAdmin:Password`. Los usuarios adicionales se crean desde el panel de administración.
 
 ---
 
@@ -321,6 +340,8 @@ dotnet run
 | **QuestPDF** | 2026.2.1 | Generación de PDFs |
 | **MailKit / MimeKit** | 4.16.0 | Envío de emails vía SMTP |
 | **Google Fonts (Outfit)** | — | Tipografía principal |
+| **Azure App Service** | F1 | Hosting de la aplicación |
+| **Azure SQL Database** | Free | Base de datos en la nube |
 
 ---
 
@@ -357,9 +378,9 @@ dotnet run
 
 ## Guías de Desarrollo
 
-La carpeta `/Guias/` contiene **51 guías** que documentan el proceso de desarrollo commit a commit. Cada guía detalla los archivos modificados, los conceptos técnicos implementados y las decisiones tomadas en ese punto del proyecto.
+La carpeta `/Guias/` contiene **54 guías** que documentan el proceso de desarrollo commit a commit. Cada guía detalla los archivos modificados, los conceptos técnicos implementados y las decisiones tomadas en ese punto del proyecto.
 
-Las guías c01–c34 fueron redactadas **antes de cada commit**, como guías de implementación. Las guías c35–c51 fueron redactadas **después**, como documentación retrospectiva que incluye las herramientas de IA utilizadas en cada etapa.
+Las guías c01–c34 fueron redactadas **antes de cada commit**, como guías de implementación. Las guías c35–c54 fueron redactadas **después**, como documentación retrospectiva que incluye las herramientas de IA utilizadas en cada etapa.
 
 ---
 
@@ -390,4 +411,4 @@ Cada tarea siguió el mismo ciclo: el autor define el problema y el contexto →
 
 **Facundo Herrera**
 - Estudiante de Tecnicatura Universitaria en Programación — UTN FRGP
-- Email: Facundo.herrera@alumnos.frgp.utn.edu.ar
+- Email: facundo.rra@gmail.com
