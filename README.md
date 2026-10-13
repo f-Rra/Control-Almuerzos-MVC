@@ -297,14 +297,10 @@ git clone https://github.com/f-Rra/Control-Almuerzos-MVC.git
 cd Control-Almuerzos-MVC/SCA-MVC
 ```
 
-```json
-// 2. Configurar la connection string en appsettings.json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=.\\SQLEXPRESS;Database=SCA_MVC;Trusted_Connection=True;TrustServerCertificate=True"
-}
-```
-
 ```bash
+# 2. Cargar la clave del administrador con user-secrets (ver "Claves y configuración")
+dotnet user-secrets set "DefaultAdmin:Password" "una-clave-de-6-o-mas-con-un-numero"
+
 # 3. Aplicar migraciones y seed data
 dotnet ef database update
 
@@ -312,13 +308,38 @@ dotnet ef database update
 dotnet run
 ```
 
-### Usuarios de demo
+La cadena de conexión de `appsettings.json` apunta a `.\SQLEXPRESS` y a la base `BD_Control_Almuerzos`. Si tu instancia de SQL Server se llama distinto, sobrescribila con user-secrets (ver abajo).
+
+### Claves y configuración
+
+`appsettings.json` no lleva claves: `DefaultAdmin:Password` y `EmailSettings:SmtpPass` están vacías. Se cargan con [user-secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets), que las guarda fuera del repositorio, en tu usuario de Windows. Los comandos se corren en la carpeta `SCA-MVC`:
+
+```bash
+# Clave del administrador (obligatoria la primera vez, cuando la base todavía no tiene admin)
+dotnet user-secrets set "DefaultAdmin:Password" "una-clave-de-6-o-mas-con-un-numero"
+
+# Envío de reportes por email (opcional). Gmail pide una contraseña de aplicación, no la clave de la cuenta
+dotnet user-secrets set "EmailSettings:SmtpUser" "tu-correo@gmail.com"
+dotnet user-secrets set "EmailSettings:SmtpPass" "clave-de-aplicacion-de-google"
+dotnet user-secrets set "EmailSettings:FromEmail" "tu-correo@gmail.com"
+
+# Otra instancia de SQL Server (opcional)
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=TU-PC\TU-INSTANCIA;Database=BD_Control_Almuerzos;Integrated Security=true;TrustServerCertificate=true"
+```
+
+Para ver lo cargado: `dotnet user-secrets list`.
+
+Si la base no tiene administrador y falta la clave, **la aplicación no arranca** y muestra el comando que hay que correr. Una vez creado el admin, la clave ya no se vuelve a pedir.
+
+Los user-secrets solo se leen en el entorno de desarrollo. En producción (Azure App Service) las mismas claves se cargan como variables de entorno de la app, con `__` en lugar de `:`: `DefaultAdmin__Password`, `EmailSettings__SmtpPass`, `ConnectionStrings__DefaultConnection`.
+
+### Usuario administrador
 
 | Rol | Usuario | Contraseña |
 |---|---|---|
-| Admin | admin | Admin123! |
+| Admin | admin@sca.com | la que cargaste en `DefaultAdmin:Password` |
 
-> La contraseña del admin se configura en `appsettings.json` bajo `SeedAdmin:Password`. Los usuarios adicionales se crean desde el panel de administración.
+> El email del admin se puede cambiar con `DefaultAdmin:Email`. Los usuarios adicionales se crean desde el panel de administración.
 
 ---
 
@@ -356,7 +377,7 @@ dotnet run
 - **Middleware global**: Captura de excepciones no controladas (404, 500)
 - **Baja lógica**: No se eliminan datos, solo se desactivan
 - **Integridad referencial**: Foreign Keys con `OnDelete(Restrict)`
-- **Datos sensibles**: Contraseñas fuera del código fuente, en `appsettings.json`
+- **Datos sensibles**: Contraseñas fuera del código fuente y de `appsettings.json`: user-secrets en desarrollo y variables de entorno en producción
 
 ### Rendimiento
 
