@@ -85,11 +85,24 @@ using (var scope = app.Services.CreateScope())
 
     // Crear usuario administrador por defecto si no existe
     var adminConfig    = app.Configuration.GetSection("DefaultAdmin");
-    var adminEmail     = adminConfig["Email"]    ?? "admin@sca.com";
-    var adminPassword  = adminConfig["Password"] ?? "Admin123";
+    var adminEmail     = adminConfig["Email"] ?? "admin@sca.com";
+    var adminPassword  = adminConfig["Password"];
 
     if (await userManager.FindByEmailAsync(adminEmail) is null)
     {
+        // Sin clave configurada no se crea el admin: la clave no puede estar escrita
+        // en el codigo. Si el admin ya existe (como en Azure) esto no se pide.
+        if (string.IsNullOrWhiteSpace(adminPassword))
+        {
+            // los secretos de usuario solo se cargan en Development, asi que fuera de ahi
+            // mandar a user-secrets seria mandar a un lugar que no se lee
+            throw new InvalidOperationException(app.Environment.IsDevelopment()
+                ? "Falta la clave del administrador. Corré esto en la carpeta SCA-MVC: " +
+                  "dotnet user-secrets set \"DefaultAdmin:Password\" \"la-clave-que-quieras-para-el-admin\""
+                : "Falta la clave del administrador. Definí la variable de entorno " +
+                  "DefaultAdmin__Password con la clave del primer admin.");
+        }
+
         var adminUser = new ApplicationUser
         {
             UserName       = adminEmail,
@@ -99,8 +112,11 @@ using (var scope = app.Services.CreateScope())
         };
 
         var resultado = await userManager.CreateAsync(adminUser, adminPassword);
-        if (resultado.Succeeded)
-            await userManager.AddToRoleAsync(adminUser, "Admin");
+        if (!resultado.Succeeded)
+            throw new InvalidOperationException("No se pudo crear el administrador: " +
+                string.Join(" ", resultado.Errors.Select(e => e.Description)));
+
+        await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 }
 
