@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>SCA_MVC</RootNamespace>
+    <UserSecretsId>7f938145-6d7c-4c2b-97c9-bd7f3a8815cd</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
