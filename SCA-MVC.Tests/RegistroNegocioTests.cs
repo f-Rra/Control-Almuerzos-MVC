@@ -1,0 +1,49 @@
+using Microsoft.EntityFrameworkCore;
+using SCA_MVC.Services;
+
+namespace SCA_MVC.Tests;
+
+// El empleado 1 es de la empresa 1 (viene del HasData). Cada test arma su servicio
+// activo con ServicioNegocio, como hace la pantalla de Servicios.
+public class RegistroNegocioTests
+{
+    [Fact]
+    public async Task Registrar_GuardaElRegistroDelEmpleadoEnElServicio()
+    {
+        using var bd = new BaseDeDatos();
+        var idServicio = await new ServicioNegocio(bd.Contexto).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto);
+
+        await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+
+        var registro = await bd.Contexto.Registros.SingleAsync(r => r.IdServicio == idServicio);
+        Assert.Equal(1, registro.IdEmpleado);
+        Assert.Equal(1, registro.IdEmpresa);
+        Assert.Equal(1, registro.IdLugar);
+    }
+
+    [Fact]
+    public async Task YaRegistrado_EsVerdaderoSoloParaQuienPaso()
+    {
+        using var bd = new BaseDeDatos();
+        var idServicio = await new ServicioNegocio(bd.Contexto).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto);
+        await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+
+        Assert.True(await registros.YaRegistradoAsync(idEmpleado: 1, idServicio: idServicio));
+        Assert.False(await registros.YaRegistradoAsync(idEmpleado: 2, idServicio: idServicio));
+    }
+
+    [Fact]
+    public async Task Contar_CuentaLosRegistrosDeEseServicio()
+    {
+        using var bd = new BaseDeDatos();
+        var idServicio = await new ServicioNegocio(bd.Contexto).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto);
+
+        await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+        await registros.RegistrarAsync(idEmpleado: 2, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+
+        Assert.Equal(2, await registros.ContarAsync(idServicio));
+    }
+}
