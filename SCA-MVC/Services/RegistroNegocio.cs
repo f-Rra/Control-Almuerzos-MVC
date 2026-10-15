@@ -3,6 +3,7 @@ using SCA_MVC.Data;
 using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using System;
+using System.Data.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,18 +21,35 @@ namespace SCA_MVC.Services
             _reloj = reloj;
         }
 
-        public async Task RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar)
+        public async Task<bool> RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar)
         {
             // Usamos SQL directo para evitar conflicto con triggers de SQL Server.
             // EF Core genera INSERT...OUTPUT para recuperar el PK generado; si la tabla
             // tiene triggers activos, SQL Server lanza una excepción (OUTPUT clause con triggers).
             // Con ExecuteSqlRawAsync el INSERT se envía directamente sin que EF Core
             // intente verificar filas afectadas ni recuperar el ID generado.
-            await _context.Database.ExecuteSqlRawAsync(
-                @"INSERT INTO Registros (IdEmpleado, IdEmpresa, IdServicio, IdLugar, Fecha, Hora)
-                  VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
-                idEmpleado, idEmpresa, idServicio, idLugar,
-                _reloj.Hoy(), _reloj.Ahora().TimeOfDay);
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(
+                    @"INSERT INTO Registros (IdEmpleado, IdEmpresa, IdServicio, IdLugar, Fecha, Hora)
+                      VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
+                    idEmpleado, idEmpresa, idServicio, idLugar,
+                    _reloj.Hoy(), _reloj.Ahora().TimeOfDay);
+                return true;
+            }
+            catch (DbException)
+            {
+                // Si el lector manda la misma credencial dos veces seguidas, las dos
+                // lecturas pasan el chequeo de YaRegistradoAsync antes de que la primera
+                // inserte, y el índice único IX_Registro_Empleado_Servicio rechaza la
+                // segunda. No se mira el número de error de SQL Server para que valga
+                // con cualquier base: si el empleado ya figura registrado, fue eso; si
+                // no, es otro problema y tiene que seguir saliendo como error.
+                if (await YaRegistradoAsync(idEmpleado, idServicio))
+                    return false;
+
+                throw;
+            }
         }
 
         public async Task<List<Registro>> ListarPorServicioAsync(int idServicio)

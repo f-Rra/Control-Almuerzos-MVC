@@ -13,12 +13,43 @@ namespace SCA_MVC.Tests;
 // sesión, así que no hace falta armar un pedido HTTP.
 public class ServicioControllerTests
 {
-    private static ServicioController CrearControlador(BaseDeDatos bd, TimeProvider reloj) => new(
+    // registros: para los tests que necesitan reemplazar el servicio de registros
+    private static ServicioController CrearControlador(BaseDeDatos bd, TimeProvider reloj, IRegistroNegocio? registros = null) => new(
         new ServicioNegocio(bd.Contexto, reloj),
         new LugarNegocio(bd.Contexto),
-        new RegistroNegocio(bd.Contexto, reloj),
+        registros ?? new RegistroNegocio(bd.Contexto, reloj),
         new EmpleadoNegocio(bd.Contexto),
         reloj);
+
+    // Un servicio de registros de mentira que reproduce la carrera de dos lecturas juntas:
+    // cuando el controlador pregunta si el empleado ya está registrado la respuesta es "no"
+    // (la otra lectura todavía no había insertado), pero al intentar registrar ya se le
+    // adelantó y la base lo rechaza por duplicado. Un test así no depende de la velocidad
+    // de la máquina: la carrera real es imposible de repetir a pedido.
+    private sealed class RegistroNegocioAdelantado : IRegistroNegocio
+    {
+        public Task<bool> YaRegistradoAsync(int idEmpleado, int idServicio) => Task.FromResult(false);
+        public Task<bool> RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar) => Task.FromResult(false);
+
+        public Task<List<Registro>> ListarPorServicioAsync(int idServicio) => throw new NotImplementedException();
+        public Task<int> ContarAsync(int idServicio) => throw new NotImplementedException();
+        public Task<List<Registro>> PorEmpresaYFechaAsync(int idEmpresa, DateTime fechaInicio, DateTime fechaFin) => throw new NotImplementedException();
+    }
+
+    [Fact]
+    public async Task Registrar_SiOtraLecturaSeAdelanto_RespondeYaRegistrado()
+    {
+        var reloj = RelojDePrueba.Cualquiera();
+        using var bd = new BaseDeDatos();
+        var idServicio = await new ServicioNegocio(bd.Contexto, reloj).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var controlador = CrearControlador(bd, reloj, new RegistroNegocioAdelantado());
+
+        var resultado = Assert.IsType<JsonResult>(await controlador.Registrar("RF001", idServicio, 1));
+
+        var json = JsonSerializer.SerializeToElement(resultado.Value);
+        Assert.False(json.GetProperty("success").GetBoolean());
+        Assert.Equal("Ya registrado en este servicio", json.GetProperty("message").GetString());
+    }
 
     [Fact]
     public async Task Registrar_DevuelveLaHoraDeArgentina()

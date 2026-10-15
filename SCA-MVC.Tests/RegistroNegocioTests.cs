@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Services;
 
@@ -36,6 +37,33 @@ public class RegistroNegocioTests
         var registro = await bd.Contexto.Registros.SingleAsync(r => r.IdServicio == idServicio);
         Assert.Equal(new DateTime(2026, 3, 10), registro.Fecha);
         Assert.Equal(new TimeSpan(23, 30, 0), registro.Hora);
+    }
+
+    [Fact]
+    public async Task Registrar_SiYaEstaRegistrado_DevuelveFalsoYNoLoDuplica()
+    {
+        using var bd = new BaseDeDatos();
+        var idServicio = await new ServicioNegocio(bd.Contexto, RelojDePrueba.Cualquiera()).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
+
+        var primera = await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+        var segunda = await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+
+        Assert.True(primera);
+        Assert.False(segunda);
+        Assert.Equal(1, await registros.ContarAsync(idServicio));
+    }
+
+    [Fact]
+    public async Task Registrar_ConUnServicioQueNoExiste_SigueFallando()
+    {
+        // Que no se confunda cualquier error de la base con un duplicado: este es otro
+        // problema (la clave foránea del servicio) y tiene que seguir saliendo como error
+        using var bd = new BaseDeDatos();
+        var registros = new RegistroNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
+
+        await Assert.ThrowsAnyAsync<DbException>(() =>
+            registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: 99999, idLugar: 1));
     }
 
     [Fact]

@@ -109,13 +109,17 @@ namespace SCA_MVC.Controllers
 
             try
             {
+                int registradosAhora = 0;
                 foreach (var idEmp in request.IdsEmpleados)
                 {
                     // Obtener datos del empleado para tener el ID de empresa
                     var emp = await _empleadoNegocio.BuscarPorIdAsync(idEmp);
                     if (emp != null)
                     {
-                        await _registroNegocio.RegistrarAsync(idEmp, emp.IdEmpresa, request.IdServicio, request.IdLugar);
+                        // Si ya estaba registrado se lo salta: el resultado buscado ya está
+                        // y no tiene sentido cortar el resto de la lista por uno repetido
+                        if (await _registroNegocio.RegistrarAsync(idEmp, emp.IdEmpresa, request.IdServicio, request.IdLugar))
+                            registradosAhora++;
                     }
                 }
 
@@ -130,7 +134,7 @@ namespace SCA_MVC.Controllers
 
                 return Json(new { 
                     success = true, 
-                    count = request.IdsEmpleados.Count,
+                    count = registradosAhora,
                     registrados = registrados,
                     pendientes = pendientes,
                     progreso = progreso
