@@ -5,8 +5,9 @@ namespace SCA_MVC.ViewModels
 {
     public class ReporteViewModel
     {
-        public DateTime FechaDesde { get; set; } = DateTime.Today.AddDays(-30);
-        public DateTime FechaHasta { get; set; } = DateTime.Today;
+        // Las dos fechas las completa siempre ReporteController.Index
+        public DateTime FechaDesde { get; set; }
+        public DateTime FechaHasta { get; set; }
         public int? IdLugar { get; set; }
         public string TipoReporte { get; set; } = "servicios"; // servicios | empresas | cobertura | dias
 

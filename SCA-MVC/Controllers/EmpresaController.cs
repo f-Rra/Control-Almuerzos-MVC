@@ -21,11 +21,16 @@ namespace SCA_MVC.Controllers
         // Servicio de negocio para consultar registros/asistencias
         private readonly IRegistroNegocio _registroNegocio;
 
+        // Reloj de la aplicación (hora de Argentina)
+        private readonly TimeProvider _reloj;
+
         public EmpresaController(
             IEmpresaNegocio empresaNegocio,
             IEmpleadoNegocio empleadoNegocio,
-            IRegistroNegocio registroNegocio)
+            IRegistroNegocio registroNegocio,
+            TimeProvider reloj)
         {
+            _reloj = reloj;
             _empresaNegocio = empresaNegocio;
             _empleadoNegocio = empleadoNegocio;
             _registroNegocio = registroNegocio;
@@ -257,14 +262,15 @@ namespace SCA_MVC.Controllers
             var inactivos = empleados.Count(e => !e.Estado);
 
             // Calcular el rango del mes actual (del primer día al día de hoy)
-            var inicioMes = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            var fin = DateTime.Today;
+            var hoy = _reloj.Hoy();
+            var inicioMes = new DateTime(hoy.Year, hoy.Month, 1);
+            var fin = hoy;
 
             var asistencias = await _registroNegocio.PorEmpresaYFechaAsync(idEmpresa.Value, inicioMes, fin);
             var asistenciasMes = asistencias.Count;
 
             // Math.Max(1, ...) evita división por cero el primer día del mes
-            var diasTranscurridos = Math.Max(1, DateTime.Today.Day);
+            var diasTranscurridos = Math.Max(1, hoy.Day);
             var promedioDiario = Math.Round(asistenciasMes / (decimal)diasTranscurridos, 1);
 
             return (totalEmpleados, inactivos, asistenciasMes, promedioDiario);

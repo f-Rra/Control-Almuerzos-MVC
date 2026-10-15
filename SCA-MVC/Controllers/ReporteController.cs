@@ -19,13 +19,15 @@ namespace SCA_MVC.Controllers
         private readonly ILugarNegocio _lugarNegocio;
         private readonly IServicioNegocio _servicioNegocio;
         private readonly IEmailService _emailService;
+        private readonly TimeProvider _reloj;
 
-        public ReporteController(IReporteNegocio reporteNegocio, ILugarNegocio lugarNegocio, IServicioNegocio servicioNegocio, IEmailService emailService)
+        public ReporteController(IReporteNegocio reporteNegocio, ILugarNegocio lugarNegocio, IServicioNegocio servicioNegocio, IEmailService emailService, TimeProvider reloj)
         {
             _reporteNegocio = reporteNegocio;
             _lugarNegocio = lugarNegocio;
             _servicioNegocio = servicioNegocio;
             _emailService = emailService;
+            _reloj = reloj;
         }
 
         // GET: Reporte
@@ -190,7 +192,7 @@ namespace SCA_MVC.Controllers
                                 row.RelativeItem().AlignRight().Text(text =>
                                 {
                                     text.Span("Emitido: ").Bold().FontSize(8);
-                                    text.Span(DateTime.Now.ToString("dd/MM/yyyy HH:mm")).FontSize(8);
+                                    text.Span(_reloj.Ahora().ToString("dd/MM/yyyy HH:mm")).FontSize(8);
                                 });
                             });
 
