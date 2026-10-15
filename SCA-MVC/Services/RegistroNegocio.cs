@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
+using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace SCA_MVC.Services
     public class RegistroNegocio : IRegistroNegocio
     {
         private readonly ApplicationDbContext _context;
+        private readonly TimeProvider _reloj;
 
-        public RegistroNegocio(ApplicationDbContext context)
+        public RegistroNegocio(ApplicationDbContext context, TimeProvider reloj)
         {
             _context = context;
+            _reloj = reloj;
         }
 
         public async Task RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar)
@@ -28,7 +31,7 @@ namespace SCA_MVC.Services
                 @"INSERT INTO Registros (IdEmpleado, IdEmpresa, IdServicio, IdLugar, Fecha, Hora)
                   VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
                 idEmpleado, idEmpresa, idServicio, idLugar,
-                DateTime.Today, DateTime.Now.TimeOfDay);
+                _reloj.Hoy(), _reloj.Ahora().TimeOfDay);
         }
 
         public async Task<List<Registro>> ListarPorServicioAsync(int idServicio)

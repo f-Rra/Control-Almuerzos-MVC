@@ -62,6 +62,9 @@ builder.Services.AddScoped<IReporteNegocio, ReporteNegocio>();
 builder.Services.AddScoped<IEstadisticasNegocio, EstadisticasNegocio>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+// El reloj de la aplicación: siempre da la hora de Argentina, esté donde esté el servidor
+builder.Services.AddSingleton<TimeProvider, RelojArgentina>();
+
 // Configuración de QuestPDF para uso comunitario
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 

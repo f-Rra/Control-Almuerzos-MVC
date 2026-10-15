@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using SCA_MVC.Services;
 using System;
@@ -17,17 +18,20 @@ namespace SCA_MVC.Controllers
         private readonly IEmpresaNegocio _empresaNegocio;
         private readonly IRegistroNegocio _registroNegocio;
         private readonly IServicioNegocio _servicioNegocio;
+        private readonly TimeProvider _reloj;
 
         public RegistroController(
             IEmpleadoNegocio empleadoNegocio,
             IEmpresaNegocio empresaNegocio,
             IRegistroNegocio registroNegocio,
-            IServicioNegocio servicioNegocio)
+            IServicioNegocio servicioNegocio,
+            TimeProvider reloj)
         {
             _empleadoNegocio = empleadoNegocio;
             _empresaNegocio = empresaNegocio;
             _registroNegocio = registroNegocio;
             _servicioNegocio = servicioNegocio;
+            _reloj = reloj;
         }
         #endregion
 
@@ -40,7 +44,7 @@ namespace SCA_MVC.Controllers
             var servicioActivo = await _servicioNegocio.ObtenerActivoGlobalAsync();
             
             // Si no hay servicio activo hoy, mostrar advertencia
-            if (servicioActivo == null || servicioActivo.Fecha.Date != DateTime.Today)
+            if (servicioActivo == null || servicioActivo.Fecha.Date != _reloj.Hoy())
             {
                 ViewBag.NoServicio = true;
                 return View(new List<Empleado>());

@@ -1,4 +1,5 @@
 @model SCA_MVC.ViewModels.ServicioActivoViewModel
+@inject TimeProvider Reloj
 @{
     ViewData["Title"] = "Servicio Activo";
     bool hayServicio = Model.ServicioActivo != null;
@@ -26,7 +27,7 @@
                     </div>
                     <div class="cfg-item">
                         <label>Fecha</label>
-                        <input type="date" value="@(hayServicio ? Model.ServicioActivo!.Fecha.ToString("yyyy-MM-dd") : DateTime.Today.ToString("yyyy-MM-dd"))" readonly />
+                        <input type="date" value="@(hayServicio ? Model.ServicioActivo!.Fecha.ToString("yyyy-MM-dd") : Reloj.GetLocalNow().ToString("yyyy-MM-dd"))" readonly />
                     </div>
                     <div class="cfg-item">
                         <label>Proyección</label>

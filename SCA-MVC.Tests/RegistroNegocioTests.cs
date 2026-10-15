@@ -11,8 +11,8 @@ public class RegistroNegocioTests
     public async Task Registrar_GuardaElRegistroDelEmpleadoEnElServicio()
     {
         using var bd = new BaseDeDatos();
-        var idServicio = await new ServicioNegocio(bd.Contexto).CrearServicioAsync(idLugar: 1, proyeccion: 50);
-        var registros = new RegistroNegocio(bd.Contexto);
+        var idServicio = await new ServicioNegocio(bd.Contexto, RelojDePrueba.Cualquiera()).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
 
         await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
 
@@ -23,11 +23,27 @@ public class RegistroNegocioTests
     }
 
     [Fact]
+    public async Task Registrar_GuardaLaFechaYLaHoraDeArgentina()
+    {
+        // Son las 23:30 del 10 de marzo en Argentina; en UTC (la hora de Azure) ya es el 11
+        var reloj = RelojDePrueba.EnArgentina(2026, 3, 10, 23, 30);
+        using var bd = new BaseDeDatos();
+        var idServicio = await new ServicioNegocio(bd.Contexto, reloj).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto, reloj);
+
+        await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+
+        var registro = await bd.Contexto.Registros.SingleAsync(r => r.IdServicio == idServicio);
+        Assert.Equal(new DateTime(2026, 3, 10), registro.Fecha);
+        Assert.Equal(new TimeSpan(23, 30, 0), registro.Hora);
+    }
+
+    [Fact]
     public async Task YaRegistrado_EsVerdaderoSoloParaQuienPaso()
     {
         using var bd = new BaseDeDatos();
-        var idServicio = await new ServicioNegocio(bd.Contexto).CrearServicioAsync(idLugar: 1, proyeccion: 50);
-        var registros = new RegistroNegocio(bd.Contexto);
+        var idServicio = await new ServicioNegocio(bd.Contexto, RelojDePrueba.Cualquiera()).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
         await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
 
         Assert.True(await registros.YaRegistradoAsync(idEmpleado: 1, idServicio: idServicio));
@@ -38,8 +54,8 @@ public class RegistroNegocioTests
     public async Task Contar_CuentaLosRegistrosDeEseServicio()
     {
         using var bd = new BaseDeDatos();
-        var idServicio = await new ServicioNegocio(bd.Contexto).CrearServicioAsync(idLugar: 1, proyeccion: 50);
-        var registros = new RegistroNegocio(bd.Contexto);
+        var idServicio = await new ServicioNegocio(bd.Contexto, RelojDePrueba.Cualquiera()).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
 
         await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
         await registros.RegistrarAsync(idEmpleado: 2, idEmpresa: 1, idServicio: idServicio, idLugar: 1);

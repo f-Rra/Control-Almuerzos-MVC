@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SCA_MVC.Helpers;
 using SCA_MVC.Services;
 using SCA_MVC.ViewModels;
 using System;
@@ -20,17 +21,20 @@ namespace SCA_MVC.Controllers
         private readonly IReporteNegocio _reporteNegocio;
         private readonly IServicioNegocio _servicioNegocio;
         private readonly IRegistroNegocio _registroNegocio;
+        private readonly TimeProvider _reloj;
 
         public HomeController(
             ILogger<HomeController> logger,
             IReporteNegocio reporteNegocio,
             IServicioNegocio servicioNegocio,
-            IRegistroNegocio registroNegocio)
+            IRegistroNegocio registroNegocio,
+            TimeProvider reloj)
         {
             _logger          = logger;
             _reporteNegocio  = reporteNegocio;
             _servicioNegocio = servicioNegocio;
             _registroNegocio = registroNegocio;
+            _reloj           = reloj;
         }
 
         #endregion
@@ -41,9 +45,11 @@ namespace SCA_MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var hoy = _reloj.Hoy();
+
             // Últimos 30 días para obtener suficientes servicios
-            var desde = DateTime.Today.AddDays(-30);
-            var hasta = DateTime.Today;
+            var desde = hoy.AddDays(-30);
+            var hasta = hoy;
 
             var todos = await _reporteNegocio.ObtenerListaServiciosAsync(desde, hasta, null);
 
@@ -57,7 +63,7 @@ namespace SCA_MVC.Controllers
             var seleccionado = ultimos.FirstOrDefault();
 
             // Comparativa: total por día de la semana de los últimos 7 días
-            var hace7 = DateTime.Today.AddDays(-6);
+            var hace7 = hoy.AddDays(-6);
             var ultimaSemana = todos
                 .Where(s => s.Fecha.Date >= hace7)
                 .ToList();
@@ -90,7 +96,7 @@ namespace SCA_MVC.Controllers
             foreach (var c in comparativa) c.MaxRef = maxRef;
 
             var servicioActivo = await _servicioNegocio.ObtenerActivoGlobalAsync();
-            bool hayHoy = servicioActivo != null && servicioActivo.Fecha.Date == DateTime.Today;
+            bool hayHoy = servicioActivo != null && servicioActivo.Fecha.Date == hoy;
             int registradosHoy = hayHoy ? await _registroNegocio.ContarAsync(servicioActivo!.IdServicio) : 0;
 
             var model = new DashboardViewModel

@@ -19,17 +19,20 @@ namespace SCA_MVC.Controllers
         private readonly ILugarNegocio _lugarNegocio;
         private readonly IRegistroNegocio _registroNegocio;
         private readonly IEmpleadoNegocio _empleadoNegocio;
+        private readonly TimeProvider _reloj;
 
         public ServicioController(
             IServicioNegocio servicioNegocio,
             ILugarNegocio lugarNegocio,
             IRegistroNegocio registroNegocio,
-            IEmpleadoNegocio empleadoNegocio)
+            IEmpleadoNegocio empleadoNegocio,
+            TimeProvider reloj)
         {
             _servicioNegocio = servicioNegocio;
             _lugarNegocio = lugarNegocio;
             _registroNegocio = registroNegocio;
             _empleadoNegocio = empleadoNegocio;
+            _reloj = reloj;
         }
 
         #endregion
@@ -49,7 +52,7 @@ namespace SCA_MVC.Controllers
 
             // Intentar obtener el servicio actualmente activo
             var activo = await _servicioNegocio.ObtenerActivoGlobalAsync();
-            if (activo != null && activo.Fecha.Date == DateTime.Today)
+            if (activo != null && activo.Fecha.Date == _reloj.Hoy())
             {
                 viewModel.ServicioActivo = activo;
                 viewModel.ServicioActivo.Lugar = viewModel.LugaresDisponibles.FirstOrDefault(l => l.IdLugar == activo.IdLugar);
@@ -147,7 +150,7 @@ namespace SCA_MVC.Controllers
                 success = true, 
                 nombre = $"{empleado.Nombre} {empleado.Apellido}",
                 empresa = empleado.Empresa?.Nombre ?? "-",
-                hora = DateTime.Now.ToString("HH:mm")
+                hora = _reloj.Ahora().ToString("HH:mm")
             });
         }
         [HttpPost]
@@ -160,8 +163,12 @@ namespace SCA_MVC.Controllers
                 int totalNormal = await _registroNegocio.ContarAsync(activo.IdServicio);
                 int totalGral = totalNormal + activo.TotalInvitados;
                 
-                // Calculamos duración aproximada en minutos
-                double mnts = (DateTime.Now - (activo.HoraInicio ?? activo.Fecha)).TotalMinutes;
+                // Calculamos duración aproximada en minutos. HoraInicio está en UTC, así que
+                // se resta contra la hora UTC de ahora; los servicios viejos que no la tienen
+                // usan la fecha, que es de Argentina.
+                double mnts = activo.HoraInicio is { } inicio
+                    ? (_reloj.GetUtcNow().UtcDateTime - inicio).TotalMinutes
+                    : (_reloj.Ahora() - activo.Fecha).TotalMinutes;
                 int duracion = (int)Math.Max(1, mnts);
 
                 await _servicioNegocio.FinalizarServicioAsync(activo.IdServicio, totalNormal, activo.TotalInvitados, duracion);

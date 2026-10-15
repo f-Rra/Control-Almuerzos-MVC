@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using SCA_MVC.Services;
 
@@ -13,7 +14,7 @@ public class ServicioNegocioTests
     public async Task CrearServicio_LoDejaActivoEnEseLugar()
     {
         using var bd = new BaseDeDatos();
-        var servicios = new ServicioNegocio(bd.Contexto);
+        var servicios = new ServicioNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
 
         var id = await servicios.CrearServicioAsync(idLugar: 1, proyeccion: 50, invitados: 2);
 
@@ -29,7 +30,7 @@ public class ServicioNegocioTests
     public async Task ObtenerActivo_NoTraeElServicioDeOtroLugar()
     {
         using var bd = new BaseDeDatos();
-        var servicios = new ServicioNegocio(bd.Contexto);
+        var servicios = new ServicioNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
         await servicios.CrearServicioAsync(idLugar: 1, proyeccion: 50);
 
         var delQuincho = await servicios.ObtenerActivoAsync(2);
@@ -41,7 +42,7 @@ public class ServicioNegocioTests
     public async Task FinalizarServicio_GuardaLosTotalesYLoPasaAFinalizado()
     {
         using var bd = new BaseDeDatos();
-        var servicios = new ServicioNegocio(bd.Contexto);
+        var servicios = new ServicioNegocio(bd.Contexto, RelojDePrueba.Cualquiera());
         var id = await servicios.CrearServicioAsync(idLugar: 1, proyeccion: 50);
 
         await servicios.FinalizarServicioAsync(id, totalComensales: 48, totalInvitados: 3, duracionMinutos: 55);
@@ -55,12 +56,46 @@ public class ServicioNegocioTests
     }
 
     [Fact]
+    public async Task CrearServicio_GuardaLaFechaDeArgentinaYElInicioEnUtc()
+    {
+        // Son las 23:30 del 10 de marzo en Argentina, pero en UTC (la hora de Azure)
+        // ya son las 02:30 del 11
+        var reloj = RelojDePrueba.EnArgentina(2026, 3, 10, 23, 30);
+        using var bd = new BaseDeDatos();
+        var servicios = new ServicioNegocio(bd.Contexto, reloj);
+
+        var id = await servicios.CrearServicioAsync(idLugar: 1, proyeccion: 50);
+
+        var servicio = await bd.Contexto.Servicios.SingleAsync(s => s.IdServicio == id);
+        Assert.Equal(new DateTime(2026, 3, 10), servicio.Fecha);
+        Assert.Equal(new DateTime(2026, 3, 11, 2, 30, 0), servicio.HoraInicio);
+    }
+
+    [Fact]
+    public async Task FinalizarPendientes_NoCierraElDeHoyAunqueEnUtcYaSeaOtroDia()
+    {
+        // En Argentina todavía es 10 de marzo: el servicio de esa fecha sigue siendo el de hoy
+        var reloj = RelojDePrueba.EnArgentina(2026, 3, 10, 23, 30);
+        using var bd = new BaseDeDatos();
+        var servicios = new ServicioNegocio(bd.Contexto, reloj);
+        var deHoy = new Servicio { IdLugar = 1, Fecha = new DateTime(2026, 3, 10) };
+        bd.Contexto.Servicios.Add(deHoy);
+        await bd.Contexto.SaveChangesAsync();
+
+        var cerrados = await servicios.FinalizarPendientesAsync();
+
+        Assert.Equal(0, cerrados);
+        Assert.Null((await bd.Contexto.Servicios.FindAsync(deHoy.IdServicio))!.DuracionMinutos);
+    }
+
+    [Fact]
     public async Task FinalizarPendientes_CierraSoloLosDeDiasAnteriores()
     {
         using var bd = new BaseDeDatos();
-        var servicios = new ServicioNegocio(bd.Contexto);
-        var deAyer = new Servicio { IdLugar = 1, Fecha = DateTime.Today.AddDays(-1) };
-        var deHoy = new Servicio { IdLugar = 2, Fecha = DateTime.Today };
+        var reloj = RelojDePrueba.EnArgentina(2026, 3, 10, 12, 0);
+        var servicios = new ServicioNegocio(bd.Contexto, reloj);
+        var deAyer = new Servicio { IdLugar = 1, Fecha = reloj.Hoy().AddDays(-1) };
+        var deHoy = new Servicio { IdLugar = 2, Fecha = reloj.Hoy() };
         bd.Contexto.Servicios.AddRange(deAyer, deHoy);
         await bd.Contexto.SaveChangesAsync();
 

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SCA_MVC.Data;
+using SCA_MVC.Helpers;
 using SCA_MVC.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace SCA_MVC.Services
     public class ServicioNegocio : IServicioNegocio
     {
         private readonly ApplicationDbContext _context;
+        private readonly TimeProvider _reloj;
 
-        public ServicioNegocio(ApplicationDbContext context)
+        public ServicioNegocio(ApplicationDbContext context, TimeProvider reloj)
         {
             _context = context;
+            _reloj = reloj;
         }
 
         public Task<Servicio?> ObtenerActivoAsync(int idLugar)
@@ -36,8 +39,10 @@ namespace SCA_MVC.Services
                 IdLugar = idLugar,
                 Proyeccion = proyeccion,
                 TotalInvitados = invitados,
-                Fecha = DateTime.Today,
-                HoraInicio = DateTime.UtcNow
+                Fecha = _reloj.Hoy(),
+                // el inicio es un instante, no una hora de reloj: va en UTC y la pantalla
+                // lo convierte (ver el cronómetro de Servicio/Index)
+                HoraInicio = _reloj.GetUtcNow().UtcDateTime
             };
 
             _context.Servicios.Add(servicio);
@@ -59,8 +64,9 @@ namespace SCA_MVC.Services
 
         public async Task<int> FinalizarPendientesAsync()
         {
+            var hoy = _reloj.Hoy();
             var pendientes = await _context.Servicios
-                .Where(s => s.DuracionMinutos == null && s.Fecha.Date < DateTime.Today.Date)
+                .Where(s => s.DuracionMinutos == null && s.Fecha.Date < hoy)
                 .ToListAsync();
 
             if (pendientes.Any())
