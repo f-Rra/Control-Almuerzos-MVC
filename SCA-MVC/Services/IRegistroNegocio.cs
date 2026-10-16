@@ -4,8 +4,8 @@ namespace SCA_MVC.Services
 {
     public interface IRegistroNegocio
     {
-        // true si lo registró; false si el empleado ya estaba registrado en ese servicio
-        Task<bool> RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar);
+        // Registra al empleado en el servicio, o dice por qué no pudo (ver ResultadoRegistro)
+        Task<ResultadoRegistro> RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar);
         Task<List<Registro>> ListarPorServicioAsync(int idServicio);
         Task<bool> YaRegistradoAsync(int idEmpleado, int idServicio);
         Task<int> ContarAsync(int idServicio);

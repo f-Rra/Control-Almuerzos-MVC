@@ -116,10 +116,18 @@ namespace SCA_MVC.Controllers
                     var emp = await _empleadoNegocio.BuscarPorIdAsync(idEmp);
                     if (emp != null)
                     {
+                        var resultado = await _registroNegocio.RegistrarAsync(idEmp, emp.IdEmpresa, request.IdServicio, request.IdLugar);
+
                         // Si ya estaba registrado se lo salta: el resultado buscado ya está
                         // y no tiene sentido cortar el resto de la lista por uno repetido
-                        if (await _registroNegocio.RegistrarAsync(idEmp, emp.IdEmpresa, request.IdServicio, request.IdLugar))
-                            registradosAhora++;
+                        if (resultado == ResultadoRegistro.YaRegistrado)
+                            continue;
+
+                        // Cualquier otro motivo es del servicio y vale para toda la lista
+                        if (resultado != ResultadoRegistro.Registrado)
+                            return Json(new { success = false, message = resultado.Mensaje() });
+
+                        registradosAhora++;
                     }
                 }
 

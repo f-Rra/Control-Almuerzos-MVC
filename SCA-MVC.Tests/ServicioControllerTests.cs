@@ -29,7 +29,7 @@ public class ServicioControllerTests
     private sealed class RegistroNegocioAdelantado : IRegistroNegocio
     {
         public Task<bool> YaRegistradoAsync(int idEmpleado, int idServicio) => Task.FromResult(false);
-        public Task<bool> RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar) => Task.FromResult(false);
+        public Task<ResultadoRegistro> RegistrarAsync(int idEmpleado, int idEmpresa, int idServicio, int idLugar) => Task.FromResult(ResultadoRegistro.YaRegistrado);
 
         public Task<List<Registro>> ListarPorServicioAsync(int idServicio) => throw new NotImplementedException();
         public Task<int> ContarAsync(int idServicio) => throw new NotImplementedException();
@@ -49,6 +49,26 @@ public class ServicioControllerTests
         var json = JsonSerializer.SerializeToElement(resultado.Value);
         Assert.False(json.GetProperty("success").GetBoolean());
         Assert.Equal("Ya registrado en este servicio", json.GetProperty("message").GetString());
+    }
+
+    [Fact]
+    public async Task Registrar_EnUnServicioFinalizado_RespondeQueYaTermino()
+    {
+        // La pantalla quedó abierta con el servicio de antes: ya se cerró (por ejemplo,
+        // se auto-finalizó al cerrar el navegador) y el lector sigue mandando credenciales
+        var reloj = RelojDePrueba.Cualquiera();
+        using var bd = new BaseDeDatos();
+        var servicios = new ServicioNegocio(bd.Contexto, reloj);
+        var idServicio = await servicios.CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        await servicios.FinalizarServicioAsync(idServicio, totalComensales: 0, totalInvitados: 0, duracionMinutos: 30);
+        var controlador = CrearControlador(bd, reloj);
+
+        var resultado = Assert.IsType<JsonResult>(await controlador.Registrar("RF001", idServicio, 1));
+
+        var json = JsonSerializer.SerializeToElement(resultado.Value);
+        Assert.False(json.GetProperty("success").GetBoolean());
+        Assert.Equal("El servicio ya terminó", json.GetProperty("message").GetString());
+        Assert.Equal(0, await new RegistroNegocio(bd.Contexto, reloj).ContarAsync(idServicio));
     }
 
     [Fact]

@@ -144,11 +144,11 @@ namespace SCA_MVC.Controllers
             if (yaRegistrado)
                 return Json(new { success = false, message = "Ya registrado en este servicio" });
 
-            // El chequeo de arriba no alcanza si llegan dos lecturas juntas: la base lo
-            // decide, y RegistrarAsync devuelve false si la otra se adelantó
-            var registrado = await _registroNegocio.RegistrarAsync(empleado.IdEmpleado, empleado.IdEmpresa, idServicio, idLugar);
-            if (!registrado)
-                return Json(new { success = false, message = "Ya registrado en este servicio" });
+            // El chequeo de arriba no alcanza: si llegan dos lecturas juntas, o si la pantalla
+            // quedó abierta con un servicio que ya terminó, RegistrarAsync lo rechaza y dice por qué
+            var resultado = await _registroNegocio.RegistrarAsync(empleado.IdEmpleado, empleado.IdEmpresa, idServicio, idLugar);
+            if (resultado != ResultadoRegistro.Registrado)
+                return Json(new { success = false, message = resultado.Mensaje() });
 
             return Json(new { 
                 success = true, 
