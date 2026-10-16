@@ -147,3 +147,7 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+// Los tests de integración levantan la aplicación entera con WebApplicationFactory<Program>,
+// que necesita ver esta clase. Con top-level statements el compilador la genera interna.
+public partial class Program { }

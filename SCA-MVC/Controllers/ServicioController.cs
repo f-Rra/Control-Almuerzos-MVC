@@ -127,7 +127,7 @@ namespace SCA_MVC.Controllers
 
         // POST: Servicio/Registrar (AJAX)
         [HttpPost]
-        [IgnoreAntiforgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registrar(string credencial, int idServicio, int idLugar)
         {
             if (string.IsNullOrEmpty(credencial))
@@ -158,7 +158,7 @@ namespace SCA_MVC.Controllers
             });
         }
         [HttpPost]
-        [IgnoreAntiforgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> FinalizarDirecto()
         {
             var activo = await _servicioNegocio.ObtenerActivoGlobalAsync();

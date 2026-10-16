@@ -102,6 +102,7 @@ namespace SCA_MVC.Controllers
         // POST: Registro/RegistrarMultiples (AJAX)
         // Procesa la selección múltiple de empleados para registrar sus almuerzos masivamente
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegistrarMultiples([FromBody] RegistroMultipleRequest request)
         {
             if (request == null || request.IdsEmpleados == null || request.IdsEmpleados.Count == 0)

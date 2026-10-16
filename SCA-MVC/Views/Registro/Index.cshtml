@@ -217,7 +217,11 @@
 
             const response = await fetch('/Registro/RegistrarMultiples', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    // el token antiforgery que deja el _Layout en un <meta>
+                    'RequestVerificationToken': document.querySelector('meta[name="csrf-token"]').content
+                },
                 body: JSON.stringify({
                     idServicio: idServicio,
                     idLugar: idLugar,
