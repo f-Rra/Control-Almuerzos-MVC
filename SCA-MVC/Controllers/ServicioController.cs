@@ -57,22 +57,9 @@ namespace SCA_MVC.Controllers
                 viewModel.ServicioActivo = activo;
                 viewModel.ServicioActivo.Lugar = viewModel.LugaresDisponibles.FirstOrDefault(l => l.IdLugar == activo.IdLugar);
                 
-                // Cargar registros del servicio activo
+                // Registros del servicio activo, ya con el nombre del empleado y de su empresa
+                // (ListarPorServicioAsync los trae con un Include y completa NombreEmpleado y NombreEmpresa)
                 var registros = await _registroNegocio.ListarPorServicioAsync(activo.IdServicio);
-                
-                // Poblar navegación de registros (Empleado, Empresa)
-                // Nota: Esto es necesario porque ADO.NET devuelve IDs planos
-                var empleados = await _empleadoNegocio.ListarAsync();
-                foreach (var reg in registros)
-                {
-                    reg.Empleado = empleados.FirstOrDefault(e => e.IdEmpleado == reg.IdEmpleado);
-                    if (reg.Empleado != null)
-                    {
-                        // En un entorno productivo esto vendría de un Join o Cache
-                        // Aquí simplificamos asignando el objeto Empresa desde el Empleado
-                        // req.Empresa ya debería estar poblado si el SP lo devuelve, si no, lo buscamos
-                    }
-                }
 
                 viewModel.UltimosRegistros = registros.OrderByDescending(r => r.Hora).Take(10).ToList();
                 viewModel.RegistradosHoy = registros.Count;

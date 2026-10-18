@@ -13,13 +13,57 @@ namespace SCA_MVC.Tests;
 // sesión, así que no hace falta armar un pedido HTTP.
 public class ServicioControllerTests
 {
-    // registros: para los tests que necesitan reemplazar el servicio de registros
-    private static ServicioController CrearControlador(BaseDeDatos bd, TimeProvider reloj, IRegistroNegocio? registros = null) => new(
+    // registros y empleados: para los tests que necesitan reemplazar alguno de esos servicios
+    private static ServicioController CrearControlador(BaseDeDatos bd, TimeProvider reloj,
+        IRegistroNegocio? registros = null, IEmpleadoNegocio? empleados = null) => new(
         new ServicioNegocio(bd.Contexto, reloj),
         new LugarNegocio(bd.Contexto),
         registros ?? new RegistroNegocio(bd.Contexto, reloj),
-        new EmpleadoNegocio(bd.Contexto),
+        empleados ?? new EmpleadoNegocio(bd.Contexto),
         reloj);
+
+    // Un servicio de empleados que explota si alguien le pide la lista completa. Sirve para
+    // comprobar que una pantalla NO la carga: si la pidiera, el test fallaría con esta excepción.
+    private sealed class EmpleadoNegocioSinListado : IEmpleadoNegocio
+    {
+        public Task<List<Empleado>> ListarAsync() => throw new InvalidOperationException("No se debe cargar a todos los empleados");
+
+        public Task<Empleado?> BuscarPorCredencialAsync(string idCredencial) => throw new NotImplementedException();
+        public Task<Empleado?> BuscarPorIdAsync(int idEmpleado) => throw new NotImplementedException();
+        public Task<int> AgregarAsync(Empleado empleado) => throw new NotImplementedException();
+        public Task ModificarAsync(Empleado empleado) => throw new NotImplementedException();
+        public Task EliminarAsync(int idEmpleado) => throw new NotImplementedException();
+        public Task<bool> ExisteCredencialAsync(string idCredencial) => throw new NotImplementedException();
+        public Task<List<Empleado>> FiltrarEmpleadosAsync(string? filtro, int? idEmpresa) => throw new NotImplementedException();
+        public Task<(List<Empleado> Items, int Total)> FiltrarPaginadoAsync(string? filtro, int? idEmpresa, int pagina, int pageSize) => throw new NotImplementedException();
+        public Task<List<Empleado>> EmpleadosSinAlmorzarAsync(int idServicio) => throw new NotImplementedException();
+        public Task<List<Empleado>> FiltrarSinAlmorzarAsync(int idServicio, int? idEmpresa, string? nombre) => throw new NotImplementedException();
+    }
+
+    [Fact]
+    public async Task Index_MuestraLosUltimosRegistrosConSuEmpleadoYEmpresa_SinCargarATodosLosEmpleados()
+    {
+        // Empleado 1 pasa a las 12:00 y el 2 a las 12:05
+        var reloj = RelojDePrueba.EnArgentina(2026, 3, 10, 12, 0);
+        using var bd = new BaseDeDatos();
+        var idServicio = await new ServicioNegocio(bd.Contexto, reloj).CrearServicioAsync(idLugar: 1, proyeccion: 50);
+        var registros = new RegistroNegocio(bd.Contexto, reloj);
+        await registros.RegistrarAsync(idEmpleado: 1, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+        reloj.Advance(TimeSpan.FromMinutes(5));
+        await registros.RegistrarAsync(idEmpleado: 2, idEmpresa: 1, idServicio: idServicio, idLugar: 1);
+        var segundo = await bd.Contexto.Empleados.AsNoTracking().Include(e => e.Empresa).SingleAsync(e => e.IdEmpleado == 2);
+        var controlador = CrearControlador(bd, reloj, empleados: new EmpleadoNegocioSinListado());
+
+        var vista = Assert.IsType<ViewResult>(await controlador.Index());
+
+        var modelo = Assert.IsType<ViewModels.ServicioActivoViewModel>(vista.Model);
+        Assert.Equal(2, modelo.RegistradosHoy);
+        Assert.Equal(2, modelo.UltimosRegistros.Count);
+        // el más nuevo primero, con el nombre del empleado y de su empresa que usa la pantalla
+        Assert.Equal($"{segundo.Nombre} {segundo.Apellido}", modelo.UltimosRegistros[0].NombreEmpleado);
+        Assert.Equal(segundo.Empresa!.Nombre, modelo.UltimosRegistros[0].NombreEmpresa);
+        Assert.Equal(new TimeSpan(12, 5, 0), modelo.UltimosRegistros[0].Hora);
+    }
 
     // Un servicio de registros de mentira que reproduce la carrera de dos lecturas juntas:
     // cuando el controlador pregunta si el empleado ya está registrado la respuesta es "no"

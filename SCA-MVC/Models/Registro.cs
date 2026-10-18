@@ -41,7 +41,7 @@ namespace SCA_MVC.Models
         [Display(Name = "Hora Formateada")]
         public string HoraFormateada => Hora.ToString(@"hh\:mm");
 
-        // Propiedades de display para datos planos del SP (no navegación)
+        // Nombres para mostrar en pantalla: los completa RegistroNegocio a partir del Include (no se guardan)
         [NotMapped]
         public string NombreEmpleado { get; set; } = string.Empty;
 
