@@ -73,6 +73,23 @@ public sealed class AppFactory : WebApplicationFactory<Program>
         return cliente;
     }
 
+    // El token que la pantalla deja en <meta name="csrf-token"> para que lo lea el JavaScript
+    public static async Task<string> TokenDeLaPantallaAsync(HttpClient cliente, string ruta)
+    {
+        var html = await cliente.GetStringAsync(ruta);
+        var meta = Regex.Match(html, "<meta name=\"csrf-token\" content=\"([^\"]+)\"");
+        Assert.True(meta.Success, $"La pantalla {ruta} no trae <meta name=\"csrf-token\">: el JavaScript no tiene de dónde sacar el token");
+        return meta.Groups[1].Value;
+    }
+
+    // Cuántos servicios hay activos en la base de la app (los que todavía no tienen duración)
+    public int ServiciosActivos()
+    {
+        using var alcance = Services.CreateScope();
+        var contexto = alcance.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return contexto.Servicios.Count(s => s.DuracionMinutos == null);
+    }
+
     // El token que Html.AntiForgeryToken() deja en un campo oculto de los formularios
     public static string TokenDeFormulario(string html)
     {

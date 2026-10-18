@@ -92,11 +92,13 @@ namespace SCA_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Iniciar(int idLugar, int? proyeccion, int invitados = 0)
         {
-            // Validar que no haya otro activo
-            var existente = await _servicioNegocio.ObtenerActivoAsync(idLugar);
+            // Hay un solo servicio activo a la vez, en cualquier lugar: la pantalla, el registro
+            // manual, el lector y la finalización al cerrar el navegador trabajan sobre "el"
+            // servicio activo, y con dos activos solo verían uno
+            var existente = await _servicioNegocio.ObtenerActivoGlobalAsync();
             if (existente != null)
             {
-                TempData.MostrarError("Ya existe un servicio activo en este lugar.");
+                TempData.MostrarError($"Ya hay un servicio activo en {existente.Lugar?.Nombre ?? "otro lugar"}. Finalizalo antes de iniciar otro.");
                 return RedirectToAction(nameof(Index));
             }
 
