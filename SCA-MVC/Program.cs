@@ -58,6 +58,7 @@ builder.Services.AddScoped<IEmpleadoNegocio, EmpleadoNegocio>();
 builder.Services.AddScoped<IServicioNegocio, ServicioNegocio>();
 builder.Services.AddScoped<IRegistroNegocio, RegistroNegocio>();
 builder.Services.AddScoped<ILugarNegocio, LugarNegocio>();
+builder.Services.AddScoped<ILectorNegocio, LectorNegocio>();
 builder.Services.AddScoped<IReporteNegocio, ReporteNegocio>();
 builder.Services.AddScoped<IEstadisticasNegocio, EstadisticasNegocio>();
 builder.Services.AddScoped<IEmailService, EmailService>();

@@ -4882,6 +4882,46 @@ namespace SCA_MVC.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SCA_MVC.Models.Lector", b =>
+                {
+                    b.Property<int>("IdLector")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdLector"));
+
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("ApiKeyHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("FechaAlta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdLugar")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("IdLector");
+
+                    b.HasIndex("ApiKeyHash")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Lector_ApiKeyHash");
+
+                    b.HasIndex("IdLugar");
+
+                    b.ToTable("Lectores");
+                });
+
             modelBuilder.Entity("SCA_MVC.Models.Lugar", b =>
                 {
                     b.Property<int>("IdLugar")
@@ -72264,6 +72304,18 @@ namespace SCA_MVC.Migrations
                         .HasConstraintName("FK_Empleados_Empresa");
 
                     b.Navigation("Empresa");
+                });
+
+            modelBuilder.Entity("SCA_MVC.Models.Lector", b =>
+                {
+                    b.HasOne("SCA_MVC.Models.Lugar", "Lugar")
+                        .WithMany()
+                        .HasForeignKey("IdLugar")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Lectores_Lugar");
+
+                    b.Navigation("Lugar");
                 });
 
             modelBuilder.Entity("SCA_MVC.Models.Registro", b =>

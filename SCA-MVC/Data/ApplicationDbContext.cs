@@ -18,6 +18,7 @@ namespace SCA_MVC.Data
         public DbSet<Lugar> Lugares { get; set; }
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<Registro> Registros { get; set; }
+        public DbSet<Lector> Lectores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
