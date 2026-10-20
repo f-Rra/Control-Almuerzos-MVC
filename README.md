@@ -2,6 +2,7 @@
 
 Rediseño web del [Sistema Control de Almuerzos](https://github.com/f-Rra/Sistema-Control-Almuerzos) original (WinForms, C#) sobre **ASP.NET Core MVC**: autenticación con Identity, roles y permisos, registro de comensales por credencial RFID, reportes PDF, envío por email y gestión completa de empleados y usuarios. Desplegado en **Azure App Service** con **Azure SQL Database**.
 
+[![CI](https://github.com/f-Rra/Control-Almuerzos-MVC/actions/workflows/ci.yml/badge.svg)](https://github.com/f-Rra/Control-Almuerzos-MVC/actions/workflows/ci.yml)
 ![.NET 9](https://img.shields.io/badge/.NET-9.0-blue)
 ![C#](https://img.shields.io/badge/C%23-13.0-green)
 ![EF Core](https://img.shields.io/badge/EF%20Core-9.0-purple)
