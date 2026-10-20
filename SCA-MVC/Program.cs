@@ -43,6 +43,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppUserClaimsPrincipalFactory>();
 
+// Segundo esquema de autenticación, para los lectores RFID que llaman a la API con su clave.
+// Se suma sin cambiar el esquema por defecto: las pantallas siguen usando la cookie de Identity.
+builder.Services.AddAuthentication()
+    .AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, SCA_MVC.Api.ApiKeyAuthenticationHandler>(
+        SCA_MVC.Api.ApiKeyAuthenticationHandler.Esquema, null);
+
 // Cookie de autenticación: redirige a /Account/Login si no está autenticado
 builder.Services.ConfigureApplicationCookie(options =>
 {
