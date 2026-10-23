@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>SCA_MVC</RootNamespace>
+    <!-- El XML con los comentarios /// del código: Swagger lo usa para explicar cada endpoint -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- 1591 avisa de cada clase pública sin comentario /// y no es lo que se busca acá -->
+    <NoWarn>$(NoWarn);1591</NoWarn>
     <UserSecretsId>7f938145-6d7c-4c2b-97c9-bd7f3a8815cd</UserSecretsId>
   </PropertyGroup>
 
@@ -21,6 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="QuestPDF" Version="2026.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.1" />
   </ItemGroup>
 
 </Project>

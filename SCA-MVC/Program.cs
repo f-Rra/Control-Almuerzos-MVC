@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SCA_MVC.Api;
 using SCA_MVC.Data;
 using SCA_MVC.Helpers;
 using SCA_MVC.Models;
@@ -9,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Swagger: la documentación de la API de lectores, en /swagger
+builder.Services.AddDocumentacionApi();
 
 // Registrar DbContext con SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -140,6 +144,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+// La documentación de la API, antes de la autenticación: se puede leer sin iniciar sesión
+app.UseDocumentacionApi();
 
 // UseAuthentication debe ir ANTES de UseAuthorization
 app.UseAuthentication();

@@ -9,7 +9,7 @@ namespace SCA_MVC.Middleware
     /// un stack trace crudo o un error 500 sin formato.
     ///
     /// Registro en Program.cs:
-    ///   app.UseMiddleware<ExceptionMiddleware>();
+    ///   app.UseMiddleware&lt;ExceptionMiddleware&gt;();
     ///
     /// Flujo:
     ///   Solicitud → [ExceptionMiddleware] → siguiente middleware → respuesta
