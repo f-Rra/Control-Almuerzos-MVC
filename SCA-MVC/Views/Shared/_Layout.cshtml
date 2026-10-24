@@ -58,6 +58,11 @@
                         <div class="ico ico-bi"><i class="bi bi-shield-lock"></i></div>
                         <span class="lbl">USUARIOS</span>
                     </a>
+                    <a asp-controller="Lector" asp-action="Index" class="mi @(controller == "Lector" ? "active" : "")" data-tip="Lectores RFID">
+                        <div class="bar"></div>
+                        <div class="ico ico-bi"><i class="bi bi-broadcast"></i></div>
+                        <span class="lbl">LECTORES</span>
+                    </a>
                 }
                 else
                 {

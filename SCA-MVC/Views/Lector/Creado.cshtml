@@ -1,0 +1,47 @@
+@model SCA_MVC.ViewModels.LectorCreadoViewModel
+@{
+    ViewData["Title"] = "Lector creado";
+}
+
+<div class="emp-wrap">
+    <div class="panel" style="max-width: 720px; margin: 0 auto;">
+        <div class="config-row">
+            <div class="cfg-title"><i class="bi bi-check-circle"></i> Lector creado: @Model.Nombre</div>
+        </div>
+
+        <div class="emp-form">
+            <div class="auth-error" style="display:block;">
+                <strong>Copiá la clave ahora.</strong> Es la única vez que se muestra: en la base queda solo un hash
+                y no se puede recuperar. Si la perdés, hay que revocar este lector y crear otro.
+            </div>
+
+            <div class="emp-field">
+                <label for="clave-lector">Clave de @Model.Nombre (@Model.Lugar)</label>
+                <input id="clave-lector" type="text" value="@Model.Clave" readonly
+                       style="font-family: monospace;" onclick="this.select()" />
+                <small class="form-hint">El lector la manda en la cabecera <code>X-Api-Key</code> de cada pedido.</small>
+            </div>
+
+            <div class="emp-actions">
+                <button type="button" class="btn-srv btn-iniciar" id="btn-copiar">
+                    <i class="bi bi-clipboard"></i> Copiar clave
+                </button>
+                <a asp-action="Index" class="btn-emp-sec">
+                    <i class="bi bi-arrow-left"></i> Ya la guardé, volver a la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('btn-copiar').addEventListener('click', async () => {
+            const campo = document.getElementById('clave-lector');
+            campo.select();
+            try { await navigator.clipboard.writeText(campo.value); }
+            catch { document.execCommand('copy'); }
+            document.getElementById('btn-copiar').innerHTML = '<i class="bi bi-check-lg"></i> Copiada';
+        });
+    </script>
+}

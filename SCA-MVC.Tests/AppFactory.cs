@@ -52,23 +52,22 @@ public sealed class AppFactory : WebApplicationFactory<Program>
         });
     }
 
-    // Un cliente HTTP con la sesión del administrador iniciada. Hace lo mismo que un
-    // navegador: pide la página de login, saca el token antiforgery del formulario y lo
+    // Un cliente HTTP con la sesión iniciada (por defecto, la del administrador). Hace lo mismo
+    // que un navegador: pide la página de login, saca el token antiforgery del formulario y lo
     // manda junto con el email y la clave. Las cookies las guarda el propio cliente.
-    public async Task<HttpClient> ClienteConSesionAsync()
+    public async Task<HttpClient> ClienteConSesionAsync(string email = AdminEmail, string clave = AdminClave)
     {
         var cliente = CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 
         var pagina = await cliente.GetStringAsync("/Account/Login");
         var respuesta = await cliente.PostAsync("/Account/Login", new FormUrlEncodedContent(new Dictionary<string, string>
         {
-            ["Email"] = AdminEmail,
-            ["Password"] = AdminClave,
+            ["Email"] = email,
+            ["Password"] = clave,
             ["__RequestVerificationToken"] = TokenDeFormulario(pagina)
         }));
 
-        // Entrar bien redirige (302) a la pantalla del administrador; una clave mala
-        // volvería a mostrar el formulario con un 200
+        // Entrar bien redirige (302); una clave mala volvería a mostrar el formulario con un 200
         Assert.Equal(HttpStatusCode.Redirect, respuesta.StatusCode);
         return cliente;
     }

@@ -1,0 +1,130 @@
+@model SCA_MVC.ViewModels.LectoresViewModel
+@{
+    ViewData["Title"] = "Lectores RFID";
+}
+
+<div class="emp-wrap">
+<div class="emp-grid">
+
+    <!-- ═══ COLUMNA IZQUIERDA — LISTA DE LECTORES ═══ -->
+    <div class="emp-list-col">
+        <div class="panel registro-section">
+            <div class="registro-inner">
+                <div class="emp-ph">
+                    <h2><i class="bi bi-broadcast"></i> Lectores RFID</h2>
+                    <div class="emp-ph-right">
+                        <span class="emp-ph-count"><strong>@Model.Lectores.Count(l => l.Activo)</strong> activos</span>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="reg-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40px">#</th>
+                                <th>Lector</th>
+                                <th style="width:110px">Lugar</th>
+                                <th style="width:110px">Alta</th>
+                                <th style="width:100px">Estado</th>
+                                <th style="width:120px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.Lectores.Any())
+                            {
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding: 2rem; opacity:.6;">
+                                        <i class="bi bi-inbox" style="font-size:1.5rem"></i><br />
+                                        Todavía no hay lectores. Creá el primero con el formulario.
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                int num = 1;
+                                foreach (var lector in Model.Lectores)
+                                {
+                                    <tr class="emp-row">
+                                        <td class="td-num">@num</td>
+                                        <td>
+                                            <div class="td-emp-cell">
+                                                <div class="td-emp-ico"><i class="bi bi-broadcast"></i></div>
+                                                <span class="td-empleado">@lector.Nombre</span>
+                                            </div>
+                                        </td>
+                                        <td>@lector.Lugar?.Nombre</td>
+                                        <td class="td-hora">@lector.FechaAlta.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            <span class="emp-badge @(lector.Activo ? "activo" : "inactivo")">
+                                                @(lector.Activo ? "Activo" : "Revocado")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if (lector.Activo)
+                                            {
+                                                <form asp-action="Revocar" method="post" style="margin:0;"
+                                                      onsubmit="return confirm('¿Revocar «@lector.Nombre»? Su clave deja de funcionar y no se puede deshacer.');">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="idLector" value="@lector.IdLector" />
+                                                    <button type="submit" class="btn-emp-danger">
+                                                        <i class="bi bi-slash-circle"></i> Revocar
+                                                    </button>
+                                                </form>
+                                            }
+                                        </td>
+                                    </tr>
+                                    num++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ COLUMNA DERECHA — ALTA ═══ -->
+    <div class="emp-detail-col">
+        <div class="panel">
+            <div class="config-row">
+                <div class="cfg-title">
+                    <i class="bi bi-plus-circle"></i> Nuevo lector
+                </div>
+            </div>
+
+            <form asp-action="Crear" method="post" class="emp-form" id="lector-form">
+                @Html.AntiForgeryToken()
+
+                <div class="emp-field">
+                    <label asp-for="Nuevo.Nombre"></label>
+                    <input asp-for="Nuevo.Nombre" placeholder="ej: Lector del comedor" autocomplete="off" />
+                    <span asp-validation-for="Nuevo.Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="emp-field">
+                    <label asp-for="Nuevo.IdLugar"></label>
+                    <select asp-for="Nuevo.IdLugar"
+                            asp-items="@(new SelectList(Model.Lugares, "IdLugar", "Nombre"))">
+                        <option value="">— Seleccionar lugar —</option>
+                    </select>
+                    <span asp-validation-for="Nuevo.IdLugar" class="text-danger"></span>
+                    <small class="form-hint">El lector registra siempre en el servicio activo de este lugar.</small>
+                </div>
+
+                <div class="emp-actions">
+                    <button type="submit" class="btn-srv btn-iniciar">
+                        <i class="bi bi-key"></i> Crear y generar clave
+                    </button>
+                </div>
+            </form>
+
+            <small class="form-hint" style="display:block; padding: .75rem 1rem 0;">
+                La clave se muestra <strong>una sola vez</strong>, al crear el lector. En la base queda solo
+                un hash, así que no hay forma de recuperarla: si se pierde, se revoca el lector y se crea otro.
+                La API está documentada en <a href="/swagger">/swagger</a>.
+            </small>
+        </div>
+    </div>
+
+</div> <!-- /emp-grid -->
+</div> <!-- /emp-wrap -->
