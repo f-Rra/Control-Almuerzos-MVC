@@ -86,6 +86,12 @@ var app = builder.Build();
 // no se vuelven a crear (operación idempotente).
 using (var scope = app.Services.CreateScope())
 {
+    // En un contenedor nuevo (docker compose) la base todavía no existe. Con esta opción la
+    // aplicación aplica las migraciones al arrancar. Está apagada por defecto: en un servidor real
+    // la base se actualiza a propósito, con `dotnet ef database update`.
+    if (app.Configuration.GetValue<bool>("Database:MigrarAlArrancar"))
+        await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.MigrateAsync();
+
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 

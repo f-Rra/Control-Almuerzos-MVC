@@ -341,7 +341,24 @@ El sistema está desplegado en Azure y disponible en:
 
 ## Cómo correr el proyecto localmente
 
-### Prerequisitos
+### Con Docker (la forma más rápida)
+
+No hace falta instalar SQL Server: Docker levanta la aplicación y su propia base, ya con los datos de ejemplo.
+
+```bash
+cp .env.example .env      # en PowerShell: copy .env.example .env
+# Editá .env y completá SA_PASSWORD (clave de la base) y ADMIN_PASSWORD (clave del administrador)
+docker compose up --build
+```
+
+Cuando termine de arrancar, abrí **http://localhost:5080** y entrá con `admin@sca.com` y la clave que pusiste en `ADMIN_PASSWORD`. La documentación de la API está en **http://localhost:5080/swagger**.
+
+- La primera vez tarda unos minutos: baja las imágenes y crea la base con sus migraciones y sus datos de ejemplo.
+- Los datos quedan en un volumen: sobreviven a `docker compose down`. Para empezar de cero, `docker compose down -v`.
+- La base se puede mirar con SSMS en `localhost,14331` (usuario `sa`). El puerto 1433 queda libre para tu SQL Server.
+- Es para probar en tu máquina. En un servidor real la base se actualiza a propósito con `dotnet ef database update` y las claves van en variables de entorno.
+
+### Sin Docker: prerequisitos
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9)
 - SQL Server 2019+ (Express Edition es suficiente)

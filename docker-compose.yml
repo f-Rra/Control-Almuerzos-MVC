@@ -1,0 +1,49 @@
+# Levanta SCA-MVC con su propia base SQL Server, sin instalar nada en la compu:
+#
+#   1. Copiá .env.example a .env y completá las dos claves
+#   2. docker compose up --build
+#   3. Abrí http://localhost:5080 y entrá con admin@sca.com y la clave de ADMIN_PASSWORD
+#
+# Es para probarlo en tu máquina. No lo uses en un servidor: la base queda con la clave del .env
+# y sin ninguna de las protecciones de un despliegue real.
+
+name: sca-mvc
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD:?Falta SA_PASSWORD. Copiá .env.example a .env y completalo}
+    ports:
+      # Solo desde tu propia máquina, por si querés mirar la base con SSMS (puerto 14331).
+      # El puerto de siempre, el 1433, queda libre para tu SQL Server de verdad.
+      - "127.0.0.1:14331:1433"
+    volumes:
+      # Los datos sobreviven a un `docker compose down`. Para empezar de cero: `docker compose down -v`
+      - sca-datos:/var/opt/mssql
+    healthcheck:
+      # SQL Server tarda en arrancar; la aplicación espera a que responda antes de levantar
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  web:
+    build: ./SCA-MVC
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=db;Database=BD_Control_Almuerzos;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;Connection Timeout=30;"
+      DefaultAdmin__Password: ${ADMIN_PASSWORD:?Falta ADMIN_PASSWORD. Copiá .env.example a .env y completalo}
+      # En un contenedor nuevo la base todavía no existe: esta opción crea las tablas y los datos
+      # de ejemplo al arrancar. En un servidor real se deja apagada.
+      Database__MigrarAlArrancar: "true"
+    ports:
+      - "5080:8080"
+
+volumes:
+  sca-datos:

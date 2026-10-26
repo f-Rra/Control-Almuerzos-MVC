@@ -416,3 +416,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Claves para correr con docker compose (ver .env.example)
+.env
