@@ -75,7 +75,7 @@ erDiagram
     }
 ```
 
-Los invitados son registros sin empleado. Un empleado no puede quedar registrado dos veces en el mismo servicio: lo garantiza un índice único en la base, además de la validación de negocio. Los usuarios del sistema son las tablas de ASP.NET Core Identity.
+Los invitados son registros sin empleado. Un empleado no puede quedar registrado dos veces en el mismo servicio: lo garantiza un índice único en la base, además de la validación de negocio. Los usuarios del sistema son las tablas de ASP.NET Core Identity. El esquema completo, con todas las columnas y restricciones, está en [`docs/DER.md`](docs/DER.md).
 
 ## Arquitectura
 
