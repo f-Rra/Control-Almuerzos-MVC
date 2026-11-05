@@ -17,24 +17,7 @@ namespace SCA_MVC.Tests;
 public class LectoresPantallaTests
 {
     // Un usuario común (no administrador), con su sesión iniciada
-    private static async Task<HttpClient> ClienteDeUsuarioComunAsync(AppFactory app)
-    {
-        using (var alcance = app.Services.CreateScope())
-        {
-            var usuarios = alcance.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var operador = new ApplicationUser
-            {
-                UserName = "operador@sca.com",
-                Email = "operador@sca.com",
-                NombreUsuario = "Operador",
-                EmailConfirmed = true
-            };
-            Assert.True((await usuarios.CreateAsync(operador, "Operador1")).Succeeded);
-            await usuarios.AddToRoleAsync(operador, "Usuario");
-        }
-
-        return await app.ClienteConSesionAsync("operador@sca.com", "Operador1");
-    }
+    private static Task<HttpClient> ClienteDeUsuarioComunAsync(AppFactory app) => app.ClienteDeUsuarioComunAsync();
 
     // El token se saca de una pantalla que ya existe, no de la nueva: así un test que falla
     // lo hace por lo que se está probando y no porque la pantalla no se abra

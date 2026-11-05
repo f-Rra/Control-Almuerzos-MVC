@@ -419,6 +419,9 @@ namespace SCA_MVC.Controllers
         }
 
         // POST: Reporte/EnviarPorEmail
+        // Solo el administrador: el mensaje sale de la cuenta de correo de la aplicación y acepta
+        // cualquier destinatario, así que un usuario común (el de prueba, por ejemplo) no puede usarla
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnviarPorEmail(string email, DateTime desde, DateTime hasta, int? idLugar, string tipo = "cobertura")

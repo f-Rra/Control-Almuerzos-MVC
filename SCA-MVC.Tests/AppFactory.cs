@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SCA_MVC.Data;
+using SCA_MVC.Models;
 
 namespace SCA_MVC.Tests;
 
@@ -70,6 +72,26 @@ public sealed class AppFactory : WebApplicationFactory<Program>
         // Entrar bien redirige (302); una clave mala volvería a mostrar el formulario con un 200
         Assert.Equal(HttpStatusCode.Redirect, respuesta.StatusCode);
         return cliente;
+    }
+
+    // Lo mismo, pero con un usuario común (rol Usuario, no administrador), que se crea en la base
+    public async Task<HttpClient> ClienteDeUsuarioComunAsync()
+    {
+        using (var alcance = Services.CreateScope())
+        {
+            var usuarios = alcance.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var operador = new ApplicationUser
+            {
+                UserName = "operador@sca.com",
+                Email = "operador@sca.com",
+                NombreUsuario = "Operador",
+                EmailConfirmed = true
+            };
+            Assert.True((await usuarios.CreateAsync(operador, "Operador1")).Succeeded);
+            await usuarios.AddToRoleAsync(operador, "Usuario");
+        }
+
+        return await ClienteConSesionAsync("operador@sca.com", "Operador1");
     }
 
     // El token que la pantalla deja en <meta name="csrf-token"> para que lo lea el JavaScript
