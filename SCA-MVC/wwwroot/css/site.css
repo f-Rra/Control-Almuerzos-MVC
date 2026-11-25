@@ -960,13 +960,15 @@ body {
     align-items: center;
     padding: 0;
     border-bottom: 1px solid var(--glass-border);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    /* En pantallas angostas la fila pasa a dos renglones en vez de
+       esconder el botón detrás de un scroll invisible. */
+    flex-wrap: wrap;
 }
 
-.config-row::-webkit-scrollbar {
-    display: none;
+@media (max-width: 1500px) {
+    .config-row > .cfg-sep {
+        display: none;
+    }
 }
 
 .cfg-title {
