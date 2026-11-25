@@ -24,7 +24,7 @@ Sistema web para controlar los almuerzos de un comedor industrial: registra qui�
 | | | | |
 |---|---|---|---|
 | <img src="docs/capturas/01-dashboard.png" width="200"> | <img src="docs/capturas/02-servicio.png" width="200"> | <img src="docs/capturas/03-registro-manual.png" width="200"> | <img src="docs/capturas/04-reportes.png" width="200"> |
-| Dashboard con los últimos servicios | Servicio activo: cronómetro y cobertura | Registro manual por empresa | Reportes en PDF, con envío por email |
+| Dashboard con los últimos servicios | Servicio activo: cronómetro y cobertura | Registro manual de los empleados pendientes | Reportes en PDF, con envío por email |
 | <img src="docs/capturas/05-empleados.png" width="200"> | <img src="docs/capturas/06-estadisticas.png" width="200"> | <img src="docs/capturas/07-lectores.png" width="200"> | <img src="docs/capturas/08-swagger.png" width="200"> |
 | Empleados con credencial RFID | Estadísticas y ranking de empresas | Alta y revocación de lectores | La API documentada en Swagger |
 
