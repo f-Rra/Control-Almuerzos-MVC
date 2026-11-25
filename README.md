@@ -4,12 +4,11 @@
 ![.NET 9](https://img.shields.io/badge/.NET-9.0-blue)
 ![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET%20Core-MVC-512BD4)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-EF%20Core-CC2927)
-![Azure](https://img.shields.io/badge/Deploy-Azure-0078D4)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
 
 Sistema web para controlar los almuerzos de un comedor industrial: registra quién come en cada servicio con su credencial RFID, lo compara con lo proyectado y arma los reportes. Es la versión web del [sistema de escritorio original](https://github.com/f-Rra/Sistema-Control-Almuerzos).
 
-**Sitio web:** [sca-mvc-app-hndpbbgshwfnbehy.brazilsouth-01.azurewebsites.net](https://sca-mvc-app-hndpbbgshwfnbehy.brazilsouth-01.azurewebsites.net) (plan gratuito de Azure: la primera visita puede tardar unos segundos).
+**Demo en línea:** por ahora no hay. Se levanta con `docker compose up` y trae datos de ejemplo; las capturas de abajo salen de esa copia.
 
 ## Funcionalidades
 
@@ -30,7 +29,7 @@ Sistema web para controlar los almuerzos de un comedor industrial: registra qui�
 
 ## Stack
 
-.NET 9 · ASP.NET Core MVC · EF Core 9 (Fluent API, migraciones) · SQL Server / Azure SQL · ASP.NET Core Identity · Swagger · QuestPDF · MailKit · Bootstrap 5 · xUnit · Docker Compose · GitHub Actions · Azure App Service.
+.NET 9 · ASP.NET Core MVC · EF Core 9 (Fluent API, migraciones) · SQL Server · ASP.NET Core Identity · Swagger · QuestPDF · MailKit · Bootstrap 5 · xUnit · Docker Compose · GitHub Actions.
 
 ## Modelo de datos
 
@@ -83,12 +82,12 @@ Los invitados son registros sin empleado. Un empleado no puede quedar registrado
 flowchart LR
     Usuario["Usuario (navegador)"] -->|cookie de Identity| MVC
     Lector["Lector RFID"] -->|X-Api-Key| API
-    subgraph Azure["Azure App Service"]
+    subgraph Servidor["Aplicación ASP.NET Core"]
         MVC["Controladores MVC"] --> Neg
         API["API REST<br/>/api/registros"] --> Neg
         Neg["Servicios de negocio<br/>servicios · registros · reportes PDF"]
     end
-    Neg --> DB[("Azure SQL")]
+    Neg --> DB[("SQL Server")]
     Neg --> Mail["Email (SMTP)"]
 ```
 
