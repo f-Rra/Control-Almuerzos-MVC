@@ -65,6 +65,5 @@ SCA-MVC/
 ├─ Migrations/    y SQL/, con los procedimientos, vistas y triggers
 └─ wwwroot/       CSS, JavaScript y Bootstrap 5 (local)
 SCA-MVC.Tests/    los tests de xUnit
-Guias/            bitácora del desarrollo, una guía por commit
 docker-compose.yml   la aplicación y su base, con un comando
 ```
